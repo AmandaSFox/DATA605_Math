@@ -1,0 +1,461 @@
+---
+title: "DATA 605 Assignment 1: Part 2"
+subtitle: "Questions 3 & 4"
+author: "Amanda Fox"
+format: pdf
+---
+
+```{r libraries, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(imager)
+library(FactoMineR)
+library(reticulate)
+```
+
+## 3. Matrix Rank, Properties, and Eigenspace
+### Determine the Rank of the Given Matrix. 
+*Find the rank of the matrix $A$ (below). Explain what the rank tells us about the linear independence of the rows and columns of matrix $A$. Identify if there are any linear dependencies among the rows or columns.*  
+  
+$$A = \begin{bmatrix} 2&4&1&3 \\ -2&-3&4&1 \\ 5&6&2&8\\-1&-2&3&7 \end{bmatrix}$$
+In row echelon form, we get:
+  
+$$A = \begin{bmatrix} 1&2&0.5&1.5 \\ 0&1&5&4 \\ 0&0&1&16.5/19.5\\0&0&0&-2 \end{bmatrix}$$
+The rank is the number of nonzero rows in row echelon form. This 4x4 matrix has rank = 4 or full rank, which means no free variables or linear dependencies. All rows and columns are linearly independent.
+  
+In R: 
+```{r rank, local = TRUE}
+library(Matrix)
+
+A <- matrix(c(2,4,1,3,
+             -2,-3,4,1,
+             5,6,2,8,
+             -1,-2,3,7), byrow = TRUE, nrow = 4)
+rank_A <- as.numeric(rankMatrix(A))
+rank_A
+
+```
+  
+### Matrix Rank Boundaries
+*Given an m x n matrix where m > n, determine the maximum and minimum possible rank, assuming that the matrix is non-zero. Prove that the rank of a matrix equals the dimension of its row space (or column space). Provide an example to illustrate the concept.*
+  
+1. Maximum rank = n because the number of linearly independent columns can't exceed n
+  
+2. Minimum rank = 1 because there must be at least one independent row or column since the matrix is non-zero
+  
+3. The rank of a matrix is the same as the dimension of its row space, which is the number of linearly independent rows. Performing row operations on a matrix to get to row echelon form does not change the row space but it allows us to see it clearly by reducing dependent rows to zeroes:
+  
+Example matrix: $$A = \begin{bmatrix} 1&2&3 \\ 2&4&6 \\ 3&6&9 \end{bmatrix}$$
+  
+Row echelon form with one linearly independent variable (non-zero row) showing the row space and rank of this 3x3 matrix is actually 1: 
+$$A = \begin{bmatrix} 1&2&3 \\ 0&0&0 \\ 0&0&0 \end{bmatrix}$$
+In R:
+  
+```{r rank2, local = TRUE}
+A <- matrix(c(1,2,3,
+              2,4,6,
+              3,6,9), byrow = TRUE, nrow = 3)
+rank_A <- as.numeric(rankMatrix(A))
+rank_A
+
+```
+  
+### Rank and Row Reduction:
+*Determine the rank of matrix $B$. Perform a row reduction on matrix $B$ and describe how it helps in finding the rank. Discuss any special properties of matrix $B$ (e.g., is it a rank-deficient matrix?)*
+
+$$B= \begin{bmatrix} 2&5&7\\4&10&14\\1&2.5&3.5 \end{bmatrix}$$
+Row-reduced to row echelon form:
+  
+Swap R3 and R1, subtract 2xR1 from R3 and subtract 2xR1 from R2:
+$$B= \begin{bmatrix} 1&2.5&3.5 \\0&0&0\\0&0&0\end{bmatrix}$$
+The rank is the number of linearly independent rows, which are the non-zero rows in row echelon format, or rank = 1.  
+  
+This is *rank deficient* because the maximum rank of a 3x3 matrix would be 3, which means this matrix had linearly dependent rows and columns (has free variables). This matrix collapses a 3D space to a 1D vector and is singular or not invertible (can't be reversed).
+  
+Check in R: 
+
+```{r rank3, local = TRUE}
+B <- matrix(c(2,5,7,
+              4,10,14,
+              1,2.5,3.5), byrow = TRUE, nrow = 3)
+rank_B <- as.numeric(rankMatrix(A))
+rank_B
+
+```
+  
+### Compute the eigenvalues and eigenvectors
+*Find the eigenvalues and eigenvectors of the matrix $A$.  Write out the characteristic polynomial and show your solution step by step. After finding the eigenvalues and eigenvectors, verify that the eigenvectors are linearly independent. If they are not, explain why.*
+  
+$$A= \begin{bmatrix} 3&1&2 \\0&5&4\\0&0&2\end{bmatrix}$$
+First we find eigenvalues by solving the characteristic equation $det(A - \lambda I)$:
+
+$$det \left( \begin{bmatrix} 3&1&2 \\0&5&4\\0&0&2\end{bmatrix} - \lambda  \begin{bmatrix} 1&0&0 \\0&1&0\\0&0&1\end{bmatrix} \right)$$
+Multiply by $\lambda$: 
+$$det \left( \begin{bmatrix} 3&1&2 \\0&5&4\\0&0&2\end{bmatrix}-\begin{bmatrix} \lambda&0&0 \\0&\lambda&0\\0&0&\lambda\end{bmatrix} \right)$$
+Subtract:
+$$det \left( \begin{bmatrix} 3-\lambda&1&2 \\0&5-\lambda&4\\0&0&2-\lambda\end{bmatrix}\right)$$
+Find determinant using $det = a(ei - fh) - b(di - fg) + c(dh - eg)$:  
+  
+From above:  
+a = $3-\lambda$  
+b = 1  
+c = 2  
+d = 0  
+e = $5-\lambda$  
+f = 4  
+g = 0  
+h = 0  
+i = $2-\lambda$  
+  
+  
+ei = $(5-\lambda)*(2-\lambda) = \lambda^2 -7\lambda + 10$  
+fh = 0  
+di = 0  
+fg = 0  
+dh = 0  
+eg = 0  
+  
+  
+$det = a(ei - fh) - b(di - fg) + c(dh - eg)$  
+$det = (3-\lambda)*(\lambda^2 -7\lambda + 10)$  
+$det = -\lambda^3 + 10\lambda^2 - 31\lambda + 30$  
+  
+Set equal to zero to find null space:   
+$-\lambda^3 + 10\lambda^2 - 31\lambda + 30 = 0$  
+  
+Try $\lambda = 2$ (Rational Root Theorem: roots must be factor of 30)  
+$-8 + 40 - 62 + 30 = 0$ is True  
+  
+So $\lambda = 2$, therefore $(\lambda - 2)$ is a factor and can be factored out:  
+$-\lambda^2 - 8\lambda - 15 =0$ 
+  
+Flip signs to make it easier:  
+$\lambda^2 + 8\lambda + 15 =0$  
+$(\lambda-3)(\lambda-5)=0$  
+  
+**Eigenvalues are {2,3,5}**  
+  
+**Eigenvectors**: Now we find eigenvectors by substituting each eigenvalue into the formula $(A - \lambda I)v = 0$:  
+  
+1. $\lambda = 2$:  
+$(A - 2I)v = 0$  
+  
+$$\left( \begin{bmatrix} 3&1&2 \\0&5&4\\0&0&2\end{bmatrix} - 2\begin{bmatrix} 1&0&0 \\0&1&0\\0&0&1\end{bmatrix} \right)\times \begin{bmatrix} v_1\\v_2\\v_3 \end{bmatrix} = \begin{bmatrix}0\\0\\0 \end{bmatrix} $$
+
+$$\left( \begin{bmatrix} 3&1&2 \\0&5&4\\0&0&2\end{bmatrix} - \begin{bmatrix} 2&0&0 \\0&2&0\\0&0&2\end{bmatrix}\right) \times \begin{bmatrix} v_1\\v_2\\v_3 \end{bmatrix} = \begin{bmatrix}0\\0\\0 \end{bmatrix}$$
+
+$$\begin{bmatrix} 1&1&2\\0&3&4\\0&0&0\end{bmatrix}\begin{bmatrix} v_1\\v_2\\v_3 \end{bmatrix} = \begin{bmatrix}0\\0\\0 \end{bmatrix}$$
+
+$$v_1 +v_2 + 2v_3 = 0$$
+$$0 +3v_2 + 4v_3 = 0$$
+$$0 +0 + 0 = 0$$
+
+So $v_2  = - 4/3 v_3$ (from second equation) and substituting that into the first equation:  
+$$v_1 - 4/3 v_3 + 2v_3 = 0$$
+$$v_1 + 2/3v_3 = 0$$
+$$v_1 = -2/3v_3$$
+
+$v_3$ is free variable; set to $t$:  
+  
+$$\begin{bmatrix} v_1\\v_2\\v_3 \end{bmatrix} = \begin{bmatrix} -2/3t\\-4/3t\\t \end{bmatrix} =t\begin{bmatrix} -2/3\\-4/3\\1 \end{bmatrix}=t\begin{bmatrix} -2\\-4\\3 \end{bmatrix}$$
+**For** $\lambda = 2$**, the eigenvector is** $\begin{bmatrix} -2\\-4\\3 \end{bmatrix}$   
+  
+2. $\lambda = 3$:  
+$$(A - 3I)v = 0$$
+  
+$$\left( \begin{bmatrix} 3&1&2 \\0&5&4\\0&0&2\end{bmatrix} - 3\begin{bmatrix} 1&0&0 \\0&1&0\\0&0&1\end{bmatrix} \right)\times \begin{bmatrix} v_1\\v_2\\v_3 \end{bmatrix} = \begin{bmatrix}0\\0\\0 \end{bmatrix} $$
+
+$$\left( \begin{bmatrix} 3&1&2 \\0&5&4\\0&0&2\end{bmatrix} - \begin{bmatrix} 3&0&0 \\0&3&0\\0&0&3\end{bmatrix}\right) \times \begin{bmatrix} v_1\\v_2\\v_3 \end{bmatrix} = \begin{bmatrix}0\\0\\0 \end{bmatrix}$$
+
+$$\begin{bmatrix} 0&1&2\\0&2&4\\0&0&-1\end{bmatrix}\begin{bmatrix} v_1\\v_2\\v_3 \end{bmatrix} = \begin{bmatrix}0\\0\\0 \end{bmatrix}$$
+  
+$$v_2 + 2v_3 = 0$$
+$$2v_2 + 4v_3 = 0$$
+$$-v_3 = 0$$
+$v_1$ does not appear in the equations and is free variable; set to $t$:  
+  
+$$\begin{bmatrix} v_1\\v_2\\v_3 \end{bmatrix} = \begin{bmatrix} t\\0t\\0t \end{bmatrix} =t\begin{bmatrix} 1\\0\\0 \end{bmatrix}$$
+**For** $\lambda = 3$**, the eigenvector is** $$\begin{bmatrix} 1\\0\\0\end{bmatrix}$$
+
+3. $\lambda = 5$:  
+$$(A - 5I)v = 0$$
+  
+$$\left( \begin{bmatrix} 3&1&2 \\0&5&4\\0&0&2\end{bmatrix} - 5\begin{bmatrix} 1&0&0 \\0&1&0\\0&0&1\end{bmatrix} \right)\times \begin{bmatrix} v_1\\v_2\\v_3 \end{bmatrix} = \begin{bmatrix}0\\0\\0 \end{bmatrix} $$
+
+$$\left( \begin{bmatrix} 3&1&2 \\0&5&4\\0&0&2\end{bmatrix} - \begin{bmatrix} 5&0&0 \\0&5&0\\0&0&5\end{bmatrix}\right) \times \begin{bmatrix} v_1\\v_2\\v_3 \end{bmatrix} = \begin{bmatrix}0\\0\\0 \end{bmatrix}$$
+
+$$\begin{bmatrix} -2&1&2\\0&0&4\\0&0&-3\end{bmatrix}\begin{bmatrix} v_1\\v_2\\v_3 \end{bmatrix} = \begin{bmatrix}0\\0\\0 \end{bmatrix}$$
+  
+$$-2v_1 + v_2 + 2v_3 = 0$$
+$$4v_3 = 0$$
+$$-3v_3 = 0$$
+  
+So $v_3 = 0$ and we can substitute:  
+$-2v_1 + v_2 = 0$  
+$v_2 = 2v_1$
+
+Because there are more variables than equations, one must be free. We can assume v_1 is free and set it to t:  
+
+$$\begin{bmatrix} v_1\\v_2\\v_3 \end{bmatrix} = \begin{bmatrix} t\\2t\\0 \end{bmatrix} =t\begin{bmatrix} 1\\2\\0 \end{bmatrix}$$
+For $\lambda = 5$, the eigenvector is $$\begin{bmatrix} 1\\2\\0\end{bmatrix}$$
+
+Validation in R: 
+```{r eigen, local = TRUE}
+A <- matrix(c(3,1,2,
+              0,5,4,
+              0,0,2),
+            nrow=3, 
+            byrow=TRUE)
+
+A
+
+my_eigen <- eigen(A)
+my_eigen$values
+
+my_eigen$vectors
+```
+
+**Linear independence:** We can determine if the eigenvectors are linearly independent by setting up an matrix and finding the determinant.
+  
+The below R code quickly calculates the determinant is 6. Because it is greater than zero, the vectors are **linearly independent**:
+
+``` {r independent, local=TRUE}
+
+B <- matrix(c(-2,1,1,
+              -4,0,2,
+              3,0,0), byrow = TRUE, nrow = 3)
+B
+
+det_B <- det(B)
+det_B
+```
+### Diagonalization of Matrix:
+*Determine if matrix $A$ can be diagonalized. If it can, find the diagonal matrix and the matrix of eigenvectors that diagonalizes. Discuss the geometric interpretation of the eigenvectors and eigenvalues in the context of transformations. For instance, how does matrix $A$ stretch, shrink, or rotate vectors*
+
+We know the matrix $A$ can be diagnolized because it has three linearly independent eigenvectors. 
+  
+The matrix of eigenvectors from above: 
+$$\begin{bmatrix} -2&1&1\\-4&0&2\\3&0&0\end{bmatrix}$$
+The diagonal matrix $D$ contains the eigenvalues for each vector, on the diagonal:
+$$\begin{bmatrix} 2&0&0\\0&3&0\\0&0&5\end{bmatrix}$$
+Matrix $A$ scales its eigenvectors by the corresponding eigenvalues shown in $D$.
+
+**Conclusion**: The matrix $A$ is an upper triangular matrix (non-symmetric) with a **set of eigenvalues = {2,3,5}**. 
+
+It has a full set of eigenvectors, which are **linearly independent**:  
+  
+**For** $\lambda = 2$**, the eigenvector is** $$\begin{bmatrix} -2\\-4\\3 \end{bmatrix}$$  
+   
+**For** $\lambda = 3$**, the eigenvector is** $$\begin{bmatrix} 1\\0\\0 \end{bmatrix}$$   
+  
+**For** $\lambda = 5$**, the eigenvector is** $$\begin{bmatrix} 1\\2\\0 \end{bmatrix}$$ 
+
+Matrix $A$ can be diagonalized as shown above. 
+  
+
+## 4. Eigenfaces from the LFW (Labeled Faces in the Wild) Dataset
+*Task: Using the LFW (Labeled Faces in the Wild) dataset, build and visualize eigenfaces that account for 80% of the variability in the dataset. The LFW dataset is a well-known dataset containing thousands of labeled facial images, available for academic research.*
+  
+### Download the data
+  
+I used the suggested approach of a Python script (lfw module in sklearn library) to download the dataset and extracted the images component to a numpy file. I used no resizing and color=True to set up for our preprocessing step below.
+
+```
+##NOTE: This is the code I ran to download the data, which I then stored in an Azure data storage to access in the next step. Code here for documentation purposes only; do not run.
+
+from sklearn.datasets import fetch_lfw_people
+import numpy as np
+
+# download full dataset
+lfw_people = fetch_lfw_people(min_faces_per_person=1, resize=None, color=True)
+
+# save images file as numpy array
+images = lfw_people.images
+np.save("lfw_image_arrays.npy", images)
+```
+  
+### Preprocess the images
+*Convert the images to grayscale and resize them to a smaller size (e.g., 64x64) to reduce computational complexity. Flatten each image into a vector.*  
+  
+In this challenging step, I used R help and online resources (Gemini) to learn about the **imager** package, as well as how and why we need to move between images objects, arrays, and finally vectors to accomplish all of our required processing. 
+  
+After successfully using an images package function to grayscale the whole array of images at once, I had some trouble in trying to replicate that logic to resize the whole array at once: that definitely did not work as it resized the **array** itself and I needed to resize each image via looping. Frequently checking the dimensions with the **dim** function was key to keeping everything straight.
+  
+After that, flattening the array into vectors and storing in a matrix was straightforward with more looping.
+
+```{r setup, include=FALSE, message = FALSE, warning = FALSE}
+use_python("C:/Users/amand/anaconda3/python.exe", required = TRUE) 
+py_config() # Verify the python path is correct.
+```
+
+
+```{r faces, message=FALSE, warning=FALSE}
+
+#Load data with numpy. Verify 13233 images
+
+np <- import("numpy")
+
+# Note - I stored a copy in Azure to make the code shareable but 
+# it got corrupted: the below references my local C:\
+
+lfw_data <- np$load("lfw_image_arrays.npy") 
+dim(lfw_data)
+
+# Show the first image in original form
+first_image <- lfw_data[1,,,]
+first_image_cimg <- as.cimg(first_image)
+plot(first_image_cimg)
+
+# Convert to an imager object and grayscale
+lfw_cimg <- as.cimg(lfw_data)
+grayscale_lfw_cimg <- grayscale(lfw_cimg)
+
+# Convert back to an array
+grayscale_lfw <- as.array(grayscale_lfw_cimg[,,,1]) #select first channel
+dim(grayscale_lfw)
+
+# View first grayscaled image
+grayscale_image <- grayscale_lfw[1,,]
+grayscale_image_cimg <- as.cimg(grayscale_image)
+plot(grayscale_image_cimg, main = "First Image: Grayscale")
+
+# Create array to store resized images
+count_images <- dim(grayscale_lfw)[1]
+resized_grayscale_lfw <- array(0, dim = c(count_images, 64, 48))
+
+# Loop 
+for (i in 1:count_images) {
+  # Convert to cimg
+  image_cimg <- as.cimg(grayscale_lfw[i,,])  
+  # Resize
+  resized_image_cimg <- resize(image_cimg, 64, 48)  # Resize to 64x48
+  # Convert back to array
+  resized_grayscale_lfw[i,,] <- as.array(resized_image_cimg[,,,1])  
+}
+
+# Check the dimensions
+dim(resized_grayscale_lfw)
+
+# View first resized image
+resized_grayscale_image <- resized_grayscale_lfw[1,,]
+resized_grayscale_image_cimg <- as.cimg(resized_grayscale_image)
+plot(resized_grayscale_image_cimg, main = "First Image: Grayscale, Resized")
+
+# Flatten each image into vector and store as matrix
+
+matrix_lfw <- matrix(NA, 
+                        nrow = dim(resized_grayscale_lfw)[1], 
+                        ncol = 64*48)
+
+for (i in 1:dim(resized_grayscale_lfw)[1]) {
+  matrix_lfw[i, ] <- as.vector(resized_grayscale_lfw[i,,])
+}
+
+# Check the new dimensions
+dim(matrix_lfw)
+
+```
+
+### Apply PCA
+*Compute the PCA on the flattened images. Determine the number of principal components required to account for 80% of the variability.*  
+
+In this step, I learned about the outputs of the simple base R **prcomp** function and used the sdev component to find the % variation explained by each principal component.
+
+**40 principal components account for 80% of the variability:** 
+
+```{r faces_pca, message=FALSE, warning=FALSE}
+# Compute PCA using base R function 
+pca_result <- prcomp(matrix_lfw, center = TRUE, scale. = TRUE)
+
+# Compute cumulative variance
+explained_variance <- pca_result$sdev^2 / sum(pca_result$sdev^2)
+cumulative_variance <- cumsum(explained_variance)
+components_80 <- which(cumulative_variance >= 0.80)[1]
+components_80
+
+```
+
+### Visualize Eigenfaces 
+*Visualize the first few eigenfaces (principal components) and discuss their significance. Reconstruct some images using the computed eigenfaces and compare them with the original images.*
+  
+The **rotation** component of the PCA output is a matrix of eigenvectors. Each column is a PCA, arranged in order of highest to lowest variation, and each row is a pixel.
+  
+In this facial recognition exercise, a PCA is an eigenface, or a component that makes up face images. 
+
+```{r faces_eigen, message=FALSE, warning=FALSE}
+
+# top four pcas
+num_eigenfaces <- 4
+eigenfaces <- pca_result$rotation[, 1:num_eigenfaces]
+dim(eigenfaces)
+
+# Loop through the first few principal components
+for (i in 1:num_eigenfaces) {
+  eigenface_matrix <- matrix(pca_result$rotation[, i], 
+                             nrow = 64, 
+                             ncol = 48)  # Reshape vector
+  eigenface_cimg <- as.cimg(eigenface_matrix)  # Convert to cimg object
+  plot(eigenface_cimg, main = paste("Eigenface", i))
+}
+
+```
+
+For the final reconstruction, I picked images # 1, 500, and 1000 from the grayscale/resized data and used the top 40 PCAs (which accounted for 80% of the variation in the dataset). Online resources were again very helpful in this step and I learned a lot about this process through this exercise.
+
+```{r eigen2, message=FALSE, warning=FALSE}
+
+#---------
+# Reconstructing with Eigenfaces
+#---------
+
+# Images to reconstruct
+image_indices <- c(1, 50, 100)
+
+# Initialize a list to store reconstructed images
+reconstructed_images <- list()
+
+for (i in seq_along(image_indices)) {
+  img_idx <- image_indices[i]
+  test_image <- matrix_lfw[img_idx, ]
+  # get principal components
+  projected_coefficients <- test_image %*% pca_result$rotation[, 1:40]
+  # Reconstruct the image
+  reconstruction <- projected_coefficients %*% t(pca_result$rotation[, 1:40])
+  
+  # Add the mean image back
+  reconstructed_image <- reconstruction + pca_result$center
+  
+  # Reshape into 64x48 image format and store it
+  reconstructed_images[[i]] <- matrix(reconstructed_image, nrow = 64, ncol = 48)
+}
+
+#---------
+# Plots
+#---------
+
+for (i in seq_along(image_indices)) {
+  img_idx <- image_indices[i]
+  # Plot Original Image
+  original_matrix <- matrix(matrix_lfw[img_idx, ], nrow = 64, ncol = 48)
+  original_cimg <- as.cimg(original_matrix)
+  plot(original_cimg, main = paste("Original Image", img_idx))
+  # Plot Reconstructed Image (40 PCs)
+  reconstructed_cimg <- as.cimg(reconstructed_images[[i]])
+  plot(reconstructed_cimg, main = paste("Reconstructed (40 PCs)", img_idx))
+}
+
+```
+
+## Works Cited
+Beezer, Robert. “A First Course in Linear Algebra.” Open Textbook Library, 2015,  
+  open.umn.edu/opentextbooks/textbooks/5. Accessed Feb. 2025.  
+  
+ChatGPT. “ChatGPT.” Chatgpt.com, 2024, chatgpt.com. Accessed Feb. 2025.  
+  R coding and LaTeX assistance.  
+  
+Google. “Gemini.” Gemini.google.com, Google, 2024, gemini.google.com/app. Accessed Feb.   
+  2025. R coding assistance. 
+  
+Huang, G. B., et al. "Labeled Faces in the Wild: A Database for Studying Face Recognition  
+  in Unconstrained Environments." University of Massachusetts, Amherst, Technical  
+  Report 07-49, 2007.  
+
