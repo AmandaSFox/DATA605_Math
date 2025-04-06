@@ -1,9 +1,12 @@
 ---
 title: "DATA_605_Assignment_2_Fox"
 author: "Amanda Fox"
+date: "April 13, 2025"
 format: html
 ---
-
+  
+  
+## Preparation  
 Load libraries: 
   
 ```{r libraries, message=FALSE, warning=FALSE}
@@ -14,10 +17,354 @@ library(markovchain)
 
 ```
   
+## Problem 1  
+  
+### 1. Bayesian
+**(Bayesian): A new credit scoring system has been developed to predict the likelihood of loan defaults. The system has a 90% sensitivity, meaning that it correctly identifies 90% of those who will default on their loans. It also has a 95% specificity, meaning that it correctly identifies 95% of those who will not default. The default rate among borrowers is 2%.**
+  
+First I set up a confusion matrix: this is an extra step but it is helpful to visualize everything first.
+  
+```{r bayesian_matrix}
+
+n_borrowers = 10000
+p_default = .02
+sensitivity = .9 
+specificity = .95
+
+n_default = n_borrowers %*% p_default
+n_no_default = n_borrowers - n_default
+
+M_default <- matrix(c(n_default %*% sensitivity, n_default %*% (1-sensitivity),n_default,
+                      n_no_default %*% (1-specificity),n_no_default %*% specificity,n_no_default,
+                      (n_default %*% sensitivity)+ (n_no_default %*% (1-specificity)),
+                      (n_default %*% (1-sensitivity)) + (n_no_default %*% specificity),
+                      n_default + n_no_default),
+                      nrow = 3, byrow = TRUE)
+
+rownames(M_default) = c("Default","No Default","Total")
+colnames(M_default) = c("Risk Flag","No Risk Flag","Total")
+M_default
+
+```
+  
+**Given these prevalence, sensitivity, and specificity estimates, what is the probability that a borrower flagged by the system as likely to default will actually default?**  
+  
+Using the matrix above, the probability of a flagged borrower defaulting (a true positive) is **~0.269**.  
+  
+```{r bayesian_prob}
+
+tp <- M_default[1,1]
+total_defaults <- M_default[3,1]
+
+prob_tp <- tp/total_defaults
+prob_tp
+  
+```
+  
+**If the average loss per defaulted loan is $200,000 and the cost to run the credit scoring test on each borrower is $500, what is the total first-year cost for evaluating 10,000 borrowers?**  
+  
+If the model were used in a process to **deny all flagged loans**, the first-year cost would be **$9 million**: 20 false negatives would still get loans and default, at a cost of \$4 million in addition to the \$5 million cost of the tests. 
+  
+```{r bayesian_cost}
+
+options(scipen = 999) #no scientific notation
+
+avg_cost <- 500
+avg_loss <- 200000
+
+# cost of tests for all borrowers
+test_cost <- n_borrowers %*% avg_cost
+test_cost
+
+# deny all flagged loans: 20 false negatives still get loans and default
+fn <- M_default[1,2]
+total_cost <- test_cost + (avg_loss %*% fn) 
+total_cost
+
+```
+### 2. Binomial
+**The probability that a stock will pay a dividend in any given quarter is 0.7.** 
+  
+**Probabilities**  
+  
+The dbinom function in R gives the probability of an exact number of successes in a binomial distribution: 
+
+*What is the probability that the stock pays dividends exactly 6 times in 8 quarters?* 
+
+**0.296**
+
+*What is the probability that it pays dividends 6 or more times? *
+
+**0.552**
+
+*What is the probability that it pays dividends fewer than 6 times?*
+
+**0.448**
+
+**What is the expected number of dividend payments over 8 quarters?** 
+
+The expected number of payments is simply n * p:   
+**5.6**
+
+**What is the standard deviation?**
+
+The standard deviation is $\frac{np}{1-p}$:  
+**1.296**
+
+```{r binom}
+n_binom <- 8
+p_binom <- .7
+
+# prob of 6
+p_binom_6 <- dbinom(x = 6, 
+                    size = n_binom, 
+                    prob = p_binom)
+p_binom_6
+
+# prob of 6-8
+p_binom_6_8 <- sum(dbinom(x = 6:8, 
+                    size = n_binom, 
+                    prob = p_binom))
+p_binom_6_8
+
+# prob of <6
+p_binom_0_5 <- sum(dbinom(x = 0:5, 
+                    size = n_binom, 
+                    prob = p_binom))
+p_binom_0_5
+
+# expected
+expected_binom <- n_binom %*% p_binom
+expected_binom
+
+# std dev
+sd_binom <- sqrt(n_binom %*% p_binom * (1- p_binom))
+sd_binom
+```
+### 3. Poisson  
+**A financial analyst notices that there are an average of 12 trading days each month when a certain stock’s price increases by more than 2%.** 
+  
+**Probabilities**  
+  
+*What is the probability that exactly 4 such days occur in a given month?*  
+  
+The dpois function in R gives the probability of an exact number of successes in a poisson distribution:  
+**0.005**  
+  
+*What is the probability that more than 12 such days occur in a given month?*  
+  
+Assuming there is no upper limit on the days (or trading days) in a month, we can use ppois function in R to find the probability of $\leq 12$ and subtract that from 1:  
+**0.424**
+  
+**How many such days would you expect in a 6-month period?**  
+  
+Expected = $\lambda$ * number of months  
+**72**
+  
+**What is the standard deviation of the number of such days?**  
+  
+Standard deviation = $\sqrt \lambda$  
+**~3.464**  
+  
+**If an investment strategy requires at least 70 days of such price increases in a year for profitability, what is the percent utilization and what are your recommendations?**  
+  
+The expected number of days with price increases over 2% in 12 months is 144, so the percent utilization is **205.7%** and the probability of having 70 or more such days is **1.00**. Therefore I would recommend moving forward with the investment strategy.  
+  
+```{r poisson}
+
+lambda_month <- 12
+
+# prob of 4
+prob_pois_4 <- dpois(x = 4, 
+                        lambda = lambda_month)
+prob_pois_4
+
+# prob >12, not limited to actual days in month
+prob_pois_more_than_12 <- 1-(ppois(q = 12, 
+                        lambda = lambda_month))
+prob_pois_more_than_12
+
+# expected in six months
+lambda_6months <- lambda_month %*% 6
+lambda_6months
+
+# std dev
+sd_pois <- sqrt(lambda_month)
+sd_pois
+
+# expected in 12 months
+lambda_12months <- lambda_month %*% 12
+lambda_12months
+
+pct_util_12mo <- lambda_12months/70
+pct_util_12mo
+
+prob_pois_more_than_69 <- 1-(ppois(q = 69, 
+                        lambda = lambda_12months))
+prob_pois_more_than_69
+
+```
+
+### 4. Hypergeometric
+
+**A hedge fund has a portfolio of 25 stocks, with 15 categorized as high-risk and 10 as low-risk.The fund manager randomly selects 7 stocks to closely monitor.**  
+  
+**If the manager selected 5 high-risk stocks and 2 low-risk stocks, what is the probability of selecting exactly 5 high-risk stocks if the selection was random?**  
+  
+The hypergeometic distribution represents taking a sample without replacement where K is the total number of successes (in this case, high risk stocks) in the population N. 
+  
+As in the examples above, we can use the "d" version of the distribution function, or dhyper, to find probabilities of exactly 5 successes in sample n=7:  
+**0.281**
+  
+**How many high-risk and low-risk stocks would you expect to be selected?**
+  
+The expected number of successes in sample n=7 is found by $n \cdot \frac{K}{N}$:  
+**4.2 high risk, 2.8 low risk**
+  
+```{r hypergeom}
+
+N_hyper <- 25 #total N
+K_hyper <- 15 #total successes
+n_hyper <- 7  #sample drawn
+
+# prob of 5 successes in the sample
+
+x_hyper <- 5  #desired successes
+prob_hyper_5 <- dhyper(x_hyper,
+                       K_hyper,
+                       N_hyper-K_hyper,
+                       n_hyper)
+prob_hyper_5
+
+# expected x
+expected_hyper <- n_hyper %*% (K_hyper/N_hyper)
+expected_hyper
+
+# expected not x
+n_hyper - expected_hyper
+```
+
+### 5. Geometric  
+  
+**The probability that a bond defaults in any given year is 0.5%. A portfolio manager holds this bond for 10 years.** 
+    
+**Probabilities**  
+This is a geometric distribution modeling the number of trials (years) until the first success (default). As above we can use the "p" version of the distribution function or "pgeom" to find the probability of success in $\leq q$ years:
+
+*What is the probability that the bond will default during this period?*
+  
+**0.489**
+
+*What is the probability that it will default in the next 15 years?* 
+  
+**0.072**  
+  
+**What is the expected number of years before the bond defaults?** 
+  
+Expected = $\frac{1}{p}$  
+**200**
+  
+**If the bond has already survived 10 years, what is the probability that it will default in the next 2 years?**
+
+Surviving 10 years is not relevant; find probability of defaulting in 2 years:  
+**0.010**
+
+```{r geom}
+p_geom <- .005
+
+# prob default by year 10
+prob_geom_10 <- pgeom(9,p_geom) #up to 9 FAILURES (not 10 successes)
+prob_geom_10
+
+# prob default by year 15
+prob_geom_15 <- pgeom(14,p_geom) 
+prob_geom_15
+
+# expected years before default
+exp_geom <- 1/p_geom
+exp_geom
+
+# prob default by year 2
+prob_geom_2 <- pgeom(1,p_geom) 
+prob_geom_2
 
 
+```
+  
+### 6. Poisson
+  
+**A high-frequency trading algorithm experiences a system failure about once every 1500 trading hours.**
+
+The time interval is 1500 hours and $\lambda = 1$
+  
+**What is the probability that the algorithm will experience more than two failures in 1500 hours?** 
+
+Similar to the earlier poisson problem, I used ppois to find the probability of $\leq 2$ failures in one time interval and subtracted from 1 to find probability of >2:  
+**0.080**
+  
+**What is the expected number of failures?**
+  
+The expected number of failures in 1500 hours is lambda or 
+**1**
+
+```{r poisson_2}
+
+# time interval = 1500 hours
+lambda_1500hours <- 1
+
+# prob of >2 in one time interval
+prob_pois2_gt2 <- 1-(ppois(q = 2, 
+                        lambda = lambda_1500hours))
+prob_pois2_gt2
+
+# expected in 1500 hours 
+exp_1500hrs <- lambda_1500hours %*% 1
+exp_1500hrs
+
+```
+### 7. Uniform 
+  
+**An investor is trying to time the market and is monitoring a stock that they believe has an equal chance of reaching a target price between 20 and 60 days.**
+
+**Probabilities**
+
+
+
+*What is the probability that the stock will reach the target price in more than 40 days?*  
+  
+*If it hasn’t reached the target price by day 40, what is the probability that it will reach it in the next 10 days?*  
+    
+**What is the expected time for the stock to reach the target price?**
+  
+  
+```{r uniform}
+
+
+
+
+
+```
+  
+### 8. Exponential 
+  
+**A financial model estimates that the lifetime of a successful start-up before it either goes public or fails follows an exponential distribution with an expected value of 8 years. **
+  
+**What is the expected time until the start-up either goes public or fails?**
+  
+**What is the standard deviation?** 
+  
+**What is the probability that the start-up will go public or fail after 6 years? **
+  
+**Given that the start-up has survived for 6 years, what is the probability that it will go public or fail in the next 2 years?**
+
+
+{{< pagebreak >}}
+## Problem 2  
+  
 {{< pagebreak >}}  
-
+## Problem 3  
+  
+{{< pagebreak >}}  
 ## Problem 4  
   
 ### 1. Sum of Independently Exponentially Distributed Random Variables  
