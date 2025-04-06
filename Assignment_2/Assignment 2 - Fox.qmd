@@ -1,0 +1,275 @@
+---
+title: "DATA_605_Assignment_2_Fox"
+author: "Amanda Fox"
+format: html
+---
+
+Load libraries: 
+  
+```{r libraries, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(Matrix)
+library(markovchain)
+
+```
+  
+
+
+{{< pagebreak >}}  
+
+## Problem 4  
+  
+### 1. Sum of Independently Exponentially Distributed Random Variables  
+  
+**Scenario: You are managing two independent servers in a data center. The time until the next failure for each server follows an exponential distribution with different rates:**
+
+$\lambda_A = 0.5$ failures per hour  
+$\lambda_B = 0.3$ failures per hour  
+
+**Question: What is the distribution of the total time until both servers have failed at least once? Use the moment generating function (MGF) to find the distribution of the sum of the times to failure.**  
+  
+The exponential distributions of time to failure for our two independently unreliable servers can be added together to find the distribution of the total time until both have failed.  
+
+The MGF of an exponential distribution is: 
+$$ M(s) = \frac{\lambda}{(\lambda-s)}$$
+  
+By multiplying the MGFs of the two independent exponential distributions, we find **the MGF of the distribution of the sum of the times to failure**:  
+  
+$$ M(s) = \frac{0.5}{(0.5-s)}\cdot\frac{0.3}{(0.3-s)}$$
+It is **not an exponential function**; the MGF does not match any defined type of distribution so this describes the distribution fully. 
+
+But we can use R to visualize the shape of the distribution described by the MGF we found: 
+
+```{r MGF_exp}
+
+n <- 10000
+
+#generate random numbers for each given distribution
+A <- rexp(n, rate = 0.5)
+B <- rexp(n, rate = 0.3)
+
+total_hours <- A + B
+df_total_hours <- data.frame(total_hours)
+
+df_total_hours %>% 
+  ggplot(aes(x = total_hours))+
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 50,
+                 fill = "steelblue")
+
+```
+
+
+### 2. Sum of Independent Normally Distributed Random Variables  
+  
+**Scenario: An investment firm is analyzing the returns of two independent assets, Asset X and Asset Y. The returns on these assets are normally distributed:**  
+  
+Asset X: $X \sim N(\mu_X = 5\%, \sigma_x^2 = 4\%)$  
+  
+Asset Y: $Y \sim N(\mu_X = 7\%, \sigma_x^2 = 9\%)$  
+
+**Question: Find the distribution of the combined return of the portfolio consisting of these two assets using the moment generating function (MGF).**
+
+The MGF of a normal distribution is $M(s) = exp(\mu s + \frac{\sigma^2 s^2}{2})$  
+  
+$M_X(s) = exp(.05s + \frac{.04s^2}{2})$  
+$M_Y(s) = exp(.07s + \frac{.09s^2}{2})$
+
+By multiplying the MGFs, we get the MGF of the sum of the normal distributions:  
+$M_Z(s) = exp(.05s + \frac{.04s^2}{2}) \cdot exp(.07s + \frac{.09s^2}{2})$
+$$M_Z(s) = exp(0.05s + 0.07s + \frac{0.04s^2 + 0.09s^2}{2})$$
+$$M_Z(s)= exp(0.12s + \frac{0.13s^2}{2})$$
+  
+So this is also a **normal distribution with** $\mu = .12$ **and** $\sigma^2 = .13$
+
+As above, we can also use R to visualize the shape of the combined distribution:
+
+```{r MGF_norm}
+
+n <- 10000
+
+#generate random numbers for each given distribution
+A <- rnorm(n, mean = 5, sd = sqrt(4))
+B <- rnorm(n, mean = 7, sd = sqrt(9))
+
+total_return <- A + B
+df_total_return <- data.frame(total_return)
+
+df_total_return %>% 
+  ggplot(aes(x = total_return))+
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 70,
+                 fill = "darkseagreen")
+
+```
+
+### 3. Sum of Independent Poisson Distributions of Random Variables  
+  
+**Scenario: A call center receives calls independently from two different regions. The number of calls received from Region A and Region B in an hour follows a Poisson distribution:**  
+  
+Region X: $X_A \sim Poisson(\lambda_A = 3)$  
+Region Y: $X_B \sim Poisson(\lambda_B = 5)$  
+  
+**Question: Determine the distribution of the total number of calls received in an hour from both regions using the moment generating function (MGF)**
+
+The MGF of a Poisson distribution is $M(s) = exp(\lambda(e^s - 1))$  
+  
+$M_X(s) = exp(3(e^s - 1))$
+$M_Y(s) = exp(5(e^s - 1))$
+
+By multiplying the MGFs, we get the MGF of the sum of the Poisson distributions:  
+$$M_Z(s) = exp(3(e^s - 1)) \cdot exp(5(e^s - 1))$$
+$$M_Z(s) = exp(3+5(e^s - 1))$$
+$$M_Z(s) = exp(8(e^s - 1))$$
+  
+This is **also a Poisson distribution with** $\lambda = 8$
+  
+Once again, we can visualize the shape of the combined distribution:
+  
+```{r MGF_pois}
+
+n <- 10000
+
+#generate random numbers for each given distribution
+A <- rpois(n, lambda = 3)
+B <- rpois(n, lambda = 5)
+
+total_calls <- A + B
+df_total_calls <- data.frame(total_calls)
+
+# histogram - make binwidth = 1 for discrete poisson
+df_total_calls %>% 
+  ggplot(aes(x = total_calls))+
+  geom_histogram(aes(y = after_stat(density)),
+                 binwidth = 1,
+                 fill = "cornflowerblue")
+
+```
+
+
+{{< pagebreak >}}  
+## Problem 5
+  
+### 1. Customer Retention and Churn
+  
+**Scenario: A telecommunications company wants to model the behavior of its customers regarding their likelihood to stay with the company (retention) or leave for a competitor (churn).**  
+   
+*From State 1 (Retention): 80% stay in State 1, 15% move to State 2, and 5% move to State 3.*  
+*From State 2 (At-risk): 30% return to State 1, 50% stay in State 2, and 20% move to State 3.*  
+*From State 3 (Churn): 100% stay in State 3.* 
+  
+**(a) Construct the transition matrix for this Markov Chain**  
+  
+```{r markov_churn}
+M_churn <- matrix(c(.8, .15, .05,
+                    .3, .5, .2,
+                    0,0,1),
+                  nrow = 3, byrow = TRUE)
+rownames(M_churn) <- c("Retention","At-Risk","Churn")
+colnames(M_churn) <- c("Retention","At-Risk","Churn")
+
+M_churn
+
+```
+
+**(b) If a customer starts as satisfied (State 1), what is the probability that they will eventually churn (move to State 3)? **  
+  
+This is an absorbing Markov chain where Churn is the absorbing state, so we can calculate the probability per the below methodology. 
+
+The probability that a customer who starts in Retention  will eventually churn is **100%**. 
+
+```{r absorb_churn}
+
+# Q matrix - to transient states
+Q_churn <- matrix(c(.8,.15,
+                    .3,.5),
+                  nrow = 2, 
+                  byrow = TRUE)
+rownames(Q_churn) <- c("Retention","At-Risk")
+colnames(Q_churn) <- c("Retention","At-Risk")
+Q_churn
+
+# R matrix - to absorbing state
+R_churn <- matrix(c(.05, .2),
+                  nrow = 2, 
+                  byrow = TRUE)
+rownames(R_churn) <- c("Retention","At-Risk")
+colnames(R_churn) <- c("Churn")
+R_churn
+
+# Fundamental matrix 
+# N = (I-Q)^-1 or inverse of identity matrix minus Q matrix
+
+I_churn <- diag(2)
+N_churn <- solve(I_churn - Q_churn)
+
+# Probabilities of eventual absorption by initial state:
+NR_churn <- N_churn %*% R_churn
+NR_churn
+
+# Probability of eventual absorption if starting in Retention state:
+NR_churn[1,1]
+
+```
+  
+
+**(c) Determine the steady-state distribution of this Markov Chain. What percentage of customers can the company expect to be in each state in the long run?**
+
+Steady state can only be calculated for regular chains where any state can be reached from any other. Because this is an absorbing chain, this is not the case.
+
+However, from the above calculations (NR matrix, shown again below) we can see that **100%** of customers will be in Churn in the long run no matter where they started: 
+
+``` {r longrun_churn}
+NR_churn
+```
+  
+------------------------------------------------------------------------
+
+### 2. Inventory Management in a Warehouse
+  
+**Scenario: A warehouse tracks the inventory levels of a particular product using a Markov Chain model. **
+  
+*From State 1 (High >100 units): 70% stay in State 1, 25% move to State 2, and 5% move to State 3.*  
+*From State 2 (Medium 50-100 units): 20% move to State 1, 50% stay in State 2, and 30% move to State 3.*  
+*From State 3 (Low <50 units): 10% move to State 1, 40% move to State 2, and 50% stay in State 3.*  
+  
+**(a) Construct the transition matrix for this Markov Chain.** 
+  
+```{r markov_stock}
+M_stock <- matrix(c(.7, .25, .05,
+                    .2, .5, .3,
+                    .1, .4, .5),
+                  nrow = 3, byrow = TRUE)
+rownames(M_stock) <- c("High","Med","Low")
+colnames(M_stock) <- c("High","Med","Low")
+
+M_stock
+
+```
+
+
+**(b) If the warehouse starts with a high inventory level (State 1), what is the probability that it will eventually end up in a low inventory level (State 3)?**  
+  
+This is not an absorbing Markov chain so the inventory levels will continue to change and it will not end up in any given state permanently.  
+
+However, in part C, the steady state distribution shows that the warehouse will spend *about 26.7% of the time* in the long term when the system is in *steady state.*
+
+**(c) Determine the steady-state distribution of this Markov Chain. What is the long-term expected proportion of time that the warehouse will spend in each inventory state**  
+
+The package "markovchain" can be used to easily find the steady state of this regular Markov chain. 
+
+The steady state matrix below shows that in the long term, the expected proportion of the time spent in each state will be:  
+**High ~34.7%**  
+**Med ~38.7%**  
+**Low ~26.7%**  
+  
+``` {r markov_steady}
+mc_stock <- new("markovchain",
+                transitionMatrix = M_stock,
+                states = c("High","Med","Low"))
+steady_stock <- steadyStates(mc_stock)
+steady_stock
+
+```
+
