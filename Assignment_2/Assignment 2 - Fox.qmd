@@ -327,21 +327,40 @@ exp_1500hrs
 **An investor is trying to time the market and is monitoring a stock that they believe has an equal chance of reaching a target price between 20 and 60 days.**
 
 **Probabilities**
-
-
+For a discrete uniform distribution, every outcome is equally likely so the probability formula is: 
+$$P(a \leq X \leq b) = \frac{values\ in\ range}{total\ possible\ values}  $$
 
 *What is the probability that the stock will reach the target price in more than 40 days?*  
   
+**0.5**
+  
 *If it hasn’t reached the target price by day 40, what is the probability that it will reach it in the next 10 days?*  
-    
+  
+**0.225**
+  
 **What is the expected time for the stock to reach the target price?**
   
+Expected value is half the range:
+**20 days (i.e. day 40)**  
+
   
 ```{r uniform}
 
+min_unif <- 20
+max_unif <- 60
+range_unif <- max_unif - min_unif
 
+# prob > 40 days to target 
+prob_unif_gt40 <- (max_unif-40)/range_unif
+prob_unif_gt40
 
+# prob 41-50
+prob_unif_41_50 <- (50-41)/range_unif
+prob_unif_41_50
 
+# expected time 
+expected_unif <- range_unif/2
+expected_unif
 
 ```
   
