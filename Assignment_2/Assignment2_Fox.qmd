@@ -2,7 +2,7 @@
 title: "DATA_605_Assignment_2_Fox"
 author: "Amanda Fox"
 date: "April 13, 2025"
-format: html
+format: pdf
 ---
   
   
@@ -601,10 +601,7 @@ prob_desired_arrangement <- desired_arrangements/total_arrangements
 prob_desired_arrangement
 ```
 
-{{< pagebreak >}}  
-## Problem 3  
-
-### 1. Expected Value of a Business Deal
+### 9. Expected Value of a Business Deal
 
 **A company is evaluating a deal where they either gain $4 for every successful contract or lose $16 for every unsuccessful contract. A "successful" contract is defined as drawing a queen or lower from a standard deck of cards. (Aces are considered the highest card in the deck.)**
 
@@ -637,7 +634,10 @@ expected_value
 833*expected_value
 
 ```
-### 2. Supply Chain Risk Assessment
+{{< pagebreak >}}  
+## Problem 3  
+  
+### 1. Supply Chain Risk Assessment
 **Let X1, X2,...Xn represent the lead times (in days) for the delivery of key components from n=5 different suppliers. Each lead time is uniformly distributed across a range of 1 to k=20 days, reflecting the uncertainty in delivery times. Let Y denote the minimum delivery time among all suppliers. Understanding the distribution of Y is crucial for assessing the earliest possible time you can begin production.**
 **Determine the distribution of Y to better manage your supply chain and minimize downtime.**
 
@@ -666,43 +666,102 @@ plot_cdf
 
 ```
 
-### 3. Maintenance Planning for Critical Equipment
+### 2. Maintenance Planning for Critical Equipment
 **Your organization owns a critical piece of equipment, such as a high-capacity photocopier (for a law firm) or an MRI machine (for a healthcare provider).** 
 **The manufacturer estimates the expected lifetime of this equipment to be 8 years, meaning that, on average, you expect one failure every 8 years. It's essential to understand the likelihood of failure over time to plan for maintenance and replacements.**
 
 *a. Geometric Model: Calculate the probability that the machine will not fail for the first 6 years. Also, provide the expected value and standard deviation. This model assumes each year the machine either fails or does not, independently of previous years.*
-
+  
 Probability no failure in six years: **0.449**
-Expected value: 
-Standard Deviation: 
-
-
+Expected value: 1/p = **8** 
+Standard Deviation: **7.483**
+  
 *b. Exponential Model: Calculate the probability that the machine will not fail for the first 6 years. Provide the expected value and standard deviation, modeling the time to failure as a continuous process.*
-
-
+  
+Probability no failure in six years: **0.472**
+Expected value: 1/lambda = **8**
+Standard Deviation: same as expected value **8**
+  
 *c. Binomial Model: Calculate the probability that the machine will not fail during the first 6 years, given that it is expected to fail once every 8 years. Provide the expected value and standard deviation, assuming a fixed number of trials (years) with a constant failure probability each year.*
-
-
+  
+Probability no failure in six years: n = six trials, no successes **0.449**
+Expected value: n * p = **2.693**
+Standard Deviation:  **0.810**
+  
 *d. Poisson Model: Calculate the probability that the machine will not fail during the first 6 years, modeling the failure events as a Poisson process. Provide the expected value and standard deviation.*
-
+  
+Probability no failure in six years: **0.472**
+Expected value: lambda * time periods = **0.75**
+Standard Deviation: square root expected value **0.866**
+  
 ```{r machine}
 
 prob_failure <- 1/8
 
 # ------------------
-# Geometric - assumes independence
+# Geometric - assumes independence, discrete years
 # ------------------
 
 # No failure in six years 
-prob_no_fail_6 <- (1-prob_failure)^6
-prob_no_fail_6
+prob_geom_no_fail_6 <- (1-prob_failure)^6
+prob_geom_no_fail_6
 
+expected_geom_machine <- 1/prob_failure
+expected_geom_machine
+
+std_dev_geom_machine <- sqrt((1-prob_failure)/prob_failure^2)
+std_dev_geom_machine
+
+
+# ------------------
+# Exponential - assumes independence, continuous time
+# ------------------
+
+lambda_exp_machine <- prob_failure
+prob_exp_no_fail_6 <- 1 - pexp(6,
+                           rate = lambda_exp_machine)
+prob_exp_no_fail_6
+
+expected_exp_machine <- 1/lambda_exp_machine
+expected_exp_machine
+
+# ------------------
+# Binomial - fixed number of independent trials (years)
+# ------------------
+
+trials_binom <- 6
+
+prob_binom_no_fail_6 <- dbinom(0,
+                               trials_binom,
+                               prob_failure)
+prob_binom_no_fail_6
+
+expected_binom_machine <- trials_binom %*% prob_failure
+expected_binom_machine
+
+std_dev_binom_machine <- sqrt(trials_binom %*% prob_failure %*% (1-prob_failure))
+std_dev_binom_machine
+
+# ------------------
+# Poisson - find # of rare failures in a time period 
+# ------------------
+
+lambda_pois_machine <- prob_failure
+
+expected_pois_machine <- lambda_pois_machine * 6
+expected_pois_machine
+
+prob_pois_no_fail_6 <- dpois(0,expected_pois_machine)
+prob_pois_no_fail_6
+
+std_dev_pois_machine <- sqrt(expected_pois_machine)
+std_dev_pois_machine
 ```
   
 {{< pagebreak >}}  
 ## Problem 4  
   
-### 1. Sum of Independently Exponentially Distributed Random Variables  
+### 1. Sum of Independent Exponentially Distributed Random Variables  
   
 **Scenario: You are managing two independent servers in a data center. The time until the next failure for each server follows an exponential distribution with different rates:**
 
@@ -786,7 +845,7 @@ df_total_return %>%
 
 ```
 
-### 3. Sum of Independent Poisson Distributions of Random Variables  
+### 3. Sum of Independent Poisson Distributed Random Variables  
   
 **Scenario: A call center receives calls independently from two different regions. The number of calls received from Region A and Region B in an hour follows a Poisson distribution:**  
   
