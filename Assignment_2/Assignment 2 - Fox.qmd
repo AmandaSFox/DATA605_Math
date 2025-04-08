@@ -332,7 +332,7 @@ $$P(a \leq X \leq b) = \frac{values\ in\ range}{total\ possible\ values}  $$
 
 *What is the probability that the stock will reach the target price in more than 40 days?*  
   
-**0.5**
+**0.488**
   
 *If it hasn’t reached the target price by day 40, what is the probability that it will reach it in the next 10 days?*  
   
@@ -341,27 +341,30 @@ $$P(a \leq X \leq b) = \frac{values\ in\ range}{total\ possible\ values}  $$
 **What is the expected time for the stock to reach the target price?**
   
 Expected value is half the range:
-**20 days (i.e. day 40)**  
+**Day 40**  
 
   
 ```{r uniform}
 
 min_unif <- 20
 max_unif <- 60
-range_unif <- max_unif - min_unif
+range_unif <- max_unif - min_unif + 1 # one extra day if 20-60 inclusive
+range_unif
 
-# prob > 40 days to target 
+# prob day 41 to day 60  
 prob_unif_gt40 <- (max_unif-40)/range_unif
 prob_unif_gt40
 
-# prob 41-50
-prob_unif_41_50 <- (50-41)/range_unif
+# prob 41-50, range now 41-60
+range_41_60 <- max_unif - 40 
+range_41_60
+prob_unif_41_50 <- (50-41+1)/range_41_60
 prob_unif_41_50
 
-# expected time 
+# expected time (max+min)/2
 expected_unif <- range_unif/2
-expected_unif
-
+expected_unif #days
+min_unif+expected_unif #expected day
 ```
   
 ### 8. Exponential 
@@ -370,16 +373,272 @@ expected_unif
   
 **What is the expected time until the start-up either goes public or fails?**
   
+Per the question, the expected time ($\lambda$) is *8 years*
+  
 **What is the standard deviation?** 
+  
+The standard deviation for an exponential function is the same as expected value, or **8 years**
   
 **What is the probability that the start-up will go public or fail after 6 years? **
   
+**0.472**
+  
 **Given that the start-up has survived for 6 years, what is the probability that it will go public or fail in the next 2 years?**
+  
+Surviving six years does not impact the probability of what happens in the following two years: 
+**0.221**
+  
+```{r exp}
+exp_expected = 8
+exp_lambda = 1/exp_expected
+exp_lambda
 
+# prob >6 
+exp_7_8 <- 1-(pexp(6, rate = exp_lambda))
+exp_7_8
+
+# prob <=2 
+exp_2 <- pexp(2, rate = exp_lambda)
+exp_2
+
+```
 
 {{< pagebreak >}}
 ## Problem 2  
   
+### 1. Product Selection
+  
+**A company produces 5 different types of green pens and 7 different types of red pens. The marketing team needs to create a new promotional package that includes 5 pens. How many different ways can the package be created if it contains fewer than 2 green pens?**
+  
+There are two ways to do this, either 0 or 1 green pens. Summing the combinations gives us **196**
+
+```{r pens}
+
+# choose five red pens from 7 total red pens
+case1_pens <- choose(7,5)
+case1_pens
+
+# choose four red pens from 7 red pens AND one green pen from five green pens
+case2_pens <- choose(7,4) * choose(5,1)
+case2_pens
+
+# add them together
+combined_cases_pens <- case1_pens+case2_pens
+combined_cases_pens
+
+```
+  
+###2. Team Formation for a Project
+  
+**A project committee is being formed within a company that includes 14 senior managers and 13 junior managers. How many ways can a project team of 5 members be formed if at least 4 of the members must be junior managers?**
+  
+Similar to above, there are two ways to do this: either choose five juniors or four juniors and one senior: 
+**11,297**
+  
+```{r team}
+
+senior_mgr <- 14
+junior_mgr <- 13
+
+# five total, four or five must be junior
+
+# choose five junior from 13
+case1_team <- choose(junior_mgr,5)
+case1_team
+
+# choose four junior from 13 AND one senior from 14
+case2_team <- choose(junior_mgr,4) * choose(senior_mgr,1)
+case2_team
+
+# add them together
+combined_cases_team <- case1_team+case2_team
+combined_cases_team
+
+```
+
+### 3. Marketing Campaign Outcomes
+  
+**A marketing campaign involves three stages: first, a customer is sent 5 email offers; second, the customer is targeted with 2 different online ads; and third, the customer is presented with 3 personalized product recommendations. If the email offers, online ads, and product recommendations are selected randomly, how many different possible outcomes are there for the entire campaign?**
+  
+We can find the possible combinations of these three types of outreach by multiplying the options for each: 
+**30**
+
+```{r mkting}
+
+ads_email <- 5
+ads_online <- 2
+ads_recs <- 3
+
+ads_combinations <- ads_email*ads_online*ads_recs
+ads_combinations
+```
+### 4. Product Defect Probability
+  
+**A quality control team draws 3 products from a batch of size N without replacement. What is the probability that at least one of the products drawn is defective if the defect rate is known to be consistent? **
+
+This is a hypergeometric probability problem and while we do not know the defect rate, we could find the probability of zero defects in R with **dhyper function** and then subtract from 1 to find the probability of at least one defect.
+  
+### 5. Business Strategy Choices
+  
+** A business strategist is choosing potential projects to invest in, focusing on 17 high-risk, high-reward projects and 14 low-risk, steady-return projects.**
+  
+*Step 1: How many different combinations of 5 projects can the strategist select?*  
+  
+Choose five from 31: **169,911**
+  
+*Step 2: How many different combinations of 5 projects can the strategist select if they want at least one low-risk project?*  
+  
+This is the difference between all possible combinations of five (above) and the number of combinations that are ALL high-risk: **163,723**
+
+```{r proj}
+high_risk <- 17
+low_risk <- 14
+
+# combinations of 5
+total_proj <- high_risk+low_risk
+case1_proj <- choose(total_proj,5)
+case1_proj
+
+# combinations of 5, at least one low-risk
+
+case2_all_high <- choose(high_risk,5) # all high-risk (5 from 17)
+case2_not_all_high <- case1_proj - case2_all_high
+case2_not_all_high
+```
+
+### Event Scheduling
+**A business conference needs to schedule 9 different keynote sessions from three different industries: technology, finance, and healthcare. There are 4 potential technology sessions, 104 finance sessions, and 17 healthcare sessions to choose from.** 
+**How many different schedules can be made? Express your answer in scientific notation rounding to the hundredths place.**
+
+If order doesn't matter, this is similar to the above combination problems: 
+$$1.53 \times 10^{13}$$ 
+
+However, if order matters, this is a permutation problem and the formula is $P(n,r) = \frac {n!}{(n-r)!}$
+$$5.55 \times 10^{18}$$ 
+
+```{r event}
+tech <- 4
+fin <- 104
+health <- 17
+
+# order doesn't matter
+total_sesh <- tech+fin+health
+case_sesh <- choose(total_sesh,9)
+case_sesh
+
+# order matters
+perm_sesh <- factorial(total_sesh)/factorial(total_sesh-9)
+perm_sesh
+```
+
+### Book Selection for Corporate Training  
+** An HR manager needs to create a reading list for a corporate leadership training program, which includes 13 books in total. The books are categorized into 6 novels, 6 business case studies, 7 leadership theory books, and 5 strategy books.**
+  
+*Step 1: If the manager wants to include no more than 4 strategy books, how many different reading schedules are possible? Express your answer in scientific notation rounding to the hundredths place.*
+
+As this is a reading list, I assumed order did not matter and calculated the ways to choose 13 books less the ways to choose five strategy books:
+$$2.42 \times 10^6$$
+
+*Step 2: If the manager wants to include all 6 business case studies, how many different reading schedules are possible? Express your answer in scientific notation rounding to the hundredths place*
+
+Similar to the above: $$3.18 \times 10^4$$
+
+
+```{r books}
+novels <-6
+biz <- 6
+lead <- 7
+strat <-5
+
+total_books <- novels + biz + lead + strat
+total_books
+
+# all combinations of 13 books
+case1_all_books <- choose(total_books,13)
+case1_all_books
+
+# combinations with five strategy books
+case2_strat_5 <- choose(total_books-strat, 8) # if five are strategy, ways to choose 8 from other categories
+case2_strat_5
+
+# combinations with < five strategy books
+case3_books_strat_leq4 <- case1_all_books - case2_strat_5
+case3_books_strat_leq4
+
+# combinations with six business books
+case4_biz_6 <- choose(total_books-biz, 7) # if six are strategy, ways to choose 7 from other categories
+case4_biz_6
+
+```
+
+### 8. Product Arrangement
+**A retailer is arranging 10 products on a display shelf. There are 5 different electronic gadgets and 5 different accessories.**
+**What is the probability that all the gadgets are placed together and all the accessories are placed together on the shelf? Express your answer as a fraction or a decimal number rounded to four decimal places**
+
+This one was challenging: there must be two blocks of five items, which themselves could be displayed as AB or BA.
+
+**0.0079**
+
+```{r products}
+electronic <- 5
+accessories <- 5
+
+total_arrangements <- factorial(10) # possible product line ups
+total_arrangements
+
+# calculate arrangements of two blocks of five, in any order: 
+elec_arrangements <- factorial(5)
+acc_arrangements <- factorial(5)
+
+# calculate total possible ways to arrange these two blocks of five items
+block_arrangements <- factorial(2)
+
+# calculate total desired arrangements of two blocks of five items by type
+desired_arrangements <- elec_arrangements * acc_arrangements * block_arrangements
+
+# calculate % desired arrangements as % of total possible
+prob_desired_arrangement <- desired_arrangements/total_arrangements
+prob_desired_arrangement
+```
+### Expected Value of a Business Deal
+
+**A company is evaluating a deal where they either gain $4 for every successful contract or lose $16 for every unsuccessful contract. A "successful" contract is defined as drawing a queen or lower from a standard deck of cards. (Aces are considered the highest card in the deck.)**
+
+*Step 1: Find the expected value of the deal. Round your answer to two decimal places. Losses must be expressed as negative values.*
+
+The expected value is the sum of (value of outcome x probability of outcome): 
+$$EV = \sum (Value \times Probability)$$
+**0.923**
+
+*Step 2: If the company enters into this deal 833 times, how much would they expect to win or lose? Round your answer to two decimal places. Losses must be expressed as negative values.*
+
+**$768.92**
+
+```{r decks}
+value_win <- 4
+value_lose <- -16
+
+cards_lose <- 2*4 #kings and aces times four suits
+cards_win <- 52 - cards_lose
+
+# probabilities of win/lose
+prob_win <- cards_win/52
+prob_lose <- cards_lose/52
+
+# expected value of a hand
+expected_value <- (value_win * prob_win) + (value_lose * prob_lose)
+expected_value
+
+# expected value of 833 hands
+833*expected_value
+
+```
+
+
+```
+
+
+
 {{< pagebreak >}}  
 ## Problem 3  
   
