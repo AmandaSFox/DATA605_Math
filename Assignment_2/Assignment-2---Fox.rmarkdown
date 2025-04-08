@@ -1,14 +1,16 @@
 ---
-title: "DATA_605_Assignment_2_Fox2"
+title: "DATA_605_Assignment_2_Fox"
 author: "Amanda Fox"
 date: "April 13, 2025"
 format: html
 ---
+
   
   
 ## Preparation  
 Load libraries: 
   
+
 ```{r libraries, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(ggplot2)
@@ -16,6 +18,7 @@ library(Matrix)
 library(markovchain)
 
 ```
+
   
 ## Problem 1  
   
@@ -24,6 +27,7 @@ library(markovchain)
   
 First I set up a confusion matrix: this is an extra step but it is helpful to visualize everything first.
   
+
 ```{r bayesian_matrix}
 
 n_borrowers = 10000
@@ -46,11 +50,13 @@ colnames(M_default) = c("Risk Flag","No Risk Flag","Total")
 M_default
 
 ```
+
   
 **Given these prevalence, sensitivity, and specificity estimates, what is the probability that a borrower flagged by the system as likely to default will actually default?**  
   
 Using the matrix above, the probability of a flagged borrower defaulting (a true positive) is **~0.269**.  
   
+
 ```{r bayesian_prob}
 
 tp <- M_default[1,1]
@@ -60,11 +66,13 @@ prob_tp <- tp/total_defaults
 prob_tp
   
 ```
+
   
 **If the average loss per defaulted loan is $200,000 and the cost to run the credit scoring test on each borrower is $500, what is the total first-year cost for evaluating 10,000 borrowers?**  
   
 If the model were used in a process to **deny all flagged loans**, the first-year cost would be **$9 million**: 20 false negatives would still get loans and default, at a cost of \$4 million in addition to the \$5 million cost of the tests. 
   
+
 ```{r bayesian_cost}
 
 options(scipen = 999) #no scientific notation
@@ -82,6 +90,7 @@ total_cost <- test_cost + (avg_loss %*% fn)
 total_cost
 
 ```
+
 ### 2. Binomial
 **The probability that a stock will pay a dividend in any given quarter is 0.7.** 
   
@@ -110,6 +119,7 @@ The expected number of payments is simply n * p:
 
 The standard deviation is $\frac{np}{1-p}$:  
 **1.296**
+
 
 ```{r binom}
 n_binom <- 8
@@ -141,6 +151,7 @@ expected_binom
 sd_binom <- sqrt(n_binom %*% p_binom * (1- p_binom))
 sd_binom
 ```
+
 ### 3. Poisson  
 **A financial analyst notices that there are an average of 12 trading days each month when a certain stock’s price increases by more than 2%.** 
   
@@ -170,6 +181,7 @@ Standard deviation = $\sqrt \lambda$
   
 The expected number of days with price increases over 2% in 12 months is 144, so the percent utilization is **205.7%** and the probability of having 70 or more such days is **1.00**. Therefore I would recommend moving forward with the investment strategy.  
   
+
 ```{r poisson}
 
 lambda_month <- 12
@@ -205,6 +217,7 @@ prob_pois_more_than_69
 
 ```
 
+
 ### 4. Hypergeometric
 
 **A hedge fund has a portfolio of 25 stocks, with 15 categorized as high-risk and 10 as low-risk.The fund manager randomly selects 7 stocks to closely monitor.**  
@@ -221,6 +234,7 @@ As in the examples above, we can use the "d" version of the distribution functio
 The expected number of successes in sample n=7 is found by $n \cdot \frac{K}{N}$:  
 **4.2 high risk, 2.8 low risk**
   
+
 ```{r hypergeom}
 
 N_hyper <- 25 #total N
@@ -243,6 +257,7 @@ expected_hyper
 # expected not x
 n_hyper - expected_hyper
 ```
+
 
 ### 5. Geometric  
   
@@ -269,6 +284,7 @@ Expected = $\frac{1}{p}$
 Surviving 10 years is not relevant; find probability of defaulting in 2 years:  
 **0.010**
 
+
 ```{r geom}
 p_geom <- .005
 
@@ -290,6 +306,7 @@ prob_geom_2
 
 
 ```
+
   
 ### 6. Poisson
   
@@ -307,6 +324,7 @@ Similar to the earlier poisson problem, I used ppois to find the probability of 
 The expected number of failures in 1500 hours is lambda or 
 **1**
 
+
 ```{r poisson_2}
 
 # time interval = 1500 hours
@@ -322,6 +340,7 @@ exp_1500hrs <- lambda_1500hours %*% 1
 exp_1500hrs
 
 ```
+
 ### 7. Uniform 
   
 **An investor is trying to time the market and is monitoring a stock that they believe has an equal chance of reaching a target price between 20 and 60 days.**
@@ -344,6 +363,7 @@ Expected value is half the range:
 **Day 40**  
 
   
+
 ```{r uniform}
 
 min_unif <- 20
@@ -366,6 +386,7 @@ expected_unif <- range_unif/2
 expected_unif #days
 min_unif+expected_unif #expected day
 ```
+
   
 ### 8. Exponential 
   
@@ -388,6 +409,7 @@ The standard deviation for an exponential function is the same as expected value
 Surviving six years does not impact the probability of what happens in the following two years: 
 **0.221**
   
+
 ```{r exp}
 exp_expected = 8
 exp_lambda = 1/exp_expected
@@ -404,6 +426,8 @@ exp_2
 ```
 
 {{< pagebreak >}}
+
+
 ## Problem 2  
   
 ### 1. Product Selection
@@ -411,6 +435,7 @@ exp_2
 **A company produces 5 different types of green pens and 7 different types of red pens. The marketing team needs to create a new promotional package that includes 5 pens. How many different ways can the package be created if it contains fewer than 2 green pens?**
   
 There are two ways to do this, either 0 or 1 green pens. Summing the combinations gives us **196**
+
 
 ```{r pens}
 
@@ -427,6 +452,7 @@ combined_cases_pens <- case1_pens+case2_pens
 combined_cases_pens
 
 ```
+
   
 ###2. Team Formation for a Project
   
@@ -435,6 +461,7 @@ combined_cases_pens
 Similar to above, there are two ways to do this: either choose five juniors or four juniors and one senior: 
 **11,297**
   
+
 ```{r team}
 
 senior_mgr <- 14
@@ -456,12 +483,14 @@ combined_cases_team
 
 ```
 
+
 ### 3. Marketing Campaign Outcomes
   
 **A marketing campaign involves three stages: first, a customer is sent 5 email offers; second, the customer is targeted with 2 different online ads; and third, the customer is presented with 3 personalized product recommendations. If the email offers, online ads, and product recommendations are selected randomly, how many different possible outcomes are there for the entire campaign?**
   
 We can find the possible combinations of these three types of outreach by multiplying the options for each: 
 **30**
+
 
 ```{r mkting}
 
@@ -472,6 +501,7 @@ ads_recs <- 3
 ads_combinations <- ads_email*ads_online*ads_recs
 ads_combinations
 ```
+
 ### 4. Product Defect Probability
   
 **A quality control team draws 3 products from a batch of size N without replacement. What is the probability that at least one of the products drawn is defective if the defect rate is known to be consistent? **
@@ -490,6 +520,7 @@ Choose five from 31: **169,911**
   
 This is the difference between all possible combinations of five (above) and the number of combinations that are ALL high-risk: **163,723**
 
+
 ```{r proj}
 high_risk <- 17
 low_risk <- 14
@@ -506,6 +537,7 @@ case2_not_all_high <- case1_proj - case2_all_high
 case2_not_all_high
 ```
 
+
 ### Event Scheduling
 **A business conference needs to schedule 9 different keynote sessions from three different industries: technology, finance, and healthcare. There are 4 potential technology sessions, 104 finance sessions, and 17 healthcare sessions to choose from.** 
 **How many different schedules can be made? Express your answer in scientific notation rounding to the hundredths place.**
@@ -515,6 +547,7 @@ $$1.53 \times 10^{13}$$
 
 However, if order matters, this is a permutation problem and the formula is $P(n,r) = \frac {n!}{(n-r)!}$
 $$5.55 \times 10^{18}$$ 
+
 
 ```{r event}
 tech <- 4
@@ -531,6 +564,7 @@ perm_sesh <- factorial(total_sesh)/factorial(total_sesh-9)
 perm_sesh
 ```
 
+
 ### Book Selection for Corporate Training  
 ** An HR manager needs to create a reading list for a corporate leadership training program, which includes 13 books in total. The books are categorized into 6 novels, 6 business case studies, 7 leadership theory books, and 5 strategy books.**
   
@@ -542,6 +576,7 @@ $$2.42 \times 10^6$$
 *Step 2: If the manager wants to include all 6 business case studies, how many different reading schedules are possible? Express your answer in scientific notation rounding to the hundredths place*
 
 Similar to the above: $$3.18 \times 10^4$$
+
 
 
 ```{r books}
@@ -571,6 +606,7 @@ case4_biz_6
 
 ```
 
+
 ### 8. Product Arrangement
 **A retailer is arranging 10 products on a display shelf. There are 5 different electronic gadgets and 5 different accessories.**
 **What is the probability that all the gadgets are placed together and all the accessories are placed together on the shelf? Express your answer as a fraction or a decimal number rounded to four decimal places**
@@ -578,6 +614,7 @@ case4_biz_6
 This one was challenging: there must be two blocks of five items, which themselves could be displayed as AB or BA.
 
 **0.0079**
+
 
 ```{r products}
 electronic <- 5
@@ -601,9 +638,6 @@ prob_desired_arrangement <- desired_arrangements/total_arrangements
 prob_desired_arrangement
 ```
 
-{{< pagebreak >}}  
-## Problem 3  
-
 ### Expected Value of a Business Deal
 
 **A company is evaluating a deal where they either gain $4 for every successful contract or lose $16 for every unsuccessful contract. A "successful" contract is defined as drawing a queen or lower from a standard deck of cards. (Aces are considered the highest card in the deck.)**
@@ -617,6 +651,7 @@ $$EV = \sum (Value \times Probability)$$
 *Step 2: If the company enters into this deal 833 times, how much would they expect to win or lose? Round your answer to two decimal places. Losses must be expressed as negative values.*
 
 **$768.92**
+
 
 ```{r decks}
 value_win <- 4
@@ -637,12 +672,14 @@ expected_value
 833*expected_value
 
 ```
+
 ### Supply Chain Risk Assessment
 **Let X1, X2,...Xn represent the lead times (in days) for the delivery of key components from n=5 different suppliers. Each lead time is uniformly distributed across a range of 1 to k=20 days, reflecting the uncertainty in delivery times. Let Y denote the minimum delivery time among all suppliers. Understanding the distribution of Y is crucial for assessing the earliest possible time you can begin production.**
 **Determine the distribution of Y to better manage your supply chain and minimize downtime.**
 
 The cumulative distribution function of Y is: 
 $$P(Y \leq k) = 1- \left( \frac{20-k}{19} \right)^5$$
+
 
 ```{r deliveries}
 n_suppliers <- 5
@@ -666,15 +703,12 @@ plot_cdf
 
 ```
 
+
 ### Maintenance Planning for Critical Equipment
 **Your organization owns a critical piece of equipment, such as a high-capacity photocopier (for a law firm) or an MRI machine (for a healthcare provider).** 
 **The manufacturer estimates the expected lifetime of this equipment to be 8 years, meaning that, on average, you expect one failure every 8 years. It's essential to understand the likelihood of failure over time to plan for maintenance and replacements.**
 
 *a. Geometric Model: Calculate the probability that the machine will not fail for the first 6 years. Also, provide the expected value and standard deviation. This model assumes each year the machine either fails or does not, independently of previous years.*
-
-Probability no failure in six years: **0.449**
-Expected value: 
-Standard Deviation: 
 
 
 *b. Exponential Model: Calculate the probability that the machine will not fail for the first 6 years. Provide the expected value and standard deviation, modeling the time to failure as a continuous process.*
@@ -685,21 +719,32 @@ Standard Deviation:
 
 *d. Poisson Model: Calculate the probability that the machine will not fail during the first 6 years, modeling the failure events as a Poisson process. Provide the expected value and standard deviation.*
 
+
 ```{r machine}
 
 prob_failure <- 1/8
+prob_failure
 
 # ------------------
 # Geometric - assumes independence
 # ------------------
 
 # No failure in six years 
-prob_no_fail_6 <- (1-prob_failure)^6
-prob_no_fail_6
+rm(list = ls())           # clear everything from memory
+options(digits = 10)      # show more precision
+(7/8)^6
 
 ```
-  
+
 {{< pagebreak >}}  
+
+
+## Problem 3  
+  
+
+{{< pagebreak >}}  
+
+
 ## Problem 4  
   
 ### 1. Sum of Independently Exponentially Distributed Random Variables  
@@ -723,6 +768,7 @@ It is **not an exponential function**; the MGF does not match any defined type o
 
 But we can use R to visualize the shape of the distribution described by the MGF we found: 
 
+
 ```{r MGF_exp}
 
 n <- 10000
@@ -741,6 +787,7 @@ df_total_hours %>%
                  fill = "steelblue")
 
 ```
+
 
 
 ### 2. Sum of Independent Normally Distributed Random Variables  
@@ -767,6 +814,7 @@ So this is also a **normal distribution with** $\mu = .12$ **and** $\sigma^2 = .
 
 As above, we can also use R to visualize the shape of the combined distribution:
 
+
 ```{r MGF_norm}
 
 n <- 10000
@@ -785,6 +833,7 @@ df_total_return %>%
                  fill = "darkseagreen")
 
 ```
+
 
 ### 3. Sum of Independent Poisson Distributions of Random Variables  
   
@@ -809,6 +858,7 @@ This is **also a Poisson distribution with** $\lambda = 8$
   
 Once again, we can visualize the shape of the combined distribution:
   
+
 ```{r MGF_pois}
 
 n <- 10000
@@ -829,8 +879,9 @@ df_total_calls %>%
 
 ```
 
-
 {{< pagebreak >}}  
+
+
 ## Problem 5
   
 ### 1. Customer Retention and Churn
@@ -843,6 +894,7 @@ df_total_calls %>%
   
 **(a) Construct the transition matrix for this Markov Chain**  
   
+
 ```{r markov_churn}
 M_churn <- matrix(c(.8, .15, .05,
                     .3, .5, .2,
@@ -855,11 +907,13 @@ M_churn
 
 ```
 
+
 **(b) If a customer starts as satisfied (State 1), what is the probability that they will eventually churn (move to State 3)? **  
   
 This is an absorbing Markov chain where Churn is the absorbing state, so we can calculate the probability per the below methodology. 
 
 The probability that a customer who starts in Retention  will eventually churn is **100%**. 
+
 
 ```{r absorb_churn}
 
@@ -894,6 +948,7 @@ NR_churn
 NR_churn[1,1]
 
 ```
+
   
 
 **(c) Determine the steady-state distribution of this Markov Chain. What percentage of customers can the company expect to be in each state in the long run?**
@@ -902,9 +957,11 @@ Steady state can only be calculated for regular chains where any state can be re
 
 However, from the above calculations (NR matrix, shown again below) we can see that **100%** of customers will be in Churn in the long run no matter where they started: 
 
+
 ``` {r longrun_churn}
 NR_churn
 ```
+
   
 ------------------------------------------------------------------------
 
@@ -918,6 +975,7 @@ NR_churn
   
 **(a) Construct the transition matrix for this Markov Chain.** 
   
+
 ```{r markov_stock}
 M_stock <- matrix(c(.7, .25, .05,
                     .2, .5, .3,
@@ -929,6 +987,7 @@ colnames(M_stock) <- c("High","Med","Low")
 M_stock
 
 ```
+
 
 
 **(b) If the warehouse starts with a high inventory level (State 1), what is the probability that it will eventually end up in a low inventory level (State 3)?**  
@@ -946,6 +1005,7 @@ The steady state matrix below shows that in the long term, the expected proporti
 **Med ~38.7%**  
 **Low ~26.7%**  
   
+
 ``` {r markov_steady}
 mc_stock <- new("markovchain",
                 transitionMatrix = M_stock,

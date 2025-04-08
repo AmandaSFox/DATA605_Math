@@ -59,16 +59,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="Assignment 2 - Fox_files/libs/clipboard/clipboard.min.js"></script>
-<script src="Assignment 2 - Fox_files/libs/quarto-html/quarto.js"></script>
-<script src="Assignment 2 - Fox_files/libs/quarto-html/popper.min.js"></script>
-<script src="Assignment 2 - Fox_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="Assignment 2 - Fox_files/libs/quarto-html/anchor.min.js"></script>
-<link href="Assignment 2 - Fox_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="Assignment 2 - Fox_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="Assignment 2 - Fox_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="Assignment 2 - Fox_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="Assignment 2 - Fox_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="Assignment2_Fox_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Assignment2_Fox_files/libs/quarto-html/quarto.js"></script>
+<script src="Assignment2_Fox_files/libs/quarto-html/popper.min.js"></script>
+<script src="Assignment2_Fox_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Assignment2_Fox_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Assignment2_Fox_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Assignment2_Fox_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Assignment2_Fox_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Assignment2_Fox_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Assignment2_Fox_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -569,9 +569,11 @@ This is a geometric distribution modeling the number of trials (years) until the
 <pre><code>[1] 196</code></pre>
 </div>
 </div>
-<p>###2. Team Formation for a Project</p>
+</section>
+<section id="team-formation-for-a-project" class="level3">
+<h3 class="anchored" data-anchor-id="team-formation-for-a-project">2. Team Formation for a Project</h3>
 <p><strong>A project committee is being formed within a company that includes 14 senior managers and 13 junior managers. How many ways can a project team of 5 members be formed if at least 4 of the members must be junior managers?</strong></p>
-<p>Similar to above, there are two ways to do this: either choose five juniors or four juniors and one senior: <strong>11,297</strong></p>
+<p>Similar to above, there are two ways to do this: either choose five juniors or four juniors and one senior. Total combinations: <strong>11,297</strong></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>senior_mgr <span class="ot">&lt;-</span> <span class="dv">14</span></span>
 <span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>junior_mgr <span class="ot">&lt;-</span> <span class="dv">13</span></span>
@@ -621,7 +623,7 @@ This is a geometric distribution modeling the number of trials (years) until the
 </section>
 <section id="business-strategy-choices" class="level3">
 <h3 class="anchored" data-anchor-id="business-strategy-choices">5. Business Strategy Choices</h3>
-<p>** A business strategist is choosing potential projects to invest in, focusing on 17 high-risk, high-reward projects and 14 low-risk, steady-return projects.**</p>
+<p><strong>A business strategist is choosing potential projects to invest in, focusing on 17 high-risk, high-reward projects and 14 low-risk, steady-return projects.</strong></p>
 <p><em>Step 1: How many different combinations of 5 projects can the strategist select?</em></p>
 <p>Choose five from 31: <strong>169,911</strong></p>
 <p><em>Step 2: How many different combinations of 5 projects can the strategist select if they want at least one low-risk project?</em></p>
@@ -648,7 +650,7 @@ This is a geometric distribution modeling the number of trials (years) until the
 </div>
 </section>
 <section id="event-scheduling" class="level3">
-<h3 class="anchored" data-anchor-id="event-scheduling">Event Scheduling</h3>
+<h3 class="anchored" data-anchor-id="event-scheduling">6. Event Scheduling</h3>
 <p><strong>A business conference needs to schedule 9 different keynote sessions from three different industries: technology, finance, and healthcare. There are 4 potential technology sessions, 104 finance sessions, and 17 healthcare sessions to choose from.</strong> <strong>How many different schedules can be made? Express your answer in scientific notation rounding to the hundredths place.</strong></p>
 <p>If order doesn’t matter, this is similar to the above combination problems: <span class="math display">\[1.53 \times 10^{13}\]</span></p>
 <p>However, if order matters, this is a permutation problem and the formula is <span class="math inline">\(P(n,r) = \frac {n!}{(n-r)!}\)</span> <span class="math display">\[5.55 \times 10^{18}\]</span></p>
@@ -673,7 +675,7 @@ This is a geometric distribution modeling the number of trials (years) until the
 </div>
 </section>
 <section id="book-selection-for-corporate-training" class="level3">
-<h3 class="anchored" data-anchor-id="book-selection-for-corporate-training">Book Selection for Corporate Training</h3>
+<h3 class="anchored" data-anchor-id="book-selection-for-corporate-training">7. Book Selection for Corporate Training</h3>
 <p>** An HR manager needs to create a reading list for a corporate leadership training program, which includes 13 books in total. The books are categorized into 6 novels, 6 business case studies, 7 leadership theory books, and 5 strategy books.**</p>
 <p><em>Step 1: If the manager wants to include no more than 4 strategy books, how many different reading schedules are possible? Express your answer in scientific notation rounding to the hundredths place.</em></p>
 <p>As this is a reading list, I assumed order did not matter and calculated the ways to choose 13 books less the ways to choose five strategy books: <span class="math display">\[2.42 \times 10^6\]</span></p>
@@ -747,9 +749,13 @@ This is a geometric distribution modeling the number of trials (years) until the
 <pre><code>[1] 0.007936508</code></pre>
 </div>
 </div>
+<div style="page-break-after: always;"></div>
 </section>
+</section>
+<section id="problem-3" class="level2">
+<h2 class="anchored" data-anchor-id="problem-3">Problem 3</h2>
 <section id="expected-value-of-a-business-deal" class="level3">
-<h3 class="anchored" data-anchor-id="expected-value-of-a-business-deal">Expected Value of a Business Deal</h3>
+<h3 class="anchored" data-anchor-id="expected-value-of-a-business-deal">1. Expected Value of a Business Deal</h3>
 <p><strong>A company is evaluating a deal where they either gain $4 for every successful contract or lose $16 for every unsuccessful contract. A “successful” contract is defined as drawing a queen or lower from a standard deck of cards. (Aces are considered the highest card in the deck.)</strong></p>
 <p><em>Step 1: Find the expected value of the deal. Round your answer to two decimal places. Losses must be expressed as negative values.</em></p>
 <p>The expected value is the sum of (value of outcome x probability of outcome): <span class="math display">\[EV = \sum (Value \times Probability)\]</span> <strong>0.923</strong></p>
@@ -780,7 +786,7 @@ This is a geometric distribution modeling the number of trials (years) until the
 </div>
 </section>
 <section id="supply-chain-risk-assessment" class="level3">
-<h3 class="anchored" data-anchor-id="supply-chain-risk-assessment">Supply Chain Risk Assessment</h3>
+<h3 class="anchored" data-anchor-id="supply-chain-risk-assessment">2. Supply Chain Risk Assessment</h3>
 <p><strong>Let X1, X2,…Xn represent the lead times (in days) for the delivery of key components from n=5 different suppliers. Each lead time is uniformly distributed across a range of 1 to k=20 days, reflecting the uncertainty in delivery times. Let Y denote the minimum delivery time among all suppliers. Understanding the distribution of Y is crucial for assessing the earliest possible time you can begin production.</strong> <strong>Determine the distribution of Y to better manage your supply chain and minimize downtime.</strong></p>
 <p>The cumulative distribution function of Y is: <span class="math display">\[P(Y \leq k) = 1- \left( \frac{20-k}{19} \right)^5\]</span></p>
 <div class="cell">
@@ -811,25 +817,36 @@ This is a geometric distribution modeling the number of trials (years) until the
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Assignment-2---Fox_files/figure-html/deliveries-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Assignment2_Fox_files/figure-html/deliveries-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
 <section id="maintenance-planning-for-critical-equipment" class="level3">
-<h3 class="anchored" data-anchor-id="maintenance-planning-for-critical-equipment">Maintenance Planning for Critical Equipment</h3>
+<h3 class="anchored" data-anchor-id="maintenance-planning-for-critical-equipment">3. Maintenance Planning for Critical Equipment</h3>
 <p><strong>Your organization owns a critical piece of equipment, such as a high-capacity photocopier (for a law firm) or an MRI machine (for a healthcare provider).</strong> <strong>The manufacturer estimates the expected lifetime of this equipment to be 8 years, meaning that, on average, you expect one failure every 8 years. It’s essential to understand the likelihood of failure over time to plan for maintenance and replacements.</strong></p>
 <p><em>a. Geometric Model: Calculate the probability that the machine will not fail for the first 6 years. Also, provide the expected value and standard deviation. This model assumes each year the machine either fails or does not, independently of previous years.</em></p>
+<p>Probability no failure in six years: <strong>0.449</strong> Expected value: Standard Deviation:</p>
 <p><em>b. Exponential Model: Calculate the probability that the machine will not fail for the first 6 years. Provide the expected value and standard deviation, modeling the time to failure as a continuous process.</em></p>
 <p><em>c.&nbsp;Binomial Model: Calculate the probability that the machine will not fail during the first 6 years, given that it is expected to fail once every 8 years. Provide the expected value and standard deviation, assuming a fixed number of trials (years) with a constant failure probability each year.</em></p>
 <p><em>d.&nbsp;Poisson Model: Calculate the probability that the machine will not fail during the first 6 years, modeling the failure events as a Poisson process. Provide the expected value and standard deviation.</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb113"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a>prob_failure <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">8</span></span>
+<span id="cb113-2"><a href="#cb113-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-3"><a href="#cb113-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------</span></span>
+<span id="cb113-4"><a href="#cb113-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Geometric - assumes independence</span></span>
+<span id="cb113-5"><a href="#cb113-5" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------</span></span>
+<span id="cb113-6"><a href="#cb113-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-7"><a href="#cb113-7" aria-hidden="true" tabindex="-1"></a><span class="co"># No failure in six years </span></span>
+<span id="cb113-8"><a href="#cb113-8" aria-hidden="true" tabindex="-1"></a>prob_no_fail_6 <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">-</span>prob_failure)<span class="sc">^</span><span class="dv">6</span></span>
+<span id="cb113-9"><a href="#cb113-9" aria-hidden="true" tabindex="-1"></a>prob_no_fail_6</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.4487953</code></pre>
+</div>
+</div>
 <div style="page-break-after: always;"></div>
 </section>
-</section>
-<section id="problem-3" class="level2">
-<h2 class="anchored" data-anchor-id="problem-3">Problem 3</h2>
-<div style="page-break-after: always;"></div>
 </section>
 <section id="problem-4" class="level2">
 <h2 class="anchored" data-anchor-id="problem-4">Problem 4</h2>
@@ -845,24 +862,24 @@ This is a geometric distribution modeling the number of trials (years) until the
 <p><span class="math display">\[ M(s) = \frac{0.5}{(0.5-s)}\cdot\frac{0.3}{(0.3-s)}\]</span> It is <strong>not an exponential function</strong>; the MGF does not match any defined type of distribution so this describes the distribution fully.</p>
 <p>But we can use R to visualize the shape of the distribution described by the MGF we found:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb113"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb113-2"><a href="#cb113-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb113-3"><a href="#cb113-3" aria-hidden="true" tabindex="-1"></a><span class="co">#generate random numbers for each given distribution</span></span>
-<span id="cb113-4"><a href="#cb113-4" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">rexp</span>(n, <span class="at">rate =</span> <span class="fl">0.5</span>)</span>
-<span id="cb113-5"><a href="#cb113-5" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">rexp</span>(n, <span class="at">rate =</span> <span class="fl">0.3</span>)</span>
-<span id="cb113-6"><a href="#cb113-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb113-7"><a href="#cb113-7" aria-hidden="true" tabindex="-1"></a>total_hours <span class="ot">&lt;-</span> A <span class="sc">+</span> B</span>
-<span id="cb113-8"><a href="#cb113-8" aria-hidden="true" tabindex="-1"></a>df_total_hours <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(total_hours)</span>
-<span id="cb113-9"><a href="#cb113-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb113-10"><a href="#cb113-10" aria-hidden="true" tabindex="-1"></a>df_total_hours <span class="sc">%&gt;%</span> </span>
-<span id="cb113-11"><a href="#cb113-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> total_hours))<span class="sc">+</span></span>
-<span id="cb113-12"><a href="#cb113-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)),</span>
-<span id="cb113-13"><a href="#cb113-13" aria-hidden="true" tabindex="-1"></a>                 <span class="at">bins =</span> <span class="dv">50</span>,</span>
-<span id="cb113-14"><a href="#cb113-14" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">"steelblue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb115-2"><a href="#cb115-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb115-3"><a href="#cb115-3" aria-hidden="true" tabindex="-1"></a><span class="co">#generate random numbers for each given distribution</span></span>
+<span id="cb115-4"><a href="#cb115-4" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">rexp</span>(n, <span class="at">rate =</span> <span class="fl">0.5</span>)</span>
+<span id="cb115-5"><a href="#cb115-5" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">rexp</span>(n, <span class="at">rate =</span> <span class="fl">0.3</span>)</span>
+<span id="cb115-6"><a href="#cb115-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb115-7"><a href="#cb115-7" aria-hidden="true" tabindex="-1"></a>total_hours <span class="ot">&lt;-</span> A <span class="sc">+</span> B</span>
+<span id="cb115-8"><a href="#cb115-8" aria-hidden="true" tabindex="-1"></a>df_total_hours <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(total_hours)</span>
+<span id="cb115-9"><a href="#cb115-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb115-10"><a href="#cb115-10" aria-hidden="true" tabindex="-1"></a>df_total_hours <span class="sc">%&gt;%</span> </span>
+<span id="cb115-11"><a href="#cb115-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> total_hours))<span class="sc">+</span></span>
+<span id="cb115-12"><a href="#cb115-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)),</span>
+<span id="cb115-13"><a href="#cb115-13" aria-hidden="true" tabindex="-1"></a>                 <span class="at">bins =</span> <span class="dv">50</span>,</span>
+<span id="cb115-14"><a href="#cb115-14" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">"steelblue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Assignment-2---Fox_files/figure-html/MGF_exp-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Assignment2_Fox_files/figure-html/MGF_exp-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -882,24 +899,24 @@ This is a geometric distribution modeling the number of trials (years) until the
 <p>So this is also a <strong>normal distribution with</strong> <span class="math inline">\(\mu = .12\)</span> <strong>and</strong> <span class="math inline">\(\sigma^2 = .13\)</span></p>
 <p>As above, we can also use R to visualize the shape of the combined distribution:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb114"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb114-1"><a href="#cb114-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb114-2"><a href="#cb114-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb114-3"><a href="#cb114-3" aria-hidden="true" tabindex="-1"></a><span class="co">#generate random numbers for each given distribution</span></span>
-<span id="cb114-4"><a href="#cb114-4" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">5</span>, <span class="at">sd =</span> <span class="fu">sqrt</span>(<span class="dv">4</span>))</span>
-<span id="cb114-5"><a href="#cb114-5" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">7</span>, <span class="at">sd =</span> <span class="fu">sqrt</span>(<span class="dv">9</span>))</span>
-<span id="cb114-6"><a href="#cb114-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb114-7"><a href="#cb114-7" aria-hidden="true" tabindex="-1"></a>total_return <span class="ot">&lt;-</span> A <span class="sc">+</span> B</span>
-<span id="cb114-8"><a href="#cb114-8" aria-hidden="true" tabindex="-1"></a>df_total_return <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(total_return)</span>
-<span id="cb114-9"><a href="#cb114-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb114-10"><a href="#cb114-10" aria-hidden="true" tabindex="-1"></a>df_total_return <span class="sc">%&gt;%</span> </span>
-<span id="cb114-11"><a href="#cb114-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> total_return))<span class="sc">+</span></span>
-<span id="cb114-12"><a href="#cb114-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)),</span>
-<span id="cb114-13"><a href="#cb114-13" aria-hidden="true" tabindex="-1"></a>                 <span class="at">bins =</span> <span class="dv">70</span>,</span>
-<span id="cb114-14"><a href="#cb114-14" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">"darkseagreen"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb116"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb116-2"><a href="#cb116-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-3"><a href="#cb116-3" aria-hidden="true" tabindex="-1"></a><span class="co">#generate random numbers for each given distribution</span></span>
+<span id="cb116-4"><a href="#cb116-4" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">5</span>, <span class="at">sd =</span> <span class="fu">sqrt</span>(<span class="dv">4</span>))</span>
+<span id="cb116-5"><a href="#cb116-5" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">7</span>, <span class="at">sd =</span> <span class="fu">sqrt</span>(<span class="dv">9</span>))</span>
+<span id="cb116-6"><a href="#cb116-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-7"><a href="#cb116-7" aria-hidden="true" tabindex="-1"></a>total_return <span class="ot">&lt;-</span> A <span class="sc">+</span> B</span>
+<span id="cb116-8"><a href="#cb116-8" aria-hidden="true" tabindex="-1"></a>df_total_return <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(total_return)</span>
+<span id="cb116-9"><a href="#cb116-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-10"><a href="#cb116-10" aria-hidden="true" tabindex="-1"></a>df_total_return <span class="sc">%&gt;%</span> </span>
+<span id="cb116-11"><a href="#cb116-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> total_return))<span class="sc">+</span></span>
+<span id="cb116-12"><a href="#cb116-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)),</span>
+<span id="cb116-13"><a href="#cb116-13" aria-hidden="true" tabindex="-1"></a>                 <span class="at">bins =</span> <span class="dv">70</span>,</span>
+<span id="cb116-14"><a href="#cb116-14" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">"darkseagreen"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Assignment-2---Fox_files/figure-html/MGF_norm-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Assignment2_Fox_files/figure-html/MGF_norm-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -918,25 +935,25 @@ Region Y: <span class="math inline">\(X_B \sim Poisson(\lambda_B = 5)\)</span></
 <p>This is <strong>also a Poisson distribution with</strong> <span class="math inline">\(\lambda = 8\)</span></p>
 <p>Once again, we can visualize the shape of the combined distribution:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb115-2"><a href="#cb115-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-3"><a href="#cb115-3" aria-hidden="true" tabindex="-1"></a><span class="co">#generate random numbers for each given distribution</span></span>
-<span id="cb115-4"><a href="#cb115-4" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">rpois</span>(n, <span class="at">lambda =</span> <span class="dv">3</span>)</span>
-<span id="cb115-5"><a href="#cb115-5" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">rpois</span>(n, <span class="at">lambda =</span> <span class="dv">5</span>)</span>
-<span id="cb115-6"><a href="#cb115-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-7"><a href="#cb115-7" aria-hidden="true" tabindex="-1"></a>total_calls <span class="ot">&lt;-</span> A <span class="sc">+</span> B</span>
-<span id="cb115-8"><a href="#cb115-8" aria-hidden="true" tabindex="-1"></a>df_total_calls <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(total_calls)</span>
-<span id="cb115-9"><a href="#cb115-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-10"><a href="#cb115-10" aria-hidden="true" tabindex="-1"></a><span class="co"># histogram - make binwidth = 1 for discrete poisson</span></span>
-<span id="cb115-11"><a href="#cb115-11" aria-hidden="true" tabindex="-1"></a>df_total_calls <span class="sc">%&gt;%</span> </span>
-<span id="cb115-12"><a href="#cb115-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> total_calls))<span class="sc">+</span></span>
-<span id="cb115-13"><a href="#cb115-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)),</span>
-<span id="cb115-14"><a href="#cb115-14" aria-hidden="true" tabindex="-1"></a>                 <span class="at">binwidth =</span> <span class="dv">1</span>,</span>
-<span id="cb115-15"><a href="#cb115-15" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">"cornflowerblue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb117"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb117-2"><a href="#cb117-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb117-3"><a href="#cb117-3" aria-hidden="true" tabindex="-1"></a><span class="co">#generate random numbers for each given distribution</span></span>
+<span id="cb117-4"><a href="#cb117-4" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">rpois</span>(n, <span class="at">lambda =</span> <span class="dv">3</span>)</span>
+<span id="cb117-5"><a href="#cb117-5" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">rpois</span>(n, <span class="at">lambda =</span> <span class="dv">5</span>)</span>
+<span id="cb117-6"><a href="#cb117-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb117-7"><a href="#cb117-7" aria-hidden="true" tabindex="-1"></a>total_calls <span class="ot">&lt;-</span> A <span class="sc">+</span> B</span>
+<span id="cb117-8"><a href="#cb117-8" aria-hidden="true" tabindex="-1"></a>df_total_calls <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(total_calls)</span>
+<span id="cb117-9"><a href="#cb117-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb117-10"><a href="#cb117-10" aria-hidden="true" tabindex="-1"></a><span class="co"># histogram - make binwidth = 1 for discrete poisson</span></span>
+<span id="cb117-11"><a href="#cb117-11" aria-hidden="true" tabindex="-1"></a>df_total_calls <span class="sc">%&gt;%</span> </span>
+<span id="cb117-12"><a href="#cb117-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> total_calls))<span class="sc">+</span></span>
+<span id="cb117-13"><a href="#cb117-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)),</span>
+<span id="cb117-14"><a href="#cb117-14" aria-hidden="true" tabindex="-1"></a>                 <span class="at">binwidth =</span> <span class="dv">1</span>,</span>
+<span id="cb117-15"><a href="#cb117-15" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">"cornflowerblue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Assignment-2---Fox_files/figure-html/MGF_pois-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Assignment2_Fox_files/figure-html/MGF_pois-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -954,14 +971,14 @@ Region Y: <span class="math inline">\(X_B \sim Poisson(\lambda_B = 5)\)</span></
 <em>From State 3 (Churn): 100% stay in State 3.</em></p>
 <p><strong>(a) Construct the transition matrix for this Markov Chain</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb116"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1" aria-hidden="true" tabindex="-1"></a>M_churn <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(.<span class="dv">8</span>, .<span class="dv">15</span>, .<span class="dv">05</span>,</span>
-<span id="cb116-2"><a href="#cb116-2" aria-hidden="true" tabindex="-1"></a>                    .<span class="dv">3</span>, .<span class="dv">5</span>, .<span class="dv">2</span>,</span>
-<span id="cb116-3"><a href="#cb116-3" aria-hidden="true" tabindex="-1"></a>                    <span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>),</span>
-<span id="cb116-4"><a href="#cb116-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb116-5"><a href="#cb116-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(M_churn) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Retention"</span>,<span class="st">"At-Risk"</span>,<span class="st">"Churn"</span>)</span>
-<span id="cb116-6"><a href="#cb116-6" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(M_churn) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Retention"</span>,<span class="st">"At-Risk"</span>,<span class="st">"Churn"</span>)</span>
-<span id="cb116-7"><a href="#cb116-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb116-8"><a href="#cb116-8" aria-hidden="true" tabindex="-1"></a>M_churn</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb118"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb118-1"><a href="#cb118-1" aria-hidden="true" tabindex="-1"></a>M_churn <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(.<span class="dv">8</span>, .<span class="dv">15</span>, .<span class="dv">05</span>,</span>
+<span id="cb118-2"><a href="#cb118-2" aria-hidden="true" tabindex="-1"></a>                    .<span class="dv">3</span>, .<span class="dv">5</span>, .<span class="dv">2</span>,</span>
+<span id="cb118-3"><a href="#cb118-3" aria-hidden="true" tabindex="-1"></a>                    <span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>),</span>
+<span id="cb118-4"><a href="#cb118-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb118-5"><a href="#cb118-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(M_churn) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Retention"</span>,<span class="st">"At-Risk"</span>,<span class="st">"Churn"</span>)</span>
+<span id="cb118-6"><a href="#cb118-6" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(M_churn) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Retention"</span>,<span class="st">"At-Risk"</span>,<span class="st">"Churn"</span>)</span>
+<span id="cb118-7"><a href="#cb118-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb118-8"><a href="#cb118-8" aria-hidden="true" tabindex="-1"></a>M_churn</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          Retention At-Risk Churn
 Retention       0.8    0.15  0.05
@@ -973,47 +990,47 @@ Churn           0.0    0.00  1.00</code></pre>
 <p>This is an absorbing Markov chain where Churn is the absorbing state, so we can calculate the probability per the below methodology.</p>
 <p>The probability that a customer who starts in Retention will eventually churn is <strong>100%</strong>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb118"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb118-1"><a href="#cb118-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Q matrix - to transient states</span></span>
-<span id="cb118-2"><a href="#cb118-2" aria-hidden="true" tabindex="-1"></a>Q_churn <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(.<span class="dv">8</span>,.<span class="dv">15</span>,</span>
-<span id="cb118-3"><a href="#cb118-3" aria-hidden="true" tabindex="-1"></a>                    .<span class="dv">3</span>,.<span class="dv">5</span>),</span>
-<span id="cb118-4"><a href="#cb118-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">nrow =</span> <span class="dv">2</span>, </span>
-<span id="cb118-5"><a href="#cb118-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb118-6"><a href="#cb118-6" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(Q_churn) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Retention"</span>,<span class="st">"At-Risk"</span>)</span>
-<span id="cb118-7"><a href="#cb118-7" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(Q_churn) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Retention"</span>,<span class="st">"At-Risk"</span>)</span>
-<span id="cb118-8"><a href="#cb118-8" aria-hidden="true" tabindex="-1"></a>Q_churn</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb120"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Q matrix - to transient states</span></span>
+<span id="cb120-2"><a href="#cb120-2" aria-hidden="true" tabindex="-1"></a>Q_churn <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(.<span class="dv">8</span>,.<span class="dv">15</span>,</span>
+<span id="cb120-3"><a href="#cb120-3" aria-hidden="true" tabindex="-1"></a>                    .<span class="dv">3</span>,.<span class="dv">5</span>),</span>
+<span id="cb120-4"><a href="#cb120-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">nrow =</span> <span class="dv">2</span>, </span>
+<span id="cb120-5"><a href="#cb120-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb120-6"><a href="#cb120-6" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(Q_churn) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Retention"</span>,<span class="st">"At-Risk"</span>)</span>
+<span id="cb120-7"><a href="#cb120-7" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(Q_churn) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Retention"</span>,<span class="st">"At-Risk"</span>)</span>
+<span id="cb120-8"><a href="#cb120-8" aria-hidden="true" tabindex="-1"></a>Q_churn</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          Retention At-Risk
 Retention       0.8    0.15
 At-Risk         0.3    0.50</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb120"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1" aria-hidden="true" tabindex="-1"></a><span class="co"># R matrix - to absorbing state</span></span>
-<span id="cb120-2"><a href="#cb120-2" aria-hidden="true" tabindex="-1"></a>R_churn <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(.<span class="dv">05</span>, .<span class="dv">2</span>),</span>
-<span id="cb120-3"><a href="#cb120-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">nrow =</span> <span class="dv">2</span>, </span>
-<span id="cb120-4"><a href="#cb120-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb120-5"><a href="#cb120-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(R_churn) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Retention"</span>,<span class="st">"At-Risk"</span>)</span>
-<span id="cb120-6"><a href="#cb120-6" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(R_churn) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Churn"</span>)</span>
-<span id="cb120-7"><a href="#cb120-7" aria-hidden="true" tabindex="-1"></a>R_churn</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb122"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1" aria-hidden="true" tabindex="-1"></a><span class="co"># R matrix - to absorbing state</span></span>
+<span id="cb122-2"><a href="#cb122-2" aria-hidden="true" tabindex="-1"></a>R_churn <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(.<span class="dv">05</span>, .<span class="dv">2</span>),</span>
+<span id="cb122-3"><a href="#cb122-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">nrow =</span> <span class="dv">2</span>, </span>
+<span id="cb122-4"><a href="#cb122-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb122-5"><a href="#cb122-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(R_churn) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Retention"</span>,<span class="st">"At-Risk"</span>)</span>
+<span id="cb122-6"><a href="#cb122-6" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(R_churn) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Churn"</span>)</span>
+<span id="cb122-7"><a href="#cb122-7" aria-hidden="true" tabindex="-1"></a>R_churn</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          Churn
 Retention  0.05
 At-Risk    0.20</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb122"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fundamental matrix </span></span>
-<span id="cb122-2"><a href="#cb122-2" aria-hidden="true" tabindex="-1"></a><span class="co"># N = (I-Q)^-1 or inverse of identity matrix minus Q matrix</span></span>
-<span id="cb122-3"><a href="#cb122-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb122-4"><a href="#cb122-4" aria-hidden="true" tabindex="-1"></a>I_churn <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">2</span>)</span>
-<span id="cb122-5"><a href="#cb122-5" aria-hidden="true" tabindex="-1"></a>N_churn <span class="ot">&lt;-</span> <span class="fu">solve</span>(I_churn <span class="sc">-</span> Q_churn)</span>
-<span id="cb122-6"><a href="#cb122-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb122-7"><a href="#cb122-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Probabilities of eventual absorption by initial state:</span></span>
-<span id="cb122-8"><a href="#cb122-8" aria-hidden="true" tabindex="-1"></a>NR_churn <span class="ot">&lt;-</span> N_churn <span class="sc">%*%</span> R_churn</span>
-<span id="cb122-9"><a href="#cb122-9" aria-hidden="true" tabindex="-1"></a>NR_churn</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb124"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb124-1"><a href="#cb124-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fundamental matrix </span></span>
+<span id="cb124-2"><a href="#cb124-2" aria-hidden="true" tabindex="-1"></a><span class="co"># N = (I-Q)^-1 or inverse of identity matrix minus Q matrix</span></span>
+<span id="cb124-3"><a href="#cb124-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb124-4"><a href="#cb124-4" aria-hidden="true" tabindex="-1"></a>I_churn <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">2</span>)</span>
+<span id="cb124-5"><a href="#cb124-5" aria-hidden="true" tabindex="-1"></a>N_churn <span class="ot">&lt;-</span> <span class="fu">solve</span>(I_churn <span class="sc">-</span> Q_churn)</span>
+<span id="cb124-6"><a href="#cb124-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb124-7"><a href="#cb124-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Probabilities of eventual absorption by initial state:</span></span>
+<span id="cb124-8"><a href="#cb124-8" aria-hidden="true" tabindex="-1"></a>NR_churn <span class="ot">&lt;-</span> N_churn <span class="sc">%*%</span> R_churn</span>
+<span id="cb124-9"><a href="#cb124-9" aria-hidden="true" tabindex="-1"></a>NR_churn</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          Churn
 Retention     1
 At-Risk       1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb124"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb124-1"><a href="#cb124-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Probability of eventual absorption if starting in Retention state:</span></span>
-<span id="cb124-2"><a href="#cb124-2" aria-hidden="true" tabindex="-1"></a>NR_churn[<span class="dv">1</span>,<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb126"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb126-1"><a href="#cb126-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Probability of eventual absorption if starting in Retention state:</span></span>
+<span id="cb126-2"><a href="#cb126-2" aria-hidden="true" tabindex="-1"></a>NR_churn[<span class="dv">1</span>,<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1</code></pre>
 </div>
@@ -1022,7 +1039,7 @@ At-Risk       1</code></pre>
 <p>Steady state can only be calculated for regular chains where any state can be reached from any other. Because this is an absorbing chain, this is not the case.</p>
 <p>However, from the above calculations (NR matrix, shown again below) we can see that <strong>100%</strong> of customers will be in Churn in the long run no matter where they started:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb126"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb126-1"><a href="#cb126-1" aria-hidden="true" tabindex="-1"></a>NR_churn</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb128"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb128-1"><a href="#cb128-1" aria-hidden="true" tabindex="-1"></a>NR_churn</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          Churn
 Retention     1
@@ -1039,14 +1056,14 @@ At-Risk       1</code></pre>
 <em>From State 3 (Low &lt;50 units): 10% move to State 1, 40% move to State 2, and 50% stay in State 3.</em></p>
 <p><strong>(a) Construct the transition matrix for this Markov Chain.</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb128"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb128-1"><a href="#cb128-1" aria-hidden="true" tabindex="-1"></a>M_stock <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(.<span class="dv">7</span>, .<span class="dv">25</span>, .<span class="dv">05</span>,</span>
-<span id="cb128-2"><a href="#cb128-2" aria-hidden="true" tabindex="-1"></a>                    .<span class="dv">2</span>, .<span class="dv">5</span>, .<span class="dv">3</span>,</span>
-<span id="cb128-3"><a href="#cb128-3" aria-hidden="true" tabindex="-1"></a>                    .<span class="dv">1</span>, .<span class="dv">4</span>, .<span class="dv">5</span>),</span>
-<span id="cb128-4"><a href="#cb128-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb128-5"><a href="#cb128-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(M_stock) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"High"</span>,<span class="st">"Med"</span>,<span class="st">"Low"</span>)</span>
-<span id="cb128-6"><a href="#cb128-6" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(M_stock) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"High"</span>,<span class="st">"Med"</span>,<span class="st">"Low"</span>)</span>
-<span id="cb128-7"><a href="#cb128-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb128-8"><a href="#cb128-8" aria-hidden="true" tabindex="-1"></a>M_stock</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb130"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1" aria-hidden="true" tabindex="-1"></a>M_stock <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(.<span class="dv">7</span>, .<span class="dv">25</span>, .<span class="dv">05</span>,</span>
+<span id="cb130-2"><a href="#cb130-2" aria-hidden="true" tabindex="-1"></a>                    .<span class="dv">2</span>, .<span class="dv">5</span>, .<span class="dv">3</span>,</span>
+<span id="cb130-3"><a href="#cb130-3" aria-hidden="true" tabindex="-1"></a>                    .<span class="dv">1</span>, .<span class="dv">4</span>, .<span class="dv">5</span>),</span>
+<span id="cb130-4"><a href="#cb130-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb130-5"><a href="#cb130-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(M_stock) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"High"</span>,<span class="st">"Med"</span>,<span class="st">"Low"</span>)</span>
+<span id="cb130-6"><a href="#cb130-6" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(M_stock) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"High"</span>,<span class="st">"Med"</span>,<span class="st">"Low"</span>)</span>
+<span id="cb130-7"><a href="#cb130-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb130-8"><a href="#cb130-8" aria-hidden="true" tabindex="-1"></a>M_stock</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     High  Med  Low
 High  0.7 0.25 0.05
@@ -1064,11 +1081,11 @@ Low   0.1 0.40 0.50</code></pre>
 <strong>Med ~38.7%</strong><br>
 <strong>Low ~26.7%</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb130"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1" aria-hidden="true" tabindex="-1"></a>mc_stock <span class="ot">&lt;-</span> <span class="fu">new</span>(<span class="st">"markovchain"</span>,</span>
-<span id="cb130-2"><a href="#cb130-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">transitionMatrix =</span> M_stock,</span>
-<span id="cb130-3"><a href="#cb130-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">states =</span> <span class="fu">c</span>(<span class="st">"High"</span>,<span class="st">"Med"</span>,<span class="st">"Low"</span>))</span>
-<span id="cb130-4"><a href="#cb130-4" aria-hidden="true" tabindex="-1"></a>steady_stock <span class="ot">&lt;-</span> <span class="fu">steadyStates</span>(mc_stock)</span>
-<span id="cb130-5"><a href="#cb130-5" aria-hidden="true" tabindex="-1"></a>steady_stock</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb132"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1" aria-hidden="true" tabindex="-1"></a>mc_stock <span class="ot">&lt;-</span> <span class="fu">new</span>(<span class="st">"markovchain"</span>,</span>
+<span id="cb132-2"><a href="#cb132-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">transitionMatrix =</span> M_stock,</span>
+<span id="cb132-3"><a href="#cb132-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">states =</span> <span class="fu">c</span>(<span class="st">"High"</span>,<span class="st">"Med"</span>,<span class="st">"Low"</span>))</span>
+<span id="cb132-4"><a href="#cb132-4" aria-hidden="true" tabindex="-1"></a>steady_stock <span class="ot">&lt;-</span> <span class="fu">steadyStates</span>(mc_stock)</span>
+<span id="cb132-5"><a href="#cb132-5" aria-hidden="true" tabindex="-1"></a>steady_stock</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          High       Med       Low
 [1,] 0.3466667 0.3866667 0.2666667</code></pre>
