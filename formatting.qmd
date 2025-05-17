@@ -1,0 +1,15 @@
+# Title (H1)
+## Section (H2)
+### Subsection (H3)
+#### Sub-subsection (H4)
+
+
+**bold text**
+
+*italic text*
+
+***bold and italic***
+
+_italic_   (also works)
+
+__bold__   (also works)

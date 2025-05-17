@@ -1,0 +1,415 @@
+---
+title: "DATA_605_Assignment_3_Fox"
+author: "Amanda Fox"
+date: "April 13, 2025"
+format: pdf
+---
+
+## Preparation  
+Load libraries: 
+
+```{r libraries, message = FALSE, warning = FALSE}
+# load libraries
+library(tidyverse)
+library(ggplot2)
+library(scales)
+```
+
+## Problem 1: Transportation Safety
+
+### 1. Data Visualization:
+  
+*Create a scatter plot of stopping distance (dist) as a function of speed (speed). Add a regression line to the plot to visually assess the relationship.*
+  
+Stopping distance increases with speed in a roughly linear pattern, with a few possible outliers and more variability at higher speeds.
+  
+```{r load1, message = FALSE, warning = FALSE}
+
+
+# Load data
+data("cars")
+glimpse(cars)
+
+plt1 <- cars %>% 
+ggplot(aes(x = speed, y = dist)) +
+  geom_point(color = "steelblue") +
+  geom_smooth(method = "lm", 
+              se = FALSE, 
+              color = "darkred") +
+  labs(title = "Stopping Distance vs Speed",
+       x = "Speed (mph)", y = "Stopping Distance (ft)")
+
+plt1
+```
+  
+### 2. Build a Linear Model:
+  
+*Construct a simple linear regression model where stopping distance (dist) is the dependent variable and speed (speed) is the independent variable.* 
+*Summarize the model to evaluate its coefficients, R-squared value, and p-value*
+  
+Stopping Distance = 3.932409 * speed - 17.58
+  
+R-squared = 0.6511 which indicatest that speed explains 65.11% of variation in stopping distance.
+  
+p-value = 1.49e-12 which indicates that this relatioship is very unlikely to be due to chance. 
+  
+```{r mod1, message = FALSE, warning = FALSE}
+
+# Model
+mod_dist <- lm(dist ~ speed, data = cars)
+
+# Summarize 
+summary(mod_dist)
+
+# Add predicted values (verified new plot matches above) 
+df_cars_model <- cars %>% 
+  mutate(predicted_dist = predict(mod_dist))
+
+glimpse(df_cars_model)
+```
+  
+### 3 & 4: Model Quality Evaluation & Residual Analysis
+  
+*Calculate and interpret the R-squared value to assess the proportion of variance in stopping distance explained by speed.*
+  
+R-squared is 0.6511 so 65.11% of the variation in stopping distance is explained by speed.
+  
+*Perform a residual analysis to check the assumptions of the linear regression model, including linearity, homoscedasticity, independence, and normality of residuals.*
+  *Plot the residuals versus fitted values to check for any patterns.*
+  *Create a Q-Q plot of the residuals to assess normality.*
+  *Perform a Shapiro-Wilk test for normality of residuals.*
+  *Plot a histogram of residuals to further check for normality.*
+  
+Assumptions are generally well met. The relationship is roughly linear and residual tests below show a reasonable fit with roughly normal distribution of residuals and some heteroscedasticity. 
+  
+In the context of the small dataset size and visual examination of the scatterplots above, these results are acceptable.  Note that independence is assumed since the behavior of one car should not impact another.
+  
+  1. Residuals vs Fitted: Fan shape suggests some heteroscedasticity with increasing variance at higher speeds
+  
+  2. Histogram of Residuals: Broadly normally distributed with a slight right skew
+  
+  3. Q-Q: Follows the line generally but deviation at both ends, particularly the upper end, suggests some non-normality/outliers
+  
+  4. Shapiro-Wilkes test: p<0.05 suggests non-normality (null hypothesis = data is normal, which is rejected).
+  
+```{r resid1, message = FALSE, warning = FALSE}
+
+# Add to dataframe
+df_cars_model <- df_cars_model %>% 
+  mutate(
+    .fitted = fitted(mod_dist),
+    .resid = resid(mod_dist),
+    .std_resid = rstandard(mod_dist)
+  )
+
+glimpse(df_cars_model)
+
+#---------------
+# Diagnostic Plots**
+#---------------
+
+# Residuals vs Fitted
+plot_resid <- df_cars_model %>% 
+  ggplot(aes(x = .fitted, y = .resid)) +
+  geom_point(alpha = 0.6) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+  labs(
+    title = "Residuals vs Fitted",
+    x = "Fitted Values",
+    y = "Residuals"
+  ) +
+  theme_minimal()
+
+plot_resid
+
+# Histogram of Residuals
+plot_resid_hist <- df_cars_model %>% 
+  ggplot(aes(x = .resid)) +
+  geom_histogram(bins = 15, fill = "skyblue", color = "white") +
+  labs(title = "Histogram of Residuals", x = "Residuals") +
+  theme_minimal()
+
+plot_resid_hist
+
+# Q-Q
+plot_qq <- df_cars_model %>% 
+  ggplot(aes(sample = .resid)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  labs(title = "Q-Q Plot of Residuals") +
+  theme_minimal()
+
+plot_qq
+
+# shapiro-wilkes test
+df_cars_model$.resid %>% 
+  shapiro.test()
+```
+
+### 5. Conclusion
+  
+*Based on the model summary and residual analysis, determine whether the linear model is appropriate for this data. Discuss any potential violations of model assumptions and suggest improvements if necessary.*
+
+Based on the model summary and residual analysis, the linear model is acceptable. The R-squared value is meaningful but not strong; model fit might improve by adding more predictors such as weight, tire specs, etc. 
+  
+Linearity, normality, and constant variance are generally met, with acceptable slight heteroscedasticity and non-normality in residuals. Independence was not formally tested but reasonable to assume since each car's stopping distance is unrelated to others. 
+
+
+## Problem 2: Health Policy Analyst
+  
+### 1. Initial Assessment of Healthcare Expenditures and Life Expectancy
+  
+*Task: Create a scatterplot of LifeExp vs. TotExp to visualize the relationship between healthcare expenditures and life expectancy across countries.* 
+```{r who1, message = FALSE, warning = FALSE}
+
+#---------------
+# Load data
+#---------------
+
+df_who_raw <- read_csv("https://raw.githubusercontent.com/AmandaSFox/DATA605_Math/main/Assignment_3/who.csv")
+
+glimpse(df_who_raw)
+
+#---------------
+# Clean data
+#---------------
+
+# check for NAs
+df_who_raw %>% 
+  summarise(across(everything(), ~sum(is.na(.))))
+
+# check for duplicate rows
+nrow(df_who_raw) - nrow(distinct(df_who_raw))
+
+# count unique values in each column
+df_who_raw %>% 
+  summarise(across(everything(), n_distinct))
+
+# verify col 10 includes only NA values 
+unique(df_who_raw$...10)
+
+# verify both LifeExp columns are identical
+all(df_who_raw$`LifeExp...2` == df_who_raw$`LifeExp...12`)
+
+# drop second LifeExp and NA columns, rename LifeExp
+df_who_clean <- df_who_raw %>% 
+  select(- LifeExp...12,- ...10) %>%
+  rename(LifeExp = `LifeExp...2`)
+
+glimpse(df_who_clean)
+
+#---------------
+# Summary and Plot
+#---------------
+
+# summarize
+summary(df_who_clean)
+
+# Scatterplot with linear regression line
+plt3 <- df_who_clean %>% 
+  ggplot(aes(x = TotExp, y = LifeExp)) +
+  geom_point(alpha = 0.6, color = "gray60") +
+  geom_smooth(method = "lm", se = FALSE, color = "darkred") +
+  scale_x_continuous(labels = scales::comma)+
+    labs(
+    title = "Life Expectancy vs Total Health Expenditures",
+    x = "Total Health Expenditures",
+    y = "Life Expectancy"
+  ) +
+  theme_minimal()
+
+plt3
+
+```
+
+*Run a simple linear regression with LifeExp as the dependent variable and TotExp as the independent variable (without transforming the variables).*
+
+LifeExp = 64.75 + 0.00006297 × TotExp
+For every additional $1 in total healthcare spending, life expectancy increases by about 0.000063 years or about 0.023 days above a "baseline" of 64.75 years at $0 spending.
+  
+*Provide and interpret the F-statistic, R-squared value, standard error, and p-values.*
+  
+* F-statistic and p value: 65.26 on 1 and 188 DF with p of 7.7e-14 indicates the relationship between total expenditure and life expectancy is extremely unlikely to be due to chance
+* R-squared: 0.2577 indicates that total healthcare expenditure explains only 25.77% of the variance in life expectancy, which is weak
+* Standard error: 9.37 indicates that average error is 9.37 years which is significant in this case as the interquartile range is 13.75 years.
+
+*Discuss whether the assumptions of simple linear regression (linearity, independence, homoscedasticity, and normality of residuals) are met in this analysis.*
+
+Overall the model violates all assumptions except independence (countries are independent observations so independence is assumed). 
+Linearity: The relationship is clearly non-linear in the scatterplot
+Homoscedasticity: The residual plot shows an uneven distribution of residuals around the line
+Normality: The histogram has a long left tail, and the qq plot varies widely around the line. The Shapiro-Wilkes small p value also indicates non normality.
+
+
+``` {r who2, message = FALSE, warning = FALSE}
+
+#---------------
+# Model
+#---------------
+mod_life <- lm(LifeExp ~ TotExp, data = df_who_clean)
+
+summary(mod_life)
+
+#---------------
+# Diagnostics
+#---------------
+
+# add predicted and residuals to df
+df_who_model <- df_who_clean %>% 
+  mutate(predicted_life = predict(mod_life),
+         .fitted = fitted(mod_life),
+         .resid = resid(mod_life),
+         .std_resid = rstandard(mod_life))
+
+glimpse(df_who_model)
+
+# Residuals vs Fitted
+plot_resid_who <- df_who_model %>%
+  ggplot(aes(x = .fitted, y = .resid)) +
+  geom_point(alpha = 0.6) +
+  geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
+  labs(title = "Residuals vs Fitted", x = "Fitted Values", y = "Residuals") +
+  theme_minimal()
+
+plot_resid_who
+
+
+# Histogram of Residuals
+plot_hist_who <- df_who_model %>%
+  ggplot(aes(x = .resid)) +
+  geom_histogram(bins = 15, fill = "skyblue", color = "white") +
+  labs(title = "Histogram of Residuals", x = "Residuals") +
+  theme_minimal()
+
+plot_hist_who
+
+# QQ plot
+plot_qq_who <- df_who_model %>%
+  ggplot(aes(sample = .resid)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  labs(title = "Q-Q Plot of Residuals") +
+  theme_minimal()
+
+plot_qq_who
+
+# Shapiro Wilkes
+shapiro.test(df_who_model$.resid)
+
+```
+
+*Discussion: Consider the implications of your findings for health policy. Are higher healthcare expenditures generally associated with longer life expectancy? What do the assumptions of the regression model suggest about the reliability of this relationship?*
+
+Higher healthcare expenditures are related to longer life expectancy but the relationship is not linear (see scatterplot above). The linear model is significant (low p value) but the fit is poor with a low R-squared and high standard error. 
+  
+To make a final conclusion on which to base policy, additional work is needed such as transformations or a non-linear model.
+
+### 2. Transforming Variables for a Better Fit
+  
+*Task: Recognizing potential non-linear relationships, transform the variables as follows:*
+*Raise life expectancy to the 4.6 power (LifeExp^4.6).*
+*Raise total expenditures to the 0.06 power (TotExp^0.06), which is nearly a logarithmic transformation.*
+*Create a new scatterplot with the transformed variables and re-run the simple linear regression model.*
+
+The transformed data now has a visually linear relationship on the scatterplot with a more even distribution around the linear regression line.
+
+*Provide and interpret the F-statistic, R-squared value, standard error, and p-values for the transformed model.*
+  
+* F-statistic and p value: 65.26 on 1 and 188 DF with p of 7.7e-14 indicates the relationship between total expenditure and life expectancy is extremely unlikely to be due to chance
+* R-squared: 0.2577 indicates that total healthcare expenditure explains only 25.77% of the variance in life expectancy, which is weak
+* Standard error: 9.37 indicates that average error is 9.37 years which is significant in this case as the interquartile range is 13.75 years.
+
+
+*Compare this model to the original model (from Question 1). Which model provides a better fit, and why?*
+  
+* F-statistic and p value: 65.26 on 1 and 188 DF with p of 7.7e-14 indicates the relationship between total expenditure and life expectancy is extremely unlikely to be due to chance
+* R-squared: 0.2577 indicates that total healthcare expenditure explains only 25.77% of the variance in life expectancy, which is weak
+* Standard error: 9.37 indicates that average error is 9.37 years which is significant in this case as the interquartile range is 13.75 years.
+
+
+``` {r who3, message = FALSE, warning = FALSE}
+
+#---------------
+# Transform and Plot
+#---------------
+
+df_who_transform <- df_who_clean %>% 
+  mutate(LifeExp_46 = LifeExp^4.6,
+         TotExp_006 = TotExp^0.06)
+
+glimpse(df_who_transform)
+
+# Scatterplot with linear regression line
+plt4 <- df_who_transform %>% 
+  ggplot(aes(x = TotExp_006, y = LifeExp_46)) +
+  geom_point(alpha = 0.6, color = "gray60") +
+  geom_smooth(method = "lm", se = FALSE, color = "darkred") +
+  scale_x_continuous(labels = scales::comma)+
+    labs(
+    title = "Transformed: Life Expectancy vs Total Health Expenditures",
+    x = "Total Health Expenditures ^ 0.06",
+    y = "Life Expectancy ^ 4.6"
+  ) +
+  theme_minimal()
+
+plt4
+
+#---------------
+# Model
+#---------------
+
+mod_life_transform <- lm(LifeExp_46 ~ TotExp_006, data = df_who_transform)
+
+summary(mod_life_transform)
+
+#---------------
+# Diagnostics
+#---------------
+
+# add predicted and residuals to df
+df_who_model <- df_who_clean %>% 
+  mutate(predicted_life = predict(mod_life),
+         .fitted = fitted(mod_life),
+         .resid = resid(mod_life),
+         .std_resid = rstandard(mod_life))
+
+glimpse(df_who_model)
+
+# Residuals vs Fitted
+plot_resid_who <- df_who_model %>%
+  ggplot(aes(x = .fitted, y = .resid)) +
+  geom_point(alpha = 0.6) +
+  geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
+  labs(title = "Residuals vs Fitted", x = "Fitted Values", y = "Residuals") +
+  theme_minimal()
+
+plot_resid_who
+
+
+# Histogram of Residuals
+plot_hist_who <- df_who_model %>%
+  ggplot(aes(x = .resid)) +
+  geom_histogram(bins = 15, fill = "skyblue", color = "white") +
+  labs(title = "Histogram of Residuals", x = "Residuals") +
+  theme_minimal()
+
+plot_hist_who
+
+# QQ plot
+plot_qq_who <- df_who_model %>%
+  ggplot(aes(sample = .resid)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  labs(title = "Q-Q Plot of Residuals") +
+  theme_minimal()
+
+plot_qq_who
+
+# Shapiro Wilkes
+shapiro.test(df_who_model$.resid)
+
+
+```
+
+
+*Discussion: How do the transformations impact the interpretation of the relationship between healthcare spending and life expectancy? Why might the transformed model be more appropriate for policy recommendations?*
