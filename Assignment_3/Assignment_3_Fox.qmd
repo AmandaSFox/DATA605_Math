@@ -1074,7 +1074,7 @@ $\Pi(x,y)$ *is the profit in dollars*
 *1. Find all local maxima, local minima, and saddle points for the profit function.* 
 *2. Write your answer(s) in the form* $(x, y, \Pi(x,y))$ *. Separate multiple points with a comma.*
 
-**The critical point (7.30, 0.26, 112.7) is a local maximum.**
+The critical point **(7.30, 0.26, 112.7)** is a local maximum.
 
 *Discussion: Discuss the implications of the results for the company’s production strategy. Which production levels maximize profit, and what risks are associated with the saddle points?*
   
@@ -1226,9 +1226,9 @@ $C(x,y)$ *is the total cost in dollars.*
 
 Because there is a linear constraint x+y=200, I used the Rsolnp package to solve the constrained optimization problem.
 
-**Optimal units:**
-**New York: 102** 
-**Chicago: 88**
+**Optimal units: ** 
+**New York: 102 **  
+**Chicago: 88 ** 
 
 *What is the minimized total cost, and how does the distribution of production between the two plants affect overall efficiency?*
 
@@ -1287,10 +1287,11 @@ $E(x,y)$ *is the estimated customer reach.
 
 *1. Find the spending levels for online and television ads that maximize customer reach.*
 
-** Online: $16,670**
-** TV: $33,330**
+**Online: $16,670**
   
-** Optimized reach: 15,833 customers**
+**TV: $33,330**
+    
+**Optimized reach: 15,833 customers**
 
 *2. Identify any saddle points and discuss how they could affect the marketing strategy.*
 
@@ -1341,3 +1342,25 @@ list(
 )
 
 ```
+
+
+## Works Cited
+  
+
+ChatGPT. “ChatGPT.” Chatgpt.com, 2024, chatgpt.com. Accessed May 2025. 
+  
+  General R coding and LaTeX assistance.
+  
+
+Hartman, Gregory, et al. “APEX Calculus.” Open Textbook Library, 2015, 
+  
+  open.umn.edu/opentextbooks/textbooks/198. Accessed May 2025.
+
+
+Lilja, David J., and Greta M. Linse. “Linear Regression Using R: An 
+  
+  Introduction to Data Modeling, 2nd Edition.” Umn.edu, University 
+  
+  of Minnesota Libraries Publishing, 2022, conservancy.umn.edu/items
+  
+  /3de2f9b4-116f-4159-a582-1d1c68e98ba3. Accessed May 2025.
