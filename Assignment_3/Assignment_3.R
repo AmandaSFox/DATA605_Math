@@ -190,13 +190,6 @@ df_who_model <- df_who_clean %>%
 
 glimpse(df_who_model)
 
-LifeExp = 64.75 + 0.00006297 × TotExp
-For every additional $1 in total healthcare spending, life expectancy increases by about 0.000063 years or about 0.023 days above a "baseline" of 64.75 years at $0 spending.
-
-R-squared: 0.2577 → TotExp explains about 26% of the variance in LifeExp.
-Standard error: 9.37 → Average prediction error is ~9.4 years.
-p-values: Both intercept and TotExp are highly significant (p < 0.001)
-F-statistic: 65.26 on 1 and 188 DF, p < 0.001 → TotExp is a significant predictor of LifeExp.
 
 plot_resid_who <- df_who_model %>%
   ggplot(aes(x = .fitted, y = .resid)) +
@@ -225,4 +218,5 @@ plot_qq_who <- df_who_model %>%
 plot_qq_who
 
 shapiro.test(df_who_model$.resid)
+
 

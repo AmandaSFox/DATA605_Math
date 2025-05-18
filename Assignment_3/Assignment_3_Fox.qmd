@@ -15,6 +15,7 @@ library(ggplot2)
 library(scales)
 library(Deriv)
 library(rootSolve)
+library(tidyr)
 
 
 ```
@@ -375,7 +376,7 @@ mod_life_transform <- lm(LifeExp_46 ~ TotExp_006, data = df_who_transform)
 summary(mod_life_transform)
 
 ```
-## 3. Forecasting Life Expectancy Based on Transformed Expenditures
+### 3. Forecasting Life Expectancy Based on Transformed Expenditures
   
 *Task: Using the results from the transformed model in Question 2, forecast the life expectancy for countries with the following transformed total expenditures (TotExp^0.06):*
 
@@ -405,7 +406,7 @@ glimpse(df_who_new_data)
 
 ```
 
-## 4: Interaction Effects in Multiple Regression
+### 4: Interaction Effects in Multiple Regression
   
 *Task: Build a multiple regression model to investigate the combined effect of the proportion of MDs and total healthcare expenditures on life expectancy. Specifically, use the model:*
 
@@ -434,7 +435,7 @@ summary(mod_life_interaction)
 
 ```
 
-## 5: Forecasting Life Expectancy with Interaction Terms
+### 5: Forecasting Life Expectancy with Interaction Terms
 
 *Task: Using the multiple regression model from Question 4, forecast the life expectancy for a country where:*
 
@@ -524,7 +525,7 @@ C(optimal_Q)
 
 ```
   
-###2. Revenue Maximization
+### 2. Revenue Maximization
   
 *Scenario: A company is running an online advertising campaign. The effectiveness of the campaign, in terms of revenue generated per day, is modeled by the function:*
   
@@ -536,7 +537,7 @@ $$R(t) = -3150t^{-4} - 220t + 6530$$
 
 To find the maximum revenue, I took the derivative of R(t) and set it equal to zero to find the critical points, then found the second derivative and checked its sign at that critical point. It was negative, so that point was a maximum.
 
-Maximum revenue = $5,912.09
+**Maximum revenue = $5,912.09**
 
 ``` {r retail2, message = FALSE, warning = FALSE}
 
@@ -560,7 +561,7 @@ max_revenue
 
 ```
 
-## 3 Demand Area Under Curve
+### 3. Demand Area Under Curve
 
 *Scenario: A company sells a product at a price that decreases over time according to the linear demand function:*
 
@@ -607,11 +608,11 @@ area2
 
 ```
 
-## 4. Profit Optimization
+### 4. Profit Optimization
   
 *Scenario: A beauty supply store sells flat irons, and the profit function associated with selling x flat irons is given by:*
 
-$$\pi(x) = x \ln (9x) - \frac{x^6}{6} $$
+$$\Pi(x) = x \ln (9x) - \frac{x^6}{6} $$
 
 *Task: Use calculus to find the value of x that maximizes profit. Calculate the maximum profit that can be achieved and determine if this optimal sales level is feasible given market conditions.*
 
@@ -643,7 +644,7 @@ max_profit
 
 ```
 
-## 5. Spending Behavior
+### 5. Spending Behavior
 
 *Scenario: A market research firm is analyzing the spending behavior of customers in a retail store. The spending behavior is modeled by the probability density function:*
 
@@ -675,7 +676,7 @@ pdf_area <- integrate(pdf, lower = pdf_a, upper = pdf_b)
 pdf_area$value  # Should be 1
 ```
 
-## 6 Market Share Estimation
+### 6. Market Share Estimation
 
 *Scenario: An electronics company is analyzing its market share over a certain period. The rate of market penetration is given by:*
 
@@ -701,4 +702,378 @@ N_10 <- N_1 + mkt_integrated_area
 N_10
 
 ```
+
+## Problem 4: Business Optimization
+  
+### 1. Revenue and Cost
+  
+*Scenario: A company’s revenue from a product can be approximated by the function* $R(x) = e^x$ *where x is the number of units sold. The cost of production is given by* $C(x) = \ln(1+x)$. *The company wants to maximize its profit, defined as* $\Pi (x) = R(x) - C(x)$
+
+*1. Approximate the Revenue Function: Use the Taylor Series expansion around x= 0 (Maclaurin series) to approximate the revenue function* $R(x) = e^x$ *up to the second degree. Explain why this approximation might be useful in a business context.*
+
+The Maclaurin series for e^x at the second degree is $e^x \approx 1 + x + \frac{x^2}{2}$. 
+
+This approximation is accurate for small values of x less than about 0.5 (see plot below). It would be easy to use for estimation especially when logs are impractical due to lack of skill/comfort level, lack of access to a computer/scientific calculator (which was more likely in the past), or to simplify complex optimization problems. 
+
+``` {r business1, message = FALSE, warning = FALSE}
+
+# define exact revenue function
+bus_R_exact <- function(x) {exp(x)}
+
+# define maclaurin series approximation function
+bus_R_approx <- function(x) {1 + x + (x^2)/2}
+
+# compare
+bus_R_x_vals <- seq(0, 1, by = 0.1)
+
+df_bus_R_compare <- data.frame(
+  x = bus_R_x_vals,
+  R_exact = bus_R_exact(bus_R_x_vals),
+  R_approx = bus_R_approx(bus_R_x_vals),
+  R_error = bus_R_approx(bus_R_x_vals) - bus_R_exact(bus_R_x_vals))
+
+head(df_bus_R_compare, 11)
+
+#plot
+df_bus_R_compare_long <- pivot_longer(df_bus_R_compare, 
+                                      cols = c("R_exact", "R_approx"), 
+                                      names_to = "type", 
+                                      values_to = "revenue")
+
+plt_bus_R <- df_bus_R_compare_long %>% 
+  ggplot(aes(x = x, y = revenue, color = type)) +
+  geom_line(size = 1) +
+  labs(title = "Exact vs Approximate Revenue Function",
+       x = "x",
+       y = "Revenue",
+       color = "Function") +
+  theme_minimal()
+
+plt_bus_R
+
+```
+
+*2. Approximate the Cost Function: Similarly, approximate the cost function $C(x) = \ln (1+x)$using its Maclaurin series expansion up to the second degree. Discuss the implications of this approximation for decision-making in production.*
+ 
+The Maclaurin series for $\ln(1+x)$ at the second degree is $\ln(1+x) \approx x - \frac{x^2}{2}$. 
+
+This approximation is accurate for small values of x <0.25 (see plot below) but using it in production would greatly underestimate costs for values of x > 0.25 and should be avoided to avoid budget surprises. 
+
+Note that the cost estimation function underestimates to a greater degree than the revenue estimation, so profit would also be underestimated for larger values of x. 
+
+``` {r business2, message = FALSE, warning = FALSE}
+
+# define exact cost function
+bus_C_exact <- function(x) {log(1+x)}
+
+# define maclaurin series approximation function
+bus_C_approx <- function(x) {x - (x^2)/2}
+
+# compare from 0 to 1
+bus_C_x_vals <- seq(0, 1, by = 0.1)
+
+df_bus_C_compare <- data.frame(
+  x = bus_C_x_vals,
+  C_exact = bus_C_exact(bus_C_x_vals),
+  C_approx = bus_C_approx(bus_C_x_vals),
+  C_error = bus_C_approx(bus_C_x_vals) - bus_C_exact(bus_C_x_vals))
+
+head(df_bus_C_compare, 11)
+
+#plot
+df_bus_C_compare_long <- pivot_longer(df_bus_C_compare, 
+                                      cols = c("C_exact", "C_approx"), 
+                                      names_to = "type", 
+                                      values_to = "cost")
+
+plt_bus_C <- df_bus_C_compare_long %>% 
+  ggplot(aes(x = x, y = cost, color = type)) +
+  geom_line(size = 1) +
+  labs(title = "Exact vs Approximate Cost Function",
+       x = "x",
+       y = "Cost",
+       color = "Function") +
+  theme_minimal()
+
+plt_bus_C
+
+```
+
+*3. Linear vs. Nonlinear Optimization: Using the Taylor Series expansions, approximate the profit function* $\Pi (x) = R(x) - C(x)$
+*Compare the optimization results when using the linear approximations versus the original nonlinear functions. What are the differences, and when might it be more appropriate to use the approximation?*
+
+The profit estimation is accurate for most values of x and begins to underestimate around x ~ 0.9 (note that underestimating profit is conservative and not usually a bad thing). It would be appropriate to use for estimations overall, and in production or sensitive applications for values of x < 0.9.
+
+``` {r business3, message = FALSE, warning = FALSE}
+
+# combine rev and cost df
+df_bus_P_compare <- merge(df_bus_C_compare,
+                          df_bus_R_compare, 
+                          by = "x")
+
+# calculate P
+df_bus_P_compare <-df_bus_P_compare %>% 
+  mutate(P_exact = R_exact - C_exact,
+         P_approx = R_approx - C_approx,
+         P_error = P_approx - P_exact)
+
+head(df_bus_P_compare, 10)
+
+#plot
+df_bus_P_compare_long <- pivot_longer(df_bus_P_compare, 
+                                      cols = c("P_exact", "P_approx"), 
+                                      names_to = "type", 
+                                      values_to = "profit")
+
+plt_bus_P <- df_bus_P_compare_long %>% 
+  ggplot(aes(x = x, y = profit, color = type)) +
+  geom_line(size = 1) +
+  labs(title = "Exact vs Approximate Profit Function",
+       x = "x",
+       y = "Profit",
+       color = "Function") +
+  theme_minimal()
+
+plt_bus_P
+
+```
+
+### 2. Financial Modeling
+  
+*Scenario: A financial analyst is modeling the risk associated with a new investment. The risk is proportional to the square root of the invested amount, modeled as* $f(x) = \sqrt x$ *, where x is the amount invested. However, to simplify calculations, the analyst wants to use a Taylor Series expansion to approximate this function for small investments.*
+
+*1. Maclaurin Series Expansion: Derive the Taylor Series expansion around x=0 up to the second degree.*
+
+x=0 is undefined for $\sqrt x$ because the derivative is undefined, so a Taylor series around x = 1 is used instead: $\sqrt x \approx 1 + \frac {x-1}{2}$
+
+*2. Practical Application: Use the derived series to approximate the risk for small investment amounts (e.g., when x is small). Compare the approximated risk with the actual function values for small and moderate investments. Discuss when this approximation might be useful in financial modeling.*
+  
+The approximation is very close for most values of x between 0.5 and 1.5 with some deviation at the extremes as shown below. This would be very useful when simplifying calculations particularly around a typical normalized (x=1) investment amount.  
+  
+*3. Optimization Scenario: Suppose the goal is to minimize risk while maintaining a certain level of investment return. Using the Taylor Series approximation, suggest an optimal investment amount x that balances risk and return.*
+
+No return function is given so we can't optimize for risk and return. To minimize risk alone, x would have to equal zero, because all levels of investment have risk. 
+
+``` {r business4, message = FALSE, warning = FALSE}
+
+# define exact risk function
+bus_risk_exact <- function(x) {sqrt(x)}
+
+# define taylor series approximation function
+bus_risk_approx <- function(x) {1 + 0.5 * (x-1) - (1/8) * (x-1)^2}
+
+# compare from 0.5 to 1.5
+bus_risk_x_vals <- seq(0.5, 1.5, by = 0.1)
+
+df_bus_risk_compare <- data.frame(
+  x = bus_risk_x_vals,
+  risk_exact = bus_risk_exact(bus_risk_x_vals),
+  risk_approx = bus_risk_approx(bus_risk_x_vals),
+  risk_error = bus_risk_approx(bus_risk_x_vals) -
+               bus_risk_exact(bus_risk_x_vals))
+
+head(df_bus_risk_compare, 11)
+
+#plot
+df_bus_risk_compare_long <- pivot_longer(df_bus_risk_compare, 
+                                      cols = c("risk_exact",
+                                               "risk_approx"), 
+                                      names_to = "type", 
+                                      values_to = "risk")
+
+plt_bus_risk <- df_bus_risk_compare_long %>% 
+  ggplot(aes(x = x, y = risk, color = type)) +
+  geom_line(size = 1) +
+  labs(title = "Exact vs Approximate Risk Function",
+       x = "x",
+       y = "Risk",
+       color = "Function") +
+  theme_minimal()
+
+plt_bus_risk
+
+```
+  
+
+### 3. Inventory Management
+  
+*Scenario: In a manufacturing process, the demand for a product decreases as the price increases, modeled by* $D(p) = 1 - p$ *, where p is the price. The cost associated with producing and selling the product is modeled as* $C(p) = e^p$ *. The company wants to maximize its profit, which is the difference between revenue and cost.*
+
+*1. Taylor Series Expansion: Expand the cost function * $C(p) = e^p$ *into a Taylor Series around p=0 up to the second degree. Discuss why approximating the cost function might be useful in a pricing strategy.*
+  
+The Maclaurin series for e^p at the second degree is $e^p \approx 1 + p + \frac{p^2}{2}$. 
+
+This approximation is accurate for values of p < 0.5 (see plot below). 
+
+It might still be useful in a pricing strategy: since covering cost is only one component of pricing (with significant buffers for desired margin, strategic and market factors, and uncertainty built in), a good estimate like this can suffice and avoiding logs would simplify the optimization of the full pricing model.
+
+``` {r inv1, message = FALSE, warning = FALSE}
+
+# define exact cost function
+inv_C_exact <- function(p) {exp(p)}
+
+# define maclaurin series approximation function
+inv_C_approx <- function(p) {1 + p + (p^2)/2}
+
+# compare
+inv_C_p_vals <- seq(0, 1, by = 0.1)
+
+df_inv_C_compare <- data.frame(
+  p = inv_C_p_vals,
+  C_exact = inv_C_exact(inv_C_p_vals),
+  C_approx = inv_C_approx(inv_C_p_vals),
+  C_error = inv_C_approx(inv_C_p_vals) - inv_C_exact(inv_C_p_vals))
+
+head(df_inv_C_compare, 11)
+
+#plot
+df_inv_C_compare_long <- pivot_longer(df_inv_C_compare, 
+                                      cols = c("C_exact", "C_approx"), 
+                                      names_to = "type", 
+                                      values_to = "cost")
+
+plt_inv_C <- df_inv_C_compare_long %>% 
+  ggplot(aes(x = p, y = cost, color = type)) +
+  geom_line(size = 1) +
+  labs(title = "Exact vs Approximate Cost Function",
+       x = "x",
+       y = "Cost",
+       color = "Function") +
+  theme_minimal()
+
+plt_inv_C
+
+```
+  
+*2. Approximating Profit: Using the Taylor Series expansion, approximate the profit function* $\Pi(p) = pD(p) - C(p)$ *. Compare the results when using the original nonlinear cost function versus the approximated cost function. What differences do you observe, and when might the approximation be sufficient?*
+
+The approximated profit is largely accurate for small values of p < 0.5 but overestimates significantly above that. 
+  
+Overestimating profit is a bigger problem than underestimating, but it could still be useful in planning with an adjustment for error.
+
+``` {r inv2, message = FALSE, warning = FALSE}
+
+glimpse(df_inv_C_compare)
+
+# calculate D and P_exact, P_est
+df_inv_P_compare <- df_inv_C_compare %>% 
+  mutate(D = 1-p,
+         Rev = p * D,
+         P_exact = Rev - C_exact,
+         P_approx = Rev - C_approx,
+         P_error = P_approx - P_exact)
+
+head(df_inv_P_compare, 11)
+
+#plot
+df_inv_P_compare_long <- pivot_longer(df_inv_P_compare, 
+                                      cols = c("P_exact", "P_approx"), 
+                                      names_to = "type", 
+                                      values_to = "profit")
+
+plt_inv_P <- df_inv_P_compare_long %>% 
+  ggplot(aes(x = p, y = profit, color = type)) +
+  geom_line(size = 1) +
+  labs(title = "Exact vs Approximate Profit Function",
+       x = "x",
+       y = "Profit",
+       color = "Function") +
+  theme_minimal()
+
+plt_inv_P
+
+```
+  
+*3. Pricing Strategy: Based on the Taylor Series approximation, suggest a pricing strategy that could maximize profit. Explain how the Taylor Series approximation helps in making this decision.*
+  
+Based on this model, I would not sell this product because it is unprofitable at any price. Revenue is maximized at p = 0.5 in the table below, but cost grows exponentially since $C = e^p$ and outpaces revenue $R = p * (1-p)$. 
+
+``` {r inv3, message = FALSE, warning = FALSE}
+
+head(df_inv_P_compare, 11)
+```
+
+### 4. Economic Forecasting
+  
+*Scenario: An economist is forecasting economic growth, which can be modeled by the logarithmic function * $G(x) = \ln(1 + x)$ *where x represents investment in infrastructure. The government wants to predict growth under different levels of investment. *
+
+*1. Maclaurin Series Expansion: Derive the Maclaurin Series expansion of up to the second degree. Explain the significance of using this approximation for small values of x in economic forecasting.*
+
+The Maclaurin series would be $\ln(1 + x) \approx x - \frac{x^2}{2}$
+
+It would be useful to simplify modeling growth estimates for small values of x. 
+
+*2. Approximation of Growth: Use the Taylor Series to approximate the growth for small investments. Compare this approximation with the actual growth function. Discuss the accuracy of the approximation for different ranges of x.*
+
+This approximation is accurate for small values of x < 0.25 and would be useful for modeling the impact of small amounts of investment. It does increasingly underestimate growth for larger values of x, which might be conservative and acceptable for planning.
+
+``` {r econ1, message = FALSE, warning = FALSE}
+
+# define exact growth function
+econ_growth_exact <- function(x) {log(1+x)}
+
+# define taylor series approximation function
+econ_growth_approx <- function(x) {x - (x^2)/2}
+
+# compare from 0 to 1
+econ_growth_x_vals <- seq(0, 1, by = 0.1)
+
+df_econ_growth_compare <- data.frame(
+  x = econ_growth_x_vals,
+  growth_exact = econ_growth_exact(econ_growth_x_vals),
+  growth_approx = econ_growth_approx(econ_growth_x_vals),
+  growth_error = econ_growth_approx(econ_growth_x_vals) -
+                 econ_growth_exact(econ_growth_x_vals))
+
+head(df_econ_growth_compare, 11)
+
+#plot
+df_econ_growth_compare_long <- pivot_longer(df_econ_growth_compare, 
+                                      cols = c("growth_exact",
+                                               "growth_approx"), 
+                                      names_to = "type", 
+                                      values_to = "growth")
+
+plt_econ_growth <- df_econ_growth_compare_long %>% 
+  ggplot(aes(x = x, y = growth, color = type)) +
+  geom_line(size = 1) +
+  labs(title = "Exact vs Approximate Growth Function",
+       x = "x",
+       y = "Growth",
+       color = "Function") +
+  theme_minimal()
+
+plt_econ_growth
+
+```
+
+
+
+*3. Policy Recommendation: Using the approximation, recommend a level of investment that could achieve a target growth rate. Discuss the limitations of using Taylor Series approximations for such policy recommendations.*
+
+Using the table below, we can make recommendations to achieve targeted growth rates. For example, for a targeted growth rate of 25%, we would recommend a normalized investment amount of ~0.3.
+
+The limitations of Taylor series approximations are that they are most accurate near the expansion point (here x = 0). In this case, higher values of x would overestimate the investment needed to achieve a targeted growth rate.
+
+``` {r econ2, message = FALSE, warning = FALSE}
+
+head(select(df_econ_growth_compare, x, growth_approx), 11)
+```
+
+## 5. Profit, Cost, & Pricing
+  
+### 1. Profit Maximization
+*Scenario: A company produces two products, A and B. The profit function for the two products is given by:* $$
+
+*Where:*
+* is the quantity of Product A produced and sold*
+* is the quantity of Product B produced and sold*
+* is the profit in dollars*
+
+Find all local maxima, local minima, and saddle points for the profit function 
+.
+Write your answer(s) in the form 
+. Separate multiple points with a comma.
+Discussion: Discuss the implications of the results for the company’s production strategy. Which production levels maximize profit, and what risks are associated with the saddle points?
+
 
