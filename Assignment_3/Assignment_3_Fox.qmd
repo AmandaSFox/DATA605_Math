@@ -16,13 +16,14 @@ library(scales)
 library(Deriv)
 library(rootSolve)
 library(tidyr)
-
+library(numDeriv)
+library(Rsolnp)
 
 ```
 
 ## Problem 1: Transportation Safety
 
-### 1. Data Visualization:
+### 1.1 Data Visualization:
   
 *Create a scatter plot of stopping distance (dist) as a function of speed (speed). Add a regression line to the plot to visually assess the relationship.*
   
@@ -47,7 +48,7 @@ ggplot(aes(x = speed, y = dist)) +
 plt1
 ```
   
-### 2. Build a Linear Model:
+### 1.2 Build a Linear Model:
   
 *Construct a simple linear regression model where stopping distance (dist) is the dependent variable and speed (speed) is the independent variable.* 
 *Summarize the model to evaluate its coefficients, R-squared value, and p-value*
@@ -73,7 +74,7 @@ df_cars_model <- cars %>%
 glimpse(df_cars_model)
 ```
   
-### 3 & 4: Model Quality Evaluation & Residual Analysis
+### 1.3 & 1.4: Model Quality Evaluation & Residual Analysis
   
 *Calculate and interpret the R-squared value to assess the proportion of variance in stopping distance explained by speed.*
   
@@ -151,7 +152,7 @@ df_cars_model$.resid %>%
   shapiro.test()
 ```
 
-### 5. Conclusion
+### 1.5 Conclusion
   
 *Based on the model summary and residual analysis, determine whether the linear model is appropriate for this data. Discuss any potential violations of model assumptions and suggest improvements if necessary.*
 
@@ -162,7 +163,7 @@ Linearity, normality, and constant variance are generally met, with acceptable s
 
 ## Problem 2: Health Policy Analyst
   
-### 1. Initial Assessment of Healthcare Expenditures and Life Expectancy
+### 2.1 Initial Assessment of Healthcare Expenditures and Life Expectancy
   
 *Task: Create a scatterplot of LifeExp vs. TotExp to visualize the relationship between healthcare expenditures and life expectancy across countries.* 
   
@@ -311,7 +312,7 @@ shapiro.test(df_who_model$.resid)
 
 ```
 
-### 2. Transforming Variables for a Better Fit
+### 2.2 Transforming Variables for a Better Fit
   
 *Task: Recognizing potential non-linear relationships, transform the variables as follows:*
 *Raise life expectancy to the 4.6 power (LifeExp^4.6).*
@@ -376,7 +377,7 @@ mod_life_transform <- lm(LifeExp_46 ~ TotExp_006, data = df_who_transform)
 summary(mod_life_transform)
 
 ```
-### 3. Forecasting Life Expectancy Based on Transformed Expenditures
+### 2.3 Forecasting Life Expectancy Based on Transformed Expenditures
   
 *Task: Using the results from the transformed model in Question 2, forecast the life expectancy for countries with the following transformed total expenditures (TotExp^0.06):*
 
@@ -406,7 +407,7 @@ glimpse(df_who_new_data)
 
 ```
 
-### 4: Interaction Effects in Multiple Regression
+### 2.4 Interaction Effects in Multiple Regression
   
 *Task: Build a multiple regression model to investigate the combined effect of the proportion of MDs and total healthcare expenditures on life expectancy. Specifically, use the model:*
 
@@ -435,7 +436,7 @@ summary(mod_life_interaction)
 
 ```
 
-### 5: Forecasting Life Expectancy with Interaction Terms
+### 2.5 Forecasting Life Expectancy with Interaction Terms
 
 *Task: Using the multiple regression model from Question 4, forecast the life expectancy for a country where:*
 
@@ -479,7 +480,7 @@ df_who_clean %>%
 ```
 ## Problem 3-Retail Company Analyst
   
-### 1. Inventory Cost
+### 3.1 Inventory Cost
   
 *Scenario: A retail company is planning its inventory strategy for the upcoming year. They expect to sell 110 units of a high-demand product. The storage cost is $3.75 per unit per year, and there is a fixed ordering cost of $8.25 per order. The company wants to minimize its total inventory cost.*
 
@@ -525,7 +526,7 @@ C(optimal_Q)
 
 ```
   
-### 2. Revenue Maximization
+### 3.2 Revenue Maximization
   
 *Scenario: A company is running an online advertising campaign. The effectiveness of the campaign, in terms of revenue generated per day, is modeled by the function:*
   
@@ -561,7 +562,7 @@ max_revenue
 
 ```
 
-### 3. Demand Area Under Curve
+### 3.3 Demand Area Under Curve
 
 *Scenario: A company sells a product at a price that decreases over time according to the linear demand function:*
 
@@ -608,7 +609,7 @@ area2
 
 ```
 
-### 4. Profit Optimization
+### 3.4 Profit Optimization
   
 *Scenario: A beauty supply store sells flat irons, and the profit function associated with selling x flat irons is given by:*
 
@@ -644,7 +645,7 @@ max_profit
 
 ```
 
-### 5. Spending Behavior
+### 3.5 Spending Behavior
 
 *Scenario: A market research firm is analyzing the spending behavior of customers in a retail store. The spending behavior is modeled by the probability density function:*
 
@@ -676,7 +677,7 @@ pdf_area <- integrate(pdf, lower = pdf_a, upper = pdf_b)
 pdf_area$value  # Should be 1
 ```
 
-### 6. Market Share Estimation
+### 3.6 Market Share Estimation
 
 *Scenario: An electronics company is analyzing its market share over a certain period. The rate of market penetration is given by:*
 
@@ -705,7 +706,7 @@ N_10
 
 ## Problem 4: Business Optimization
   
-### 1. Revenue and Cost
+### 4.1 Revenue and Cost
   
 *Scenario: A company’s revenue from a product can be approximated by the function* $R(x) = e^x$ *where x is the number of units sold. The cost of production is given by* $C(x) = \ln(1+x)$. *The company wants to maximize its profit, defined as* $\Pi (x) = R(x) - C(x)$
 
@@ -838,7 +839,7 @@ plt_bus_P
 
 ```
 
-### 2. Financial Modeling
+### 4.2 Financial Modeling
   
 *Scenario: A financial analyst is modeling the risk associated with a new investment. The risk is proportional to the square root of the invested amount, modeled as* $f(x) = \sqrt x$ *, where x is the amount invested. However, to simplify calculations, the analyst wants to use a Taylor Series expansion to approximate this function for small investments.*
 
@@ -895,7 +896,7 @@ plt_bus_risk
 ```
   
 
-### 3. Inventory Management
+### 4.3 Inventory Management
   
 *Scenario: In a manufacturing process, the demand for a product decreases as the price increases, modeled by* $D(p) = 1 - p$ *, where p is the price. The cost associated with producing and selling the product is modeled as* $C(p) = e^p$ *. The company wants to maximize its profit, which is the difference between revenue and cost.*
 
@@ -993,7 +994,7 @@ Based on this model, I would not sell this product because it is unprofitable at
 head(df_inv_P_compare, 11)
 ```
 
-### 4. Economic Forecasting
+### 4.4 Economic Forecasting
   
 *Scenario: An economist is forecasting economic growth, which can be modeled by the logarithmic function * $G(x) = \ln(1 + x)$ *where x represents investment in infrastructure. The government wants to predict growth under different levels of investment. *
 
@@ -1062,18 +1063,281 @@ head(select(df_econ_growth_compare, x, growth_approx), 11)
 
 ## 5. Profit, Cost, & Pricing
   
-### 1. Profit Maximization
-*Scenario: A company produces two products, A and B. The profit function for the two products is given by:* $$
+### 5.1 Profit Maximization
+*Scenario: A company produces two products, A and B. The profit function for the two products is given by:* $\Pi(x,y) = 30x - 2x^2 - 3xy + 24y - 4y^2$
 
 *Where:*
-* is the quantity of Product A produced and sold*
-* is the quantity of Product B produced and sold*
-* is the profit in dollars*
+$x$ *is the quantity of Product A produced and sold*
+$y$ *is the quantity of Product B produced and sold*
+$\Pi(x,y)$ *is the profit in dollars*
 
-Find all local maxima, local minima, and saddle points for the profit function 
-.
-Write your answer(s) in the form 
-. Separate multiple points with a comma.
-Discussion: Discuss the implications of the results for the company’s production strategy. Which production levels maximize profit, and what risks are associated with the saddle points?
+*1. Find all local maxima, local minima, and saddle points for the profit function.* 
+*2. Write your answer(s) in the form* $(x, y, \Pi(x,y))$ *. Separate multiple points with a comma.*
 
+**The critical point (7.30, 0.26, 112.7) is a local maximum.**
 
+*Discussion: Discuss the implications of the results for the company’s production strategy. Which production levels maximize profit, and what risks are associated with the saddle points?*
+  
+Since this is the only critical point and it's a local maximum, the company should produce approximately 7.3 units of A and 0.26 units of B to maximize profit. Note that the model is continuous so the company may need to round units.
+  
+A saddle point on the plane would pose risks to optimization because it is sloped both up and down at that point: even small shifts in inputs could increase profit in one direction and decrease it in another at the same time.
+
+``` {r profit1, message = FALSE, warning = FALSE}
+
+# define the profit function
+profit <- function(v) {x <- v[1]
+                       y <- v[2]
+                       30*x - 2*x^2 - 3*x*y + 24*y - 4*y^2}
+
+# define first partial derivative function - Gradient using numDeriv package
+grad_profit <- function(v) {grad(profit, v)}
+
+# define second partial derivative function - Hessian
+hess_profit <- function(v) {hessian(profit, v)}
+
+# find first partial derivative vector using rootSolve package
+prof_critical_point <- multiroot(f = grad_profit, start = c(1, 1))$root
+prof_critical_point
+
+# Evaluate profit at the critical point
+profit_value <- profit(prof_critical_point)
+
+# Evaluate Hessian at critical point
+H_prof <- hess_profit(prof_critical_point)
+
+# Determine type of critical point using Hessian determinant
+det_H_prof <- det(H_prof)
+trace_H_prof <- sum(diag(H_prof))
+
+if (det_H_prof > 0 && trace_H_prof < 0) {
+  type <- "local maximum"
+} else if (det_H_prof > 0 && trace_H_prof > 0) {
+  type <- "local minimum"
+} else if (det_H_prof < 0) {
+  type <- "saddle point"
+} else {
+  type <- "inconclusive"
+}
+
+# Output
+list(
+  point = round(c(x = prof_critical_point[1], 
+                  y = prof_critical_point[2]), 
+                2),
+  profit = round(profit_value, 2),
+  type = type
+)
+
+```
+  
+### 5.2 Pricing Strategy
+  
+*Scenario: A supermarket sells two competing brands of a product: Brand X and Brand Y. The store manager estimates that the demand for these brands depends on their prices, given by the functions:*
+
+*Demand for Brand X:* $D_x(x,y) = 120 - 15x + 10y$ 
+*Demand for Brand Y:* $D_y(x,y) = 80 + 5x - 20y$
+*Where:*
+$x$ *is the price of Brand X in dollars.*
+$y$ *is the price of Brand Y in dollars.*
+
+*1. Revenue Function: Find the revenue function*$R(x,y)$ *for both brands combined.*
+
+Revenue for X:
+$$R_x = x * D_x = x(120 - 15x + 10y)$$
+Revenue for Y:
+$$R_y = y * D_y = y(80 + 5x - 20y)$$
+Combined Revenue: 
+$$R_{(x,y)} = R_x + R_y = x(120 - 15x + 10y) + y(80 + 5x - 20y)$$
+$$R_{(x,y)} = 120x - 15x^2 + 10xy + 80y + 5xy - 20y^2$$
+$$R_{(x,y)} = - 15x^2 - 20y^2 + 15xy + 120x + 80y$$
+
+*2. Optimal Pricing: Determine the prices x and y that maximize the store’s total revenue. Are there any saddle points to consider in the pricing strategy?*
+  
+**Total revenue is maximized at $58.51 when the price of X = $6.15 and the price of Y = $4.31**
+
+This is the only critical point and it is a local maximum so there are no saddle points in this plane to consider.
+  
+*Discussion: Explain the significance of the optimal pricing strategy and how it can be applied in a competitive retail environment.*
+  
+This optimal pricing model maximizes revenue while taking the interaction between competing (or complimentary) products into account. In a competitive environment, this store can now adjust each item's price to balance this interaction for maximum revenue. 
+  
+Note that similar price optimization models might optimize mix for profit, volume, etc. to support the retailer's particular strategic objective.
+  
+``` {r market1, message = FALSE, warning = FALSE}
+
+# define the combined revenue function
+mkt_revenue <- function(v) {
+  x <- v[1]
+  y <- v[2]
+  -15 * x^2 - 20 * y^2 + 15 * x * y + 120 * x + 80 * y}
+
+# define first partial derivative function - Gradient using numDeriv package
+mkt_grad_revenue <- function(v) {grad(mkt_revenue, v)}
+
+# define second partial derivative function - Hessian
+mkt_hess_revenue <- function(v) {hessian(mkt_revenue, v)}
+
+# find first partial derivative vector using rootSolve package
+mkt_critical_point <- multiroot(f = mkt_grad_revenue, 
+                                start = c(1, 1))$root
+mkt_critical_point
+
+# Evaluate profit at the critical point
+mkt_revenue_value <- profit(mkt_critical_point)
+
+# Evaluate Hessian at critical point
+H_mkt <- hess_profit(mkt_critical_point)
+
+# Determine type of critical point using Hessian determinant
+det_H_mkt <- det(H_mkt)
+trace_H_mkt <- sum(diag(H_mkt))
+
+if (det_H_mkt > 0 && trace_H_mkt < 0) {
+  mkt_type <- "local maximum"
+} else if (det_H_mkt > 0 && trace_H_mkt > 0) {
+  mkt_type <- "local minimum"
+} else if (det_H_mkt < 0) {
+  mkt_type <- "saddle point"
+} else {
+  mkt_type <- "inconclusive"
+}
+
+# Output
+list(
+  point = round(c(x = mkt_critical_point[1], 
+                  y = mkt_critical_point[2]), 
+                2),
+  revenue = round(mkt_revenue_value, 2),
+  type = mkt_type
+)
+
+```
+
+### 5.3 Cost Minimization
+  
+*Scenario: A manufacturing company operates two plants, one in New York and one in Chicago. The company needs to produce a total of 200 units of a product each week. The total weekly cost of production is given by:* $$C(x,y) = \frac {1}{8}x^2 + \frac{1}{10}y^2 + 12x + 18y +1500$$
+  
+*Where:*
+$x$ *is the number of units produced in New York.*
+$y$ *is the number of units produced in Chicago.*
+$C(x,y)$ *is the total cost in dollars.*
+
+*Determine how many units should be produced in each plant to minimize the total weekly cost.*
+
+Because there is a linear constraint x+y=200, I used the Rsolnp package to solve the constrained optimization problem.
+
+**Optimal units:**
+**New York: 102** 
+**Chicago: 88**
+
+*What is the minimized total cost, and how does the distribution of production between the two plants affect overall efficiency?*
+
+**Minimized total cost = $6,749**
+
+The distribution of production can minimize cost because the plants have different cost structures. 
+
+Chicago has a higher baseline cost but New York grows faster as production ramps up. 
+
+*Discussion: Discuss the benefits of this cost-minimization strategy and any practical considerations that might influence the allocation of production between the two plants.*
+
+The production cost minimization strategy may help maximize profitability for these products. In practice, location-based constraints like plant capacity, suppliers, labor agreements, etc., may constrain production further. Also, additional costs like transportation and warehousing may impact the selection of a site to maximize profitability.
+
+``` {r manu1, message = FALSE, warning = FALSE}
+
+# define constraint
+manu_constraint <- function(v) {
+  x <- v[1]
+  y <- v[2]
+  x + y}
+
+# define the combined cost function
+manu_cost <- function(v) {
+  x <- v[1]
+  y <- v[2]
+  (1/8)*x^2 + (1/10)*y^2 + 12*x + 18*y + 1500}
+
+# solve using solnp in Rsolnp package
+manu_result <- solnp(
+  pars = c(100, 100),
+  fun = manu_cost,
+  eqfun = manu_constraint,
+  eqB = 200
+)
+
+# extract solution ROUNDED
+manu_optimal <- round(manu_result$pars, 0)
+manu_min_cost <- round(manu_cost(manu_optimal), 0)
+
+# output
+list(
+  units = c(New_York = manu_optimal[1], Chicago = manu_optimal[2]),
+  total_cost = manu_min_cost
+)
+
+```
+
+### 5.4 Marketing Mix
+  
+*Scenario: A company is launching a marketing campaign that involves spending on online ads* $x$ *and television ads* $y$. *The effectiveness of the campaign, measured in customer reach, is modeled by the function:*
+$$E(x,y) = 500x + 700y - 5x^2 - 10xy - 8y^2$$
+*Where:*
+$x$ *is the amount spent on online ads (in thousands of dollars).
+$y$ *is the amount spent on television ads (in thousands of dollars).
+$E(x,y)$ *is the estimated customer reach.
+
+*1. Find the spending levels for online and television ads that maximize customer reach.*
+
+** Online: $16,670**
+** TV: $33,330**
+  
+** Optimized reach: 15,833 customers**
+
+*2. Identify any saddle points and discuss how they could affect the marketing strategy.*
+
+No saddle points were found. Saddle points would indicate unstable regions in the plane where small changes in inputs could increase reach in one area while decreasing in another resulting in risk.
+
+*Discussion: Explain how the results can be used to allocate the marketing budget effectively and what the company should consider if it encounters saddle points in the optimization.*
+
+The results show an optimal allocation of advertising dollars that can be used in budget planning. Constraints could be added to the model to reflect actual budget constraints if needed. If saddle points had been present, the company would need to be cautious to avoid unstable regions of the budget space.
+
+``` {r mkting1, message = FALSE, warning = FALSE}
+
+# define the effectiveness function
+mktg_eff <- function(v) {
+  x <- v[1]
+  y <- v[2]
+  500 * x + 700 * y - 5 * x^2 - 10 * x * y - 8 * y^2
+}
+
+# gradient and hessian functions
+mktg_grad <- function(v) { grad(mktg_eff, v) }
+mktg_hess <- function(v) { hessian(mktg_eff, v) }
+
+# find critical point first partial derivative vector using rootSolve package
+mktg_critical_point <- multiroot(f = mktg_grad, start = c(10, 10))$root
+mktg_reach <- mktg_eff(mktg_critical_point)
+
+# Evaluate Hessian at critical point
+H_mktg <- mktg_hess(mktg_critical_point)
+det_H_mktg <- det(H_mktg)
+trace_H_mktg <- sum(diag(H_mktg))
+
+if (det_H_mktg > 0 && trace_H_mktg < 0) {
+  mktg_type <- "local maximum"
+} else if (det_H_mktg > 0 && trace_H_mktg > 0) {
+  mktg_type <- "local minimum"
+} else if (det_H_mktg < 0) {
+  mktg_type <- "saddle point"
+} else {
+  mktg_type <- "inconclusive"
+}
+
+# output
+list(
+  point = round(c(x = mktg_critical_point[1], 
+                  y = mktg_critical_point[2]), 2),
+  reach = round(mktg_reach, 2),
+  type = mktg_type
+)
+
+```
