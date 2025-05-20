@@ -1342,25 +1342,17 @@ list(
 )
 
 ```
-
-
+  
+  
 ## Works Cited
   
-
-ChatGPT. “ChatGPT.” Chatgpt.com, 2024, chatgpt.com. Accessed May 2025. 
+ChatGPT. “ChatGPT.” Chatgpt.com, 2024, chatgpt.com. Accessed May 2025.  
+    General R coding and LaTeX assistance.  
   
-  General R coding and LaTeX assistance.
+Hartman, Gregory, et al. “APEX Calculus.” Open Textbook Library, 2015,  
+    open.umn.edu/opentextbooks/textbooks/198. Accessed May 2025.  
   
-
-Hartman, Gregory, et al. “APEX Calculus.” Open Textbook Library, 2015, 
-  
-  open.umn.edu/opentextbooks/textbooks/198. Accessed May 2025.
-
-
-Lilja, David J., and Greta M. Linse. “Linear Regression Using R: An 
-  
-  Introduction to Data Modeling, 2nd Edition.” Umn.edu, University 
-  
-  of Minnesota Libraries Publishing, 2022, conservancy.umn.edu/items
-  
-  /3de2f9b4-116f-4159-a582-1d1c68e98ba3. Accessed May 2025.
+Lilja, David J., and Greta M. Linse. “Linear Regression Using R: An    
+    Introduction to Data Modeling, 2nd Edition.” Umn.edu, University  
+    of Minnesota Libraries Publishing, 2022, conservancy.umn.edu/items  
+    /3de2f9b4-116f-4159-a582-1d1c68e98ba3. Accessed May 2025.  
