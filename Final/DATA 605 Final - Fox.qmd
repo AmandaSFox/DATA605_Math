@@ -210,3 +210,86 @@ df_compare <- df_stats_actual %>%
   
 df_compare
 ```
+  
+## Part 2: Probability Analysis and Independence Testing (5 Points)
+
+### Empirical Probabilities: For the Lead_Time_Days variable (assumed to be normally distributed), calculate the following empirical probabilities:
+$$P(Z \gt \mu | Z \gt \mu - \sigma)$$
+  
+Given that lead time is greater than one standard deviation below the mean, the probability that lead time is greater than the mean is **0.593**
+  
+$$P(Z \gt \mu + \sigma | Z \gt \mu)$$
+  
+Given that lead time is greater than the mean, the probability that lead time is greater than one standard deviation above the mean is **0.313**
+  
+$$P(Z \gt \mu + 2\sigma | Z \gt \mu)$$
+  
+Given that lead time is greater than the mean, the probability that lead time is greater than two standard deviations above the mean is **0.030**
+  
+```{r prob1, message = FALSE, warning = FALSE}
+
+# define mu and sigma
+lead_mu <- mean(df$Lead_Time_Days)
+lead_sigma <- sd(df$Lead_Time_Days)
+
+#P(Z \gt \mu | Z \gt \mu - \sigma)
+
+lead_prob1 <- df %>%
+  filter(Lead_Time_Days > lead_mu - lead_sigma) %>%
+  summarise(mean(Lead_Time_Days > lead_mu))
+
+lead_prob1
+
+
+#P(Z \gt \mu + \sigma | Z \gt \mu)
+lead_prob2 <- df %>%
+  filter(Lead_Time_Days > lead_mu) %>%
+  summarise(mean(Lead_Time_Days > lead_mu+ lead_sigma))
+
+lead_prob2
+
+
+#P(Z \gt \mu + 2\sigma | Z \gt \mu)
+lead_prob3 <- df %>%
+  filter(Lead_Time_Days > lead_mu) %>%
+  summarise(mean(Lead_Time_Days > lead_mu+ 2 * lead_sigma))
+
+lead_prob3
+
+```
+
+### 2. Correlation and Independence:
+
+*Investigate the correlation between Sales and Price. Create a contingency table using quartiles of Sales and Price, and then evaluate the marginal and joint probabilities.*
+  
+``` {r corr1, message = FALSE, warning = FALSE}
+
+# create quartile bins with ntile from dplyr
+df_sales_binned <- df %>%
+  mutate(Sales_Q = ntile(Sales, 4),
+         Price_Q = ntile(Price, 4))
+
+# create table and calc probabilities
+df_sales_binned_counts <- df_sales_binned %>%
+  count(Sales_Q, Price_Q) %>% 
+  mutate(joint_prob = n / sum(n))
+
+df_sales_binned_counts
+
+
+# calculate sum of joint prob for each sales quartile
+df_marginal_sales <- df_sales_binned_counts %>%
+  group_by(Sales_Q) %>%
+  summarise(marginal_sales = sum(joint_prob))
+
+df_marginal_sales
+
+# calculate sum of joint prob for each price quartile
+df_marginal_price <- df_sales_binned_counts %>%
+  group_by(Price_Q) %>%
+  summarise(marginal_price = sum(joint_prob))
+df_marginal_sales
+
+```
+
+*Use Fisher’s Exact Test and the Chi-Square Test to check for independence between Sales and Price. Discuss which test is most appropriate and why.*
