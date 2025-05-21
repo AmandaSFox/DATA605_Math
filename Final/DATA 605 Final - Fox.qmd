@@ -13,33 +13,200 @@ library(tidyverse)
 library(readr)
 library(ggplot2)
 library(scales)
+library(MASS)
 
-df_raw <- read_csv("https://raw.githubusercontent.com/AmandaSFox/DATA605_Math/refs/heads/main/Final/synthetic_retail_data.csv")
+# load data
+df <- read_csv("https://raw.githubusercontent.com/AmandaSFox/DATA605_Math/refs/heads/main/Final/synthetic_retail_data.csv")
+
+# turn off scientific notation
+options(scipen = 999)
+
 ```
 
 ## EDA
 
+The dataset contains 200 rows and six numeric columns. It appears clean with no NA values, duplicate product IDs, or unusual values. 
+
 ```{r eda, message = FALSE, warning = FALSE}
 
-glimpse(df_raw)
-
-summary(df_raw)
+glimpse(df)
 
 # check NA (none)
-df_raw %>% 
+df %>% 
   summarise(across(everything(), ~sum(is.na(.))))
 
 # check dup (none)
-anyDuplicated(df_raw$Product_ID)
+anyDuplicated(df$Product_ID)
 
-# distributions
-df_raw %>%
+# summary and distributions
+
+summary(df)
+
+plt_dist <- df %>%
   select(Sales, Inventory_Levels, Lead_Time_Days, Price, Seasonality_Index) %>%
   pivot_longer(cols = everything()) %>%
   ggplot(aes(x = value)) +
   facet_wrap(~name, scales = "free") +
-  geom_histogram(bins = 30, fill = "gray", color = "white") +
+  geom_histogram(bins = 30, fill = "wheat", color = "white") +
   theme_minimal()
+
+plt_dist
+
+```
+  
+*Context: You are a data scientist working for a retail chain that models sales, inventory levels, and the impact of pricing and seasonality on revenue. Your task is to analyze various distributions that can describe sales variability and forecast potential revenue.*
+
+## Part 1: Empirical and Theoretical Analysis of Distributions (5 Points)
+
+### Generate and Analyze Distributions:
+
+*X ~ Sales: Consider the Sales variable from the dataset. Assume it follows a Gamma distribution and estimate its shape and scale parameters using the fitdistr function from the MASS package.*
+  
+Using the fitdistr function from the MASS package: 
+* Shape = 1.834964
+* Scale = 347.0997
+  
+```{r dist1, message = FALSE, warning = FALSE}
+
+# fit gamma distribution to Sales
+fit_sales_gamma <- fitdistr(df$Sales, densfun = "gamma")
+fit_sales_gamma
+
+# extract shape rate and rate, calculate scale
+sales_gamma_shape <- fit_gamma$estimate["shape"]
+sales_gamma_rate <- fit_gamma$estimate["rate"]
+sales_gamma_scale <- 1 / gamma_rate
+
+# display results
+sales_gamma_shape
+sales_gamma_scale
 
 ```
 
+*Y ~ Inventory Levels: Assume that the sum of inventory levels across similar products follows a Lognormal distribution. Estimate the parameters for this distribution.*
+
+* Mean = 6.133037
+* SD = 0.3633273
+  
+```{r dist2, message = FALSE, warning = FALSE}
+
+# fit log normal distribution to Inventory Levels
+fit_inv_log <- fitdistr(df$Inventory_Levels, densfun = "lognormal")
+fit_inv_log
+
+# extract mean and sd
+inv_log_mean <- fit_inv_log$estimate["meanlog"]
+inv_log_sd <- fit_inv_log$estimate["sdlog"]
+
+# display results
+inv_log_mean
+inv_log_sd
+```
+    
+*Z ~ Lead Time: Assume that Lead_Time_Days follows a Normal distribution. Estimate the mean and standard deviation.*
+  
+* Mean = 6.834298
+* SD = 2.083214
+  
+```{r dist3, message = FALSE, warning = FALSE}
+
+# fit normal distribution to Lead Time
+fit_lead_norm <- fitdistr(df$Lead_Time_Days, 
+                          densfun = "normal")
+fit_lead_norm
+
+# extract mean and sd
+lead_norm_mean <- fit_lead_norm$estimate["mean"]
+lead_norm_sd <- fit_lead_norm$estimate["sd"]
+
+# display results
+lead_norm_mean
+lead_norm_sd
+```
+  
+###Calculate Empirical Expected Value and Variance:
+    
+*Calculate the empirical mean and variance for all three variables.*
+  
+```{r emp1, message = FALSE, warning = FALSE}
+    
+df_stats_actual <- df %>%
+  summarise(
+    Sales_mean = mean(Sales),
+    Sales_var = var(Sales),
+    Inventory_mean = mean(Inventory_Levels),
+    Inventory_var = var(Inventory_Levels),
+    LeadTime_mean = mean(Lead_Time_Days),
+    LeadTime_var = var(Lead_Time_Days)
+  ) %>% 
+  pivot_longer(everything(), names_to = c("variable", ".value"), names_sep = "_")
+
+stats_actual
+
+```
+  
+*Compare these empirical values with the theoretical values derived from the estimated distribution parameters.*
+
+```{r emp1, message = FALSE, warning = FALSE}
+
+# calculate theoretrical means and variances
+
+sales_gamma_shape
+sales_gamma_scale
+inv_log_mean
+inv_log_sd
+lead_norm_mean
+lead_norm_sd
+
+# Gamma mean = shape * scale
+# Lognormal mean = mean + 05 * sd^2
+# normal mean = mean
+
+# Gamma variance = shape * scale^2
+# Lognormal variance = exp(sd^2)-1 * exp(2 * mean + sd^2)
+# normal var = sd^2
+
+tb_stats_theoretical <- tibble(
+  variable = c("Sales", "Inventory_Levels", "Lead_Time_Days"),
+  mean = c(
+    sales_gamma_shape * sales_gamma_scale,
+    exp(inv_log_mean + 0.5 * inv_log_sd^2),
+    lead_norm_mean
+  ),
+  variance = c(
+    sales_gamma_shape * sales_gamma_scale^2,
+    (exp(inv_log_sd^2) - 1) * exp(2 * inv_log_mean + inv_log_sd^2),
+    lead_norm_sd^2
+  )
+)
+
+tb_stats_theoretical
+
+# rename some values in theoretical df variable column to join
+df_stats_theoretical <- tb_stats_theoretical %>% 
+  mutate(variable = case_when(
+          variable == "Inventory_Levels" ~ "Inventory", 
+          variable == "Lead_Time_Days" ~ "LeadTime", 
+         TRUE ~ variable))
+
+df_stats_theoretical
+
+# join and compare
+df_compare <- df_stats_actual %>% 
+  left_join(df_stats_theoretical, by = "variable") %>% 
+  rename(empirical_mean = mean.x,
+         empirical_var = var,
+         theoretical_mean = mean.y,
+         theoretical_var = variance) %>% 
+  mutate(variance_mean = theoretical_mean - empirical_mean,
+         variance_var = theoretical_var - empirical_var) %>% 
+  dplyr::select(variable,
+         theoretical_mean, 
+         empirical_mean, 
+         variance_mean,
+         theoretical_var,
+         empirical_var,
+         variance_var)
+  
+df_compare
+```
