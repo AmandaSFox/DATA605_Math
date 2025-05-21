@@ -1,0 +1,45 @@
+---
+title: "DATA605_Final"
+author: "A. Fox"
+format: html
+---
+
+## Preparation: Libraries and Load Data
+  
+```{r prep, message = FALSE, warning = FALSE}
+
+# load libraries
+library(tidyverse)
+library(readr)
+library(ggplot2)
+library(scales)
+
+df_raw <- read_csv("https://raw.githubusercontent.com/AmandaSFox/DATA605_Math/refs/heads/main/Final/synthetic_retail_data.csv")
+```
+
+## EDA
+
+```{r eda, message = FALSE, warning = FALSE}
+
+glimpse(df_raw)
+
+summary(df_raw)
+
+# check NA (none)
+df_raw %>% 
+  summarise(across(everything(), ~sum(is.na(.))))
+
+# check dup (none)
+anyDuplicated(df_raw$Product_ID)
+
+# distributions
+df_raw %>%
+  select(Sales, Inventory_Levels, Lead_Time_Days, Price, Seasonality_Index) %>%
+  pivot_longer(cols = everything()) %>%
+  ggplot(aes(x = value)) +
+  facet_wrap(~name, scales = "free") +
+  geom_histogram(bins = 30, fill = "gray", color = "white") +
+  theme_minimal()
+
+```
+
