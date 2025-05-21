@@ -4,13 +4,14 @@ author: "A. Fox"
 format: html
 ---
 
-## Preparation: Libraries and Load Data
+##Preparation: Libraries and Load Data
   
 ```{r prep, message = FALSE, warning = FALSE}
 
 # load libraries
 library(tidyverse)
 library(readr)
+library(tidyr)
 library(ggplot2)
 library(scales)
 library(MASS)
@@ -23,7 +24,7 @@ options(scipen = 999)
 
 ```
 
-## EDA
+##EDA
 
 The dataset contains 200 rows and six numeric columns. It appears clean with no NA values, duplicate product IDs, or unusual values. 
 
@@ -43,8 +44,13 @@ anyDuplicated(df$Product_ID)
 summary(df)
 
 plt_dist <- df %>%
-  select(Sales, Inventory_Levels, Lead_Time_Days, Price, Seasonality_Index) %>%
-  pivot_longer(cols = everything()) %>%
+  pivot_longer(cols = c(Sales, 
+                        Inventory_Levels, 
+                        Lead_Time_Days, 
+                        Price, 
+                        Seasonality_Index),
+               names_to = "name",
+               values_to = "value") %>%
   ggplot(aes(x = value)) +
   facet_wrap(~name, scales = "free") +
   geom_histogram(bins = 30, fill = "wheat", color = "white") +
@@ -54,11 +60,13 @@ plt_dist
 
 ```
   
+##Problem 1: Business Risk and Revenue Modeling 
+  
 *Context: You are a data scientist working for a retail chain that models sales, inventory levels, and the impact of pricing and seasonality on revenue. Your task is to analyze various distributions that can describe sales variability and forecast potential revenue.*
 
-## Part 1: Empirical and Theoretical Analysis of Distributions (5 Points)
+###Part 1: Empirical and Theoretical Analysis of Distributions (5 Points)
 
-### Generate and Analyze Distributions:
+####1. Generate and Analyze Distributions:
 
 *X ~ Sales: Consider the Sales variable from the dataset. Assume it follows a Gamma distribution and estimate its shape and scale parameters using the fitdistr function from the MASS package.*
   
@@ -124,7 +132,7 @@ lead_norm_mean
 lead_norm_sd
 ```
   
-###Calculate Empirical Expected Value and Variance:
+###2. Calculate Empirical Expected Value and Variance:
     
 *Calculate the empirical mean and variance for all three variables.*
   
@@ -147,7 +155,7 @@ stats_actual
   
 *Compare these empirical values with the theoretical values derived from the estimated distribution parameters.*
 
-```{r emp1, message = FALSE, warning = FALSE}
+```{r emp2, message = FALSE, warning = FALSE}
 
 # calculate theoretrical means and variances
 
@@ -211,9 +219,9 @@ df_compare <- df_stats_actual %>%
 df_compare
 ```
   
-## Part 2: Probability Analysis and Independence Testing (5 Points)
+##Part 2: Probability Analysis and Independence Testing (5 Points)
 
-### Empirical Probabilities: For the Lead_Time_Days variable (assumed to be normally distributed), calculate the following empirical probabilities:
+###2.1 Empirical Probabilities: For the Lead_Time_Days variable (assumed to be normally distributed), calculate the following empirical probabilities:
 $$P(Z \gt \mu | Z \gt \mu - \sigma)$$
   
 Given that lead time is greater than one standard deviation below the mean, the probability that lead time is greater than the mean is **0.593**
@@ -258,7 +266,7 @@ lead_prob3
 
 ```
 
-### 2. Correlation and Independence:
+###2. Correlation and Independence:
 
 *Investigate the correlation between Sales and Price. Create a contingency table using quartiles of Sales and Price, and then evaluate the marginal and joint probabilities.*
   
@@ -293,3 +301,34 @@ df_marginal_sales
 ```
 
 *Use Fisher’s Exact Test and the Chi-Square Test to check for independence between Sales and Price. Discuss which test is most appropriate and why.*
+
+There is no dependence between these variables binned into quartiles. P = 1 in both tests. A continuous method would probably show some relationship between the variables as information is lost in binning. 
+  
+``` {r corr2, message = FALSE, warning = FALSE}
+
+# create table (pivot wide in matrix format)
+tbl_binned_counts <- table(df_sales_binned_counts$Sales_Q,
+                           df_sales_binned_counts$Price_Q)
+
+#run Fisher test
+fisher_result<- tbl_binned_counts %>% 
+  fisher.test()
+
+#run chi square test
+chisq_result<- tbl_binned_counts %>% 
+  chisq.test()
+
+
+
+fisher_result
+chisq_result
+
+```
+  
+##Problem 2: Advanced Forecasting and Optimization (Calculus) in Retail 
+  
+*Context: You are working for a large retail chain that wants to optimize pricing, inventory management, and sales forecasting using data-driven strategies. Your task is to use regression, statistical modeling, and calculus-based methods to make informed decisions.*
+
+###Part 1: Descriptive and Inferential Statistics for Inventory Data (5 Points)
+
+Task:
