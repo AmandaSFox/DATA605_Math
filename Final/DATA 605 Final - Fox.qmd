@@ -4,8 +4,10 @@ author: "A. Fox"
 format: html
 ---
 
-##Preparation: Libraries and Load Data
+## Preparation: 
   
+### Load Libraries and Data
+    
 ```{r prep, message = FALSE, warning = FALSE}
 
 # load libraries
@@ -15,6 +17,10 @@ library(tidyr)
 library(ggplot2)
 library(scales)
 library(MASS)
+library(GGally)
+library(Matrix)
+
+
 
 # load data
 df <- read_csv("https://raw.githubusercontent.com/AmandaSFox/DATA605_Math/refs/heads/main/Final/synthetic_retail_data.csv")
@@ -23,9 +29,9 @@ df <- read_csv("https://raw.githubusercontent.com/AmandaSFox/DATA605_Math/refs/h
 options(scipen = 999)
 
 ```
-
-##EDA
-
+  
+### EDA
+    
 The dataset contains 200 rows and six numeric columns. It appears clean with no NA values, duplicate product IDs, or unusual values. 
 
 ```{r eda, message = FALSE, warning = FALSE}
@@ -60,13 +66,13 @@ plt_dist
 
 ```
   
-##Problem 1: Business Risk and Revenue Modeling 
+## Problem 1: Business Risk and Revenue Modeling 
   
 *Context: You are a data scientist working for a retail chain that models sales, inventory levels, and the impact of pricing and seasonality on revenue. Your task is to analyze various distributions that can describe sales variability and forecast potential revenue.*
 
-###Part 1: Empirical and Theoretical Analysis of Distributions (5 Points)
+### Part 1: Empirical and Theoretical Analysis of Distributions (5 Points)
 
-####1. Generate and Analyze Distributions:
+#### 1. Generate and Analyze Distributions:
 
 *X ~ Sales: Consider the Sales variable from the dataset. Assume it follows a Gamma distribution and estimate its shape and scale parameters using the fitdistr function from the MASS package.*
   
@@ -81,9 +87,9 @@ fit_sales_gamma <- fitdistr(df$Sales, densfun = "gamma")
 fit_sales_gamma
 
 # extract shape rate and rate, calculate scale
-sales_gamma_shape <- fit_gamma$estimate["shape"]
-sales_gamma_rate <- fit_gamma$estimate["rate"]
-sales_gamma_scale <- 1 / gamma_rate
+sales_gamma_shape <- fit_sales_gamma$estimate["shape"]
+sales_gamma_rate <- fit_sales_gamma$estimate["rate"]
+sales_gamma_scale <- 1 / sales_gamma_rate
 
 # display results
 sales_gamma_shape
@@ -132,7 +138,7 @@ lead_norm_mean
 lead_norm_sd
 ```
   
-###2. Calculate Empirical Expected Value and Variance:
+### 2. Calculate Empirical Expected Value and Variance:
     
 *Calculate the empirical mean and variance for all three variables.*
   
@@ -149,7 +155,7 @@ df_stats_actual <- df %>%
   ) %>% 
   pivot_longer(everything(), names_to = c("variable", ".value"), names_sep = "_")
 
-stats_actual
+df_stats_actual
 
 ```
   
@@ -219,9 +225,9 @@ df_compare <- df_stats_actual %>%
 df_compare
 ```
   
-##Part 2: Probability Analysis and Independence Testing (5 Points)
+## Part 2: Probability Analysis and Independence Testing (5 Points)
 
-###2.1 Empirical Probabilities: For the Lead_Time_Days variable (assumed to be normally distributed), calculate the following empirical probabilities:
+### 2. Empirical Probabilities: For the Lead_Time_Days variable (assumed to be normally distributed), calculate the following empirical probabilities:
 $$P(Z \gt \mu | Z \gt \mu - \sigma)$$
   
 Given that lead time is greater than one standard deviation below the mean, the probability that lead time is greater than the mean is **0.593**
@@ -266,7 +272,7 @@ lead_prob3
 
 ```
 
-###2. Correlation and Independence:
+### 2. Correlation and Independence:
 
 *Investigate the correlation between Sales and Price. Create a contingency table using quartiles of Sales and Price, and then evaluate the marginal and joint probabilities.*
   
@@ -325,10 +331,168 @@ chisq_result
 
 ```
   
-##Problem 2: Advanced Forecasting and Optimization (Calculus) in Retail 
+## Problem 2: Advanced Forecasting and Optimization (Calculus) in Retail 
   
 *Context: You are working for a large retail chain that wants to optimize pricing, inventory management, and sales forecasting using data-driven strategies. Your task is to use regression, statistical modeling, and calculus-based methods to make informed decisions.*
+  
+### Part 1: Descriptive and Inferential Statistics for Inventory Data (5 Points)
+  
+#### 1. Inventory Data Analysis:
 
-###Part 1: Descriptive and Inferential Statistics for Inventory Data (5 Points)
+*Generate univariate descriptive statistics for the Inventory_Levels and Sales variables.*
+  
+```{r summ1, message = FALSE, warning=FALSE}
 
-Task:
+# Min Max Mean and quartiles
+df %>% 
+ summary()
+
+# Standard Deviation
+df %>% 
+ summarize(sales_sd = sd(Sales),
+           inv_sd = sd(Inventory_Levels))
+
+```
+  
+*Create appropriate visualizations such as histograms and scatterplots for Inventory_Levels, Sales, and Price.*
+    
+```{r summ1, message = FALSE, warning=FALSE}
+
+# Histogram for selected metrics
+plt_dist_selected <- df %>%
+  pivot_longer(cols = c(Sales, 
+                        Inventory_Levels, 
+                        Price),
+               names_to = "name",
+               values_to = "value") %>%
+  ggplot(aes(x = value)) +
+  facet_wrap(~name, scales = "free") +
+  geom_histogram(bins = 30, 
+                 fill = "steelblue", 
+                 color = "white") +
+  theme_minimal()
+
+plt_dist_selected
+
+# Pairwise scatterplots for selected metrics
+plt_scatter <- df %>%
+  dplyr::select(Sales, Inventory_Levels, Price) %>% 
+  ggpairs()
+
+plt_scatter
+
+
+```
+  
+*Compute a correlation matrix for Sales, Price, and Inventory_Levels.*
+  
+```{r summ2, message = FALSE, warning=FALSE}
+
+df %>%
+  dplyr::select(Sales, Price, Inventory_Levels) %>%
+  cor(method = "pearson")
+
+```
+    
+*Test the hypotheses that the correlations between the variables are zero and provide a 95% confidence interval.*
+
+The null hypothesis is that the correlation is zero between each of these variables and we fail to reject that hypothesis for all of the pairs below based on p-values. In additiona, the correlation coefficients are very small and the 95% confidence interval for all pairs includes zero.
+  
+**Sales/Price:**  
+              Correlation coefficient **0.103**
+              p value **0.1478** 
+              95% confidence interval **-0.037 to 0.238** 
+  
+**Sales/Inventory Level:**
+              Correlation coefficient **-0.035**
+              p value **0.6198**
+              95% confidence interval **-0.173 to 0.104** 
+  
+**Price/Inventory Level:** 
+              Correlation coefficient **-0.040**
+              p value **0.5714**
+              95% confidence interval **-0.178 to 0.099** 
+  
+
+
+```{r summ3, message = FALSE, warning=FALSE}
+  
+cor_test_results <- list(
+  Sales_vs_Price = cor.test(df$Sales, df$Price),
+  Sales_vs_Inventory = cor.test(df$Sales, df$Inventory_Levels),
+  Price_vs_Inventory = cor.test(df$Price, df$Inventory_Levels))
+
+cor_test_results
+```
+  
+#### Discussion:
+  
+*Explain the meaning of your findings and discuss the implications of the correlations for inventory management. Would you be concerned about multicollinearity in a potential regression model? Why or why not?*
+  
+The correlations between Sales, Price, and Inventory Levels are all very weak and not statistically significant, so multicollinearity is not a concern in a regression model.
+  
+### 2: Linear Algebra and Pricing Strategy (5 Points)
+  
+#### 1. Price Elasticity of Demand:
+  
+*Use linear regression to model the relationship between Sales and Price (assuming Sales as the dependent variable).*
+  
+Sales = 9.916 * Price + 442.951 
+
+This model has a very low R-squared of only 0.0155 so price explains only 1.6% of Sales. The relationship is not statistically significant with a p value of 0.1478.
+    
+```{r pricing1, message = FALSE, warning=FALSE}
+
+mod_pricing <- df %>% 
+  lm(Sales ~ Price, .)
+
+summary(mod_pricing)
+
+```
+  
+*Invert the correlation matrix from your model, and calculate the precision matrix.*
+  
+```{r pricing2, message = FALSE, warning=FALSE}
+
+# correlation matrix 
+sales_cor_matrix <- df %>%
+  dplyr::select(Sales, Price) %>%
+  cor(method = "pearson")
+
+sales_cor_matrix
+
+# invert
+sales_precision_matrix <- solve(sales_cor_matrix)
+
+sales_precision_matrix
+
+```
+  
+*Discuss the implications of the diagonal elements of the precision matrix (which are variance inflation factors).*
+  
+The diagonal elements are VIFs and as they are very close to 1, there is low variance inflation and no multicollinearity.
+  
+*Perform LU decomposition on the correlation matrix and interpret the results in the context of price elasticity.* 
+ 
+Price elasticity is low based on the small value in the off-diagonal in both the U and L matrices. 
+  
+```{r pricing3, message = FALSE, warning=FALSE}
+
+# correlation matrix from above
+sales_cor_matrix
+
+# LU decomposition
+sales_lu_decomp <- lu(Matrix(sales_cor_matrix))
+
+# Extract L and U matrices
+L <- expand(sales_lu_decomp)$L
+U <- expand(sales_lu_decomp)$U
+
+L <- as.matrix(L)
+U <- as.matrix(U)
+
+L
+U
+
+```
+
