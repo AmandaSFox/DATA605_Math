@@ -495,4 +495,110 @@ L
 U
 
 ```
+  
+### 3: Calculus-Based Probability & Statistics for Sales Forecasting (5 Points)
 
+#### 1. Sales Forecasting Using Exponential Distribution:
+  
+*Identify a variable in the dataset that is skewed to the right (e.g., Sales or Price) and fit an exponential distribution to this data using the fitdistr function.*
+  
+```{r forecast1, message=FALSE, warning=FALSE}
+
+sales_fit_exp <- fitdistr(df$Sales, 
+                          densfun = "exponential")
+
+sales_fit_exp
+```
+  
+*Generate 1,000 samples from the fitted exponential distribution and compare a histogram of these samples with the original data's histogram.*
+
+```{r forecast2, message=FALSE, warning=FALSE}
+
+#extract rate parameter
+sales_lambda <- sales_fit_exp$estimate["rate"]
+
+# simulate
+set.seed(123)
+
+sim_sales <- rexp(1000, rate = sales_lambda)
+
+# compare
+df_compare <- bind_rows(
+  tibble(source = "Original", value = df$Sales),
+  tibble(source = "Simulated", value = sim_sales))
+
+
+plt_sim <- df_compare %>% 
+  ggplot(
+    aes(x = value, fill = source)) +
+    geom_histogram(bins = 30, color = "white", alpha = 0.6, position = "identity") +
+    facet_wrap(~source, scales = "free_y") +
+    theme_minimal() +
+    labs(title = "Original vs Simulated Sales (Exponential Fit)",
+         x = "Sales", y = "Count")
+
+plt_sim
+```
+
+*Calculate the 5th and 95th percentiles using the cumulative distribution function (CDF) of the exponential distribution.*
+
+5% of products have sales below 32.67 and 95% of products have sales below 1908.03 in the simulated model.
+  
+```{r forecast3, message=FALSE, warning=FALSE}
+
+# expontial function rate from above: sales_lambda <- sales_fit_exp$estimate["rate"]
+
+# quantile function
+sales_q5 <- qexp(0.05, rate = sales_lambda)
+sales_q95 <- qexp(0.95, rate = sales_lambda)
+
+sales_q5
+sales_q95
+```
+  
+*Compute a 95% confidence interval for the original data assuming normality and compare it with the empirical percentiles.*
+  
+The confidence interval under the normality assumption includes negative sales numbers which is not possible; this is because this data is not normally distributed but right-skewed.
+  
+```{r forecast4, message=FALSE, warning=FALSE}
+
+sales_mean <- mean(df$Sales)
+sales_sd <- sd(df$Sales)
+
+sales_ci_normal <- c(lower = sales_mean - 1.96 * sales_sd,
+               upper = sales_mean + 1.96 * sales_sd)
+
+sales_ci_empirical <- quantile(df$Sales, 
+                               probs = c(0.05, 0.95))
+
+sales_ci_compare <- tibble(
+  Method = c("Normal CI", "Empirical Percentiles"),
+  Lower = c(round(sales_ci_normal[1], 2), round(sales_ci_empirical[1], 2)),
+  Upper = c(round(sales_ci_normal[2], 2), round(sales_ci_empirical[2], 2))
+)
+
+sales_ci_compare
+
+```
+  
+#### 2. Discussion:
+  
+*Discuss how well the exponential distribution models the data and what this implies for forecasting future sales or pricing. Consider whether a different distribution might be more appropriate.*
+
+The exponential distribution captures the right skew in the plot below but it has a longer tail. Actual max sales is 2447.49 while this simulation seems to go further out. Also, there seems to be more low-sales in the simulation: on the plot below, the bar near zero is proportionately greater. I think the model will overestimate sales at the extremes and I would try a gamma or log-normal distribution to avoid this issue while capturing the skew.  
+  
+```{r forecast4, message=FALSE, warning=FALSE}
+plt_sim
+```
+  
+### 4: Regression Modeling for Inventory Optimization (10 Points)
+  
+#### 1. Multiple Regression Model:
+  
+*Build a multiple regression model to predict Inventory_Levels based on Sales, Lead_Time_Days, and Price.*
+  
+*Provide a full summary of your model, including coefficients, R-squared value, and residual analysis.*
+  
+#### Optimization:
+  
+*Use your model to optimize inventory levels for a peak sales season, balancing minimizing stockouts with minimizing overstock*
