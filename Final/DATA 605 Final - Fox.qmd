@@ -434,7 +434,7 @@ cor_test_results
   
 *Explain the meaning of your findings and discuss the implications of the correlations for inventory management. Would you be concerned about multicollinearity in a potential regression model? Why or why not?*
   
-The correlations between Sales, Price, and Inventory Levels are all very weak and not statistically significant, so multicollinearity is not a concern in a regression model.
+The correlations between Sales, Price, and Inventory Levels are all very weak and not statistically significant, so multicollinearity is not a concern for a regression model.
   
 ### 2: Linear Algebra and Pricing Strategy (5 Points)
   
@@ -692,9 +692,9 @@ However, we can create a **rule of thumb** inventory target if we make some assu
 * Seasonality_Index = expected uplift during peak season (Note that the median and mean Seasonality_Index values are < 1, so most of these must be off-season products)
 * Peak season = 30 days
 
-Note that this is **not an optimization model** but allows a company to define their own replenishment buffer based on their **tolerance for stockout risk vs. holding cost**.
+Note that this is **not an optimization model** but allows a company to define their own replenishment buffer based on their **tolerance for stockouts vs. holding cost**.
   
-In the below example, I set a very low buffer of just one day more than lead time to simulate a situation where holding costs were high and I was willing to risk stockouts, and not surprisingly, the results show that current inventory is significantly overstocked given those parameters. I could raise this buffer if I wanted to reduce stockout risk and increase holding cost.
+In the below example, I set a very low buffer of just one day more than lead time to simulate a situation where holding costs were high and I was willing to risk stockouts: not surprisingly, current inventory is significantly overstocked for most products given those parameters. 
 
 ``` {r rule, message=FALSE, warning= FALSE}
 
