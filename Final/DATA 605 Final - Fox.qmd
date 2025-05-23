@@ -1,7 +1,8 @@
 ---
 title: "DATA605_Final"
-author: "A. Fox"
-format: html
+author: "Amanda Fox"
+date: "May 22, 2025"
+format: pdf
 ---
 
 ## Preparation: 
@@ -19,7 +20,7 @@ library(scales)
 library(MASS)
 library(GGally)
 library(Matrix)
-
+library(numDeriv)
 
 
 # load data
@@ -69,15 +70,17 @@ plt_dist
 ## Problem 1: Business Risk and Revenue Modeling 
   
 *Context: You are a data scientist working for a retail chain that models sales, inventory levels, and the impact of pricing and seasonality on revenue. Your task is to analyze various distributions that can describe sales variability and forecast potential revenue.*
-
+  
 ### Part 1: Empirical and Theoretical Analysis of Distributions (5 Points)
-
+  
 #### 1. Generate and Analyze Distributions:
-
+  
 *X ~ Sales: Consider the Sales variable from the dataset. Assume it follows a Gamma distribution and estimate its shape and scale parameters using the fitdistr function from the MASS package.*
   
 Using the fitdistr function from the MASS package: 
+  
 * Shape = 1.834964
+  
 * Scale = 347.0997
   
 ```{r dist1, message = FALSE, warning = FALSE}
@@ -96,10 +99,11 @@ sales_gamma_shape
 sales_gamma_scale
 
 ```
-
+  
 *Y ~ Inventory Levels: Assume that the sum of inventory levels across similar products follows a Lognormal distribution. Estimate the parameters for this distribution.*
-
+  
 * Mean = 6.133037
+  
 * SD = 0.3633273
   
 ```{r dist2, message = FALSE, warning = FALSE}
@@ -228,15 +232,15 @@ df_compare
 ## Part 2: Probability Analysis and Independence Testing (5 Points)
 
 ### 2. Empirical Probabilities: For the Lead_Time_Days variable (assumed to be normally distributed), calculate the following empirical probabilities:
-$$P(Z \gt \mu | Z \gt \mu - \sigma)$$
+$$P(Z > \mu \mid Z > \mu - \sigma)$$
   
 Given that lead time is greater than one standard deviation below the mean, the probability that lead time is greater than the mean is **0.593**
   
-$$P(Z \gt \mu + \sigma | Z \gt \mu)$$
+$$P(Z > \mu + \sigma \mid Z > \mu)$$
   
 Given that lead time is greater than the mean, the probability that lead time is greater than one standard deviation above the mean is **0.313**
   
-$$P(Z \gt \mu + 2\sigma | Z \gt \mu)$$
+$$P(Z > \mu + 2\sigma \mid Z > \mu)$$
   
 Given that lead time is greater than the mean, the probability that lead time is greater than two standard deviations above the mean is **0.030**
   
@@ -246,7 +250,7 @@ Given that lead time is greater than the mean, the probability that lead time is
 lead_mu <- mean(df$Lead_Time_Days)
 lead_sigma <- sd(df$Lead_Time_Days)
 
-#P(Z \gt \mu | Z \gt \mu - \sigma)
+#P(Z > \mu | Z > \mu - \sigma)
 
 lead_prob1 <- df %>%
   filter(Lead_Time_Days > lead_mu - lead_sigma) %>%
@@ -255,7 +259,7 @@ lead_prob1 <- df %>%
 lead_prob1
 
 
-#P(Z \gt \mu + \sigma | Z \gt \mu)
+#P(Z > \mu + \sigma | Z > \mu)
 lead_prob2 <- df %>%
   filter(Lead_Time_Days > lead_mu) %>%
   summarise(mean(Lead_Time_Days > lead_mu+ lead_sigma))
@@ -263,7 +267,7 @@ lead_prob2 <- df %>%
 lead_prob2
 
 
-#P(Z \gt \mu + 2\sigma | Z \gt \mu)
+#P(Z > \mu + 2\sigma | Z > \mu)
 lead_prob3 <- df %>%
   filter(Lead_Time_Days > lead_mu) %>%
   summarise(mean(Lead_Time_Days > lead_mu+ 2 * lead_sigma))
@@ -345,6 +349,7 @@ chisq_result
 
 # Min Max Mean and quartiles
 df %>% 
+ dplyr::select(Inventory_Levels, Sales) %>% 
  summary()
 
 # Standard Deviation
@@ -356,7 +361,7 @@ df %>%
   
 *Create appropriate visualizations such as histograms and scatterplots for Inventory_Levels, Sales, and Price.*
     
-```{r summ1, message = FALSE, warning=FALSE}
+```{r summ2, message = FALSE, warning=FALSE}
 
 # Histogram for selected metrics
 plt_dist_selected <- df %>%
@@ -386,7 +391,7 @@ plt_scatter
   
 *Compute a correlation matrix for Sales, Price, and Inventory_Levels.*
   
-```{r summ2, message = FALSE, warning=FALSE}
+```{r summ3, message = FALSE, warning=FALSE}
 
 df %>%
   dplyr::select(Sales, Price, Inventory_Levels) %>%
@@ -415,7 +420,7 @@ The null hypothesis is that the correlation is zero between each of these variab
   
 
 
-```{r summ3, message = FALSE, warning=FALSE}
+```{r summ4, message = FALSE, warning=FALSE}
   
 cor_test_results <- list(
   Sales_vs_Price = cor.test(df$Sales, df$Price),
@@ -558,7 +563,7 @@ sales_q95
   
 *Compute a 95% confidence interval for the original data assuming normality and compare it with the empirical percentiles.*
   
-The confidence interval under the normality assumption includes negative sales numbers which is not possible; this is because this data is not normally distributed but right-skewed.
+The confidence interval under the normality assumption includes negative sales numbers which is not possible; this data is not normally distributed but right-skewed.
   
 ```{r forecast4, message=FALSE, warning=FALSE}
 
@@ -585,9 +590,9 @@ sales_ci_compare
   
 *Discuss how well the exponential distribution models the data and what this implies for forecasting future sales or pricing. Consider whether a different distribution might be more appropriate.*
 
-The exponential distribution captures the right skew in the plot below but it has a longer tail. Actual max sales is 2447.49 while this simulation seems to go further out. Also, there seems to be more low-sales in the simulation: on the plot below, the bar near zero is proportionately greater. I think the model will overestimate sales at the extremes and I would try a gamma or log-normal distribution to avoid this issue while capturing the skew.  
+As shown below, the exponential distribution captures the right skew in the plot below but it has more extreme values at both ends. The simulated values extend well beyond the maximum actual value of 2447.49 at the high end, and the simulated values near zero are proportionately higher than actual sales as well. So this model will **overestimate sales at the extremes** and I would try a gamma or log-normal distribution to avoid this issue while still capturing the skew.  
   
-```{r forecast4, message=FALSE, warning=FALSE}
+```{r forecast5, message=FALSE, warning=FALSE}
 plt_sim
 ```
   
@@ -596,9 +601,127 @@ plt_sim
 #### 1. Multiple Regression Model:
   
 *Build a multiple regression model to predict Inventory_Levels based on Sales, Lead_Time_Days, and Price.*
-  
 *Provide a full summary of your model, including coefficients, R-squared value, and residual analysis.*
+  
+**Coefficients**
+Inventory = -0.007809 * Sales + 7.316793 * Lead Time - 1.087778 * Price + 464.792662
+
+None of the coefficients is statistically significant, and the overall model is not statistically significant (p-value 0.4902).
+
+**R-squared** 
+R-squared is 0.01223. The model explains only 1.2% of changes in Inventory Levels.
+
+**Residuals** 
+
+Overall the data appears to meet the assumptions of no multicollinearity (see earlier analysis) as well as linearity, homoscedasticity, and normality of residuals. 
+
+1. Residuals vs Fitted: There is no fan shape or curve so the data appears to meet the assumptions of homoscedasticity and linearity. There does appear to be a lot of variation. 
+    
+2. Histogram of Residuals: Appears nearly normally distributed so the data meets the assumption of normality.
+    
+3. Q-Q: Follows the line generally with deviation at both ends, suggests some mild skew/outliers.
+  
+  
+```{r regress1, message=FALSE, warning=FALSE}
+
+# model
+mod_inv <- df %>% 
+  lm(Inventory_Levels ~ Sales + Lead_Time_Days + Price, .)
+
+# summary
+summary(mod_inv)
+
+# df with actuals, fitted, and residuals
+df_inv_model <- df %>% 
+  dplyr::select(Inventory_Levels) %>% 
+  mutate(
+    .fitted = fitted(mod_inv),
+    .resid = resid(mod_inv),
+    .std_resid = rstandard(mod_inv)
+  )
+
+glimpse(df_inv_model)
+
+# Residuals vs Fitted
+plot_resid <- df_inv_model %>% 
+  ggplot(aes(x = .fitted, y = .resid)) +
+  geom_point(alpha = 0.6, color = "gray40") +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "darkred") +
+  labs(
+    title = "Residuals vs Fitted",
+    x = "Fitted Values",
+    y = "Residuals"
+  ) +
+  theme_minimal()
+
+plot_resid
+
+# Histogram of Residuals
+plot_resid_hist <- df_inv_model %>% 
+  ggplot(aes(x = .resid)) +
+  geom_histogram(bins = 15, fill = "gray", color = "white") +
+  labs(title = "Histogram of Residuals", x = "Residuals") +
+  theme_minimal()
+
+plot_resid_hist
+
+# Q-Q
+plot_qq <- df_inv_model %>% 
+  ggplot(aes(sample = .resid)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  labs(title = "Q-Q Plot of Residuals") +
+  theme_minimal()
+
+plot_qq
+
+```
   
 #### Optimization:
   
 *Use your model to optimize inventory levels for a peak sales season, balancing minimizing stockouts with minimizing overstock*
+
+The model explains very little and is not statistically significant, so it cannot reliably optimize inventory levels. Additionally, because it is a linear model, calculus is not helpful: the gradient is constant (equal to the coefficients) and the model has no curvature or interior max/min to find. To optimize a linear model, we need defined constraints and in this case the necessary data is unavailable. 
+
+Optimizing inventory levels is a time-based problem: inventory moves in and out over time, and planning requires forecasting demand movements across a defined time period. This dataset does not have a time dimension, holding cost, or stockout cost, so we could simply set beginning inventory equal to sales and run it down to zero: **optimization isn’t meaningful under these conditions**.
+  
+However, we can create a **rule of thumb** inventory target if we make some assumptions:
+  
+* Time period for this dataset = 30 days
+* Sales = baseline demand
+* Seasonality_Index = expected uplift during peak season (Note that the median and mean Seasonality_Index values are < 1, so most of these must be off-season products)
+* Peak season = 30 days
+
+Note that this is **not an optimization model** but allows a company to define their own replenishment buffer based on their **tolerance for stockout risk vs. holding cost**.
+  
+In the below example, I set a very low buffer of just one day more than lead time to simulate a situation where holding costs were high and I was willing to risk stockouts, and not surprisingly, the results show that current inventory is significantly overstocked given those parameters. I could raise this buffer if I wanted to reduce stockout risk and increase holding cost.
+
+``` {r rule, message=FALSE, warning= FALSE}
+
+# assume Sales is 30 days of baseline sales 
+# project "peak season" sales: multiply Sales by seasonality factor 
+# calculate avg daily projected sales 
+# calculate target inventory to minimize holding time: multiply by 
+#   lead time + 1 day (as a buffer)
+
+# NOT AN OPTIMIZATION: just a rule of thumb
+# change buffer_days to match tolerance for risk of 
+#   stockout vs. holding cost
+
+buffer_days <- 1
+
+df_rule <- df %>%
+  dplyr::select(-Price) %>% 
+  dplyr::rename(baseline_demand_30 = Sales) %>% 
+  mutate(peak_demand_30 = baseline_demand_30 * Seasonality_Index,
+         daily_demand = peak_demand_30/30,
+         buffer_days = buffer_days,
+         target_inventory = daily_demand * (Lead_Time_Days + buffer_days),
+         inventory_gap = Inventory_Levels - target_inventory)
+
+glimpse(df_rule)
+
+summary(df_rule$inventory_gap)
+
+```
+

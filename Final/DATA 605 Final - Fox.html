@@ -132,8 +132,10 @@ window.Quarto = {
 </header>
 
 
-<section id="preparation-libraries-and-load-data" class="level2">
-<h2 class="anchored" data-anchor-id="preparation-libraries-and-load-data">Preparation: Libraries and Load Data</h2>
+<section id="preparation" class="level2">
+<h2 class="anchored" data-anchor-id="preparation">Preparation:</h2>
+<section id="load-libraries-and-data" class="level3">
+<h3 class="anchored" data-anchor-id="load-libraries-and-data">Load Libraries and Data</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load libraries</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
@@ -142,16 +144,20 @@ window.Quarto = {
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># load data</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://raw.githubusercontent.com/AmandaSFox/DATA605_Math/refs/heads/main/Final/synthetic_retail_data.csv"</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GGally)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Matrix)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(numDeriv)</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># turn off scientific notation</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">999</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># load data</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://raw.githubusercontent.com/AmandaSFox/DATA605_Math/refs/heads/main/Final/synthetic_retail_data.csv"</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># turn off scientific notation</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">999</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="eda" class="level2">
-<h2 class="anchored" data-anchor-id="eda">EDA</h2>
+<section id="eda" class="level3">
+<h3 class="anchored" data-anchor-id="eda">EDA</h3>
 <p>The dataset contains 200 rows and six numeric columns. It appears clean with no NA values, duplicate product IDs, or unusual values.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -220,7 +226,10 @@ $ Seasonality_Index &lt;dbl&gt; 1.1839497, 0.8573051, 0.6986774, 0.6975404, 0.84
 </div>
 </div>
 </div>
-<p>##Problem 1: Business Risk and Revenue Modeling</p>
+</section>
+</section>
+<section id="problem-1-business-risk-and-revenue-modeling" class="level2">
+<h2 class="anchored" data-anchor-id="problem-1-business-risk-and-revenue-modeling">Problem 1: Business Risk and Revenue Modeling</h2>
 <p><em>Context: You are a data scientist working for a retail chain that models sales, inventory levels, and the impact of pricing and seasonality on revenue. Your task is to analyze various distributions that can describe sales variability and forecast potential revenue.</em></p>
 <section id="part-1-empirical-and-theoretical-analysis-of-distributions-5-points" class="level3">
 <h3 class="anchored" data-anchor-id="part-1-empirical-and-theoretical-analysis-of-distributions-5-points">Part 1: Empirical and Theoretical Analysis of Distributions (5 Points)</h3>
@@ -456,7 +465,7 @@ $ Seasonality_Index &lt;dbl&gt; 1.1839497, 0.8573051, 0.6986774, 0.6975404, 0.84
 <section id="part-2-probability-analysis-and-independence-testing-5-points" class="level2">
 <h2 class="anchored" data-anchor-id="part-2-probability-analysis-and-independence-testing-5-points">Part 2: Probability Analysis and Independence Testing (5 Points)</h2>
 <section id="empirical-probabilities-for-the-lead_time_days-variable-assumed-to-be-normally-distributed-calculate-the-following-empirical-probabilities" class="level3">
-<h3 class="anchored" data-anchor-id="empirical-probabilities-for-the-lead_time_days-variable-assumed-to-be-normally-distributed-calculate-the-following-empirical-probabilities">2.1 Empirical Probabilities: For the Lead_Time_Days variable (assumed to be normally distributed), calculate the following empirical probabilities:</h3>
+<h3 class="anchored" data-anchor-id="empirical-probabilities-for-the-lead_time_days-variable-assumed-to-be-normally-distributed-calculate-the-following-empirical-probabilities">2. Empirical Probabilities: For the Lead_Time_Days variable (assumed to be normally distributed), calculate the following empirical probabilities:</h3>
 <p><span class="math display">\[P(Z \gt \mu | Z \gt \mu - \sigma)\]</span></p>
 <p>Given that lead time is greater than one standard deviation below the mean, the probability that lead time is greater than the mean is <strong>0.593</strong></p>
 <p><span class="math display">\[P(Z \gt \mu + \sigma | Z \gt \mu)\]</span></p>
@@ -615,6 +624,482 @@ X-squared = 0, df = 9, p-value = 1</code></pre>
 <p><em>Context: You are working for a large retail chain that wants to optimize pricing, inventory management, and sales forecasting using data-driven strategies. Your task is to use regression, statistical modeling, and calculus-based methods to make informed decisions.</em></p>
 <section id="part-1-descriptive-and-inferential-statistics-for-inventory-data-5-points" class="level3">
 <h3 class="anchored" data-anchor-id="part-1-descriptive-and-inferential-statistics-for-inventory-data-5-points">Part 1: Descriptive and Inferential Statistics for Inventory Data (5 Points)</h3>
+<section id="inventory-data-analysis" class="level4">
+<h4 class="anchored" data-anchor-id="inventory-data-analysis">1. Inventory Data Analysis:</h4>
+<p><em>Generate univariate descriptive statistics for the Inventory_Levels and Sales variables.</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Min Max Mean and quartiles</span></span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Product_ID         Sales         Inventory_Levels Lead_Time_Days  
+ Min.   :  1.00   Min.   :  25.57   Min.   : 67.35   Min.   : 0.491  
+ 1st Qu.: 50.75   1st Qu.: 284.42   1st Qu.:376.51   1st Qu.: 5.291  
+ Median :100.50   Median : 533.54   Median :483.72   Median : 6.765  
+ Mean   :100.50   Mean   : 636.92   Mean   :488.55   Mean   : 6.834  
+ 3rd Qu.:150.25   3rd Qu.: 867.58   3rd Qu.:600.42   3rd Qu.: 8.212  
+ Max.   :200.00   Max.   :2447.49   Max.   :858.79   Max.   :12.722  
+     Price        Seasonality_Index
+ Min.   : 5.053   Min.   :0.3305   
+ 1st Qu.:16.554   1st Qu.:0.8475   
+ Median :19.977   Median :0.9762   
+ Mean   :19.560   Mean   :0.9829   
+ 3rd Qu.:22.924   3rd Qu.:1.1205   
+ Max.   :29.404   Max.   :1.5958   </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Standard Deviation</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">summarize</span>(<span class="at">sales_sd =</span> <span class="fu">sd</span>(Sales),</span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">inv_sd =</span> <span class="fu">sd</span>(Inventory_Levels))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  sales_sd inv_sd
+     &lt;dbl&gt;  &lt;dbl&gt;
+1     463.   155.</code></pre>
+</div>
+</div>
+<p><em>Create appropriate visualizations such as histograms and scatterplots for Inventory_Levels, Sales, and Price.</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Histogram for selected metrics</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>plt_dist_selected <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(Sales, </span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a>                        Inventory_Levels, </span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a>                        Price),</span>
+<span id="cb69-6"><a href="#cb69-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"name"</span>,</span>
+<span id="cb69-7"><a href="#cb69-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"value"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb69-8"><a href="#cb69-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> value)) <span class="sc">+</span></span>
+<span id="cb69-9"><a href="#cb69-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>name, <span class="at">scales =</span> <span class="st">"free"</span>) <span class="sc">+</span></span>
+<span id="cb69-10"><a href="#cb69-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>, </span>
+<span id="cb69-11"><a href="#cb69-11" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">"steelblue"</span>, </span>
+<span id="cb69-12"><a href="#cb69-12" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
+<span id="cb69-13"><a href="#cb69-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb69-14"><a href="#cb69-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-15"><a href="#cb69-15" aria-hidden="true" tabindex="-1"></a>plt_dist_selected</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="DATA-605-Final---Fox_files/figure-html/summ2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pairwise scatterplots for selected metrics</span></span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>plt_scatter <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(Sales, Inventory_Levels, Price) <span class="sc">%&gt;%</span> </span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggpairs</span>()</span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a>plt_scatter</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="DATA-605-Final---Fox_files/figure-html/summ2-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><em>Compute a correlation matrix for Sales, Price, and Inventory_Levels.</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(Sales, Price, Inventory_Levels) <span class="sc">%&gt;%</span></span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor</span>(<span class="at">method =</span> <span class="st">"pearson"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                       Sales       Price Inventory_Levels
+Sales             1.00000000  0.10272730      -0.03529619
+Price             0.10272730  1.00000000      -0.04025941
+Inventory_Levels -0.03529619 -0.04025941       1.00000000</code></pre>
+</div>
+</div>
+<p><em>Test the hypotheses that the correlations between the variables are zero and provide a 95% confidence interval.</em></p>
+<p>The null hypothesis is that the correlation is zero between each of these variables and we fail to reject that hypothesis for all of the pairs below based on p-values. In additiona, the correlation coefficients are very small and the 95% confidence interval for all pairs includes zero.</p>
+<p><strong>Sales/Price:</strong><br>
+Correlation coefficient <strong>0.103</strong> p value <strong>0.1478</strong> 95% confidence interval <strong>-0.037 to 0.238</strong></p>
+<p><strong>Sales/Inventory Level:</strong> Correlation coefficient <strong>-0.035</strong> p value <strong>0.6198</strong> 95% confidence interval <strong>-0.173 to 0.104</strong></p>
+<p><strong>Price/Inventory Level:</strong> Correlation coefficient <strong>-0.040</strong> p value <strong>0.5714</strong> 95% confidence interval <strong>-0.178 to 0.099</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>cor_test_results <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Sales_vs_Price =</span> <span class="fu">cor.test</span>(df<span class="sc">$</span>Sales, df<span class="sc">$</span>Price),</span>
+<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Sales_vs_Inventory =</span> <span class="fu">cor.test</span>(df<span class="sc">$</span>Sales, df<span class="sc">$</span>Inventory_Levels),</span>
+<span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Price_vs_Inventory =</span> <span class="fu">cor.test</span>(df<span class="sc">$</span>Price, df<span class="sc">$</span>Inventory_Levels))</span>
+<span id="cb73-5"><a href="#cb73-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb73-6"><a href="#cb73-6" aria-hidden="true" tabindex="-1"></a>cor_test_results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$Sales_vs_Price
+
+    Pearson's product-moment correlation
+
+data:  df$Sales and df$Price
+t = 1.4532, df = 198, p-value = 0.1478
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ -0.03653442  0.23807516
+sample estimates:
+      cor 
+0.1027273 
+
+
+$Sales_vs_Inventory
+
+    Pearson's product-moment correlation
+
+data:  df$Sales and df$Inventory_Levels
+t = -0.49697, df = 198, p-value = 0.6198
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ -0.1731891  0.1039539
+sample estimates:
+        cor 
+-0.03529619 
+
+
+$Price_vs_Inventory
+
+    Pearson's product-moment correlation
+
+data:  df$Price and df$Inventory_Levels
+t = -0.56696, df = 198, p-value = 0.5714
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ -0.17800614  0.09903478
+sample estimates:
+        cor 
+-0.04025941 </code></pre>
+</div>
+</div>
+</section>
+<section id="discussion" class="level4">
+<h4 class="anchored" data-anchor-id="discussion">Discussion:</h4>
+<p><em>Explain the meaning of your findings and discuss the implications of the correlations for inventory management. Would you be concerned about multicollinearity in a potential regression model? Why or why not?</em></p>
+<p>The correlations between Sales, Price, and Inventory Levels are all very weak and not statistically significant, so multicollinearity is not a concern in a regression model.</p>
+</section>
+</section>
+<section id="linear-algebra-and-pricing-strategy-5-points" class="level3">
+<h3 class="anchored" data-anchor-id="linear-algebra-and-pricing-strategy-5-points">2: Linear Algebra and Pricing Strategy (5 Points)</h3>
+<section id="price-elasticity-of-demand" class="level4">
+<h4 class="anchored" data-anchor-id="price-elasticity-of-demand">1. Price Elasticity of Demand:</h4>
+<p><em>Use linear regression to model the relationship between Sales and Price (assuming Sales as the dependent variable).</em></p>
+<p>Sales = 9.916 * Price + 442.951</p>
+<p>This model has a very low R-squared of only 0.0155 so price explains only 1.6% of Sales. The relationship is not statistically significant with a p value of 0.1478.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>mod_pricing <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(Sales <span class="sc">~</span> Price, .)</span>
+<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-4"><a href="#cb75-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod_pricing)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Sales ~ Price, data = .)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-679.54 -347.85  -98.63  241.12 1770.08 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)   
+(Intercept)  442.951    137.419   3.223  0.00148 **
+Price          9.916      6.824   1.453  0.14775   
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 462.2 on 198 degrees of freedom
+Multiple R-squared:  0.01055,   Adjusted R-squared:  0.005556 
+F-statistic: 2.112 on 1 and 198 DF,  p-value: 0.1478</code></pre>
+</div>
+</div>
+<p><em>Invert the correlation matrix from your model, and calculate the precision matrix.</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="co"># correlation matrix </span></span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a>sales_cor_matrix <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(Sales, Price) <span class="sc">%&gt;%</span></span>
+<span id="cb77-4"><a href="#cb77-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor</span>(<span class="at">method =</span> <span class="st">"pearson"</span>)</span>
+<span id="cb77-5"><a href="#cb77-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb77-6"><a href="#cb77-6" aria-hidden="true" tabindex="-1"></a>sales_cor_matrix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          Sales     Price
+Sales 1.0000000 0.1027273
+Price 0.1027273 1.0000000</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="co"># invert</span></span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>sales_precision_matrix <span class="ot">&lt;-</span> <span class="fu">solve</span>(sales_cor_matrix)</span>
+<span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-4"><a href="#cb79-4" aria-hidden="true" tabindex="-1"></a>sales_precision_matrix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           Sales      Price
+Sales  1.0106655 -0.1038229
+Price -0.1038229  1.0106655</code></pre>
+</div>
+</div>
+<p><em>Discuss the implications of the diagonal elements of the precision matrix (which are variance inflation factors).</em></p>
+<p>The diagonal elements are VIFs and as they are very close to 1, there is low variance inflation and no multicollinearity.</p>
+<p><em>Perform LU decomposition on the correlation matrix and interpret the results in the context of price elasticity.</em></p>
+<p>Price elasticity is low based on the small value in the off-diagonal in both the U and L matrices.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="co"># correlation matrix from above</span></span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>sales_cor_matrix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          Sales     Price
+Sales 1.0000000 0.1027273
+Price 0.1027273 1.0000000</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="co"># LU decomposition</span></span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>sales_lu_decomp <span class="ot">&lt;-</span> <span class="fu">lu</span>(<span class="fu">Matrix</span>(sales_cor_matrix))</span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract L and U matrices</span></span>
+<span id="cb83-5"><a href="#cb83-5" aria-hidden="true" tabindex="-1"></a>L <span class="ot">&lt;-</span> <span class="fu">expand</span>(sales_lu_decomp)<span class="sc">$</span>L</span>
+<span id="cb83-6"><a href="#cb83-6" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> <span class="fu">expand</span>(sales_lu_decomp)<span class="sc">$</span>U</span>
+<span id="cb83-7"><a href="#cb83-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-8"><a href="#cb83-8" aria-hidden="true" tabindex="-1"></a>L <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(L)</span>
+<span id="cb83-9"><a href="#cb83-9" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(U)</span>
+<span id="cb83-10"><a href="#cb83-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-11"><a href="#cb83-11" aria-hidden="true" tabindex="-1"></a>L</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          [,1] [,2]
+[1,] 1.0000000    0
+[2,] 0.1027273    1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>U</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1]      [,2]
+[1,]    1 0.1027273
+[2,]    0 0.9894471</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="calculus-based-probability-statistics-for-sales-forecasting-5-points" class="level3">
+<h3 class="anchored" data-anchor-id="calculus-based-probability-statistics-for-sales-forecasting-5-points">3: Calculus-Based Probability &amp; Statistics for Sales Forecasting (5 Points)</h3>
+<section id="sales-forecasting-using-exponential-distribution" class="level4">
+<h4 class="anchored" data-anchor-id="sales-forecasting-using-exponential-distribution">1. Sales Forecasting Using Exponential Distribution:</h4>
+<p><em>Identify a variable in the dataset that is skewed to the right (e.g., Sales or Price) and fit an exponential distribution to this data using the fitdistr function.</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>sales_fit_exp <span class="ot">&lt;-</span> <span class="fu">fitdistr</span>(df<span class="sc">$</span>Sales, </span>
+<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">densfun =</span> <span class="st">"exponential"</span>)</span>
+<span id="cb87-3"><a href="#cb87-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb87-4"><a href="#cb87-4" aria-hidden="true" tabindex="-1"></a>sales_fit_exp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       rate    
+  0.0015700652 
+ (0.0001110204)</code></pre>
+</div>
+</div>
+<p><em>Generate 1,000 samples from the fitted exponential distribution and compare a histogram of these samples with the original data’s histogram.</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="co">#extract rate parameter</span></span>
+<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a>sales_lambda <span class="ot">&lt;-</span> sales_fit_exp<span class="sc">$</span>estimate[<span class="st">"rate"</span>]</span>
+<span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-4"><a href="#cb89-4" aria-hidden="true" tabindex="-1"></a><span class="co"># simulate</span></span>
+<span id="cb89-5"><a href="#cb89-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb89-6"><a href="#cb89-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-7"><a href="#cb89-7" aria-hidden="true" tabindex="-1"></a>sim_sales <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="dv">1000</span>, <span class="at">rate =</span> sales_lambda)</span>
+<span id="cb89-8"><a href="#cb89-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-9"><a href="#cb89-9" aria-hidden="true" tabindex="-1"></a><span class="co"># compare</span></span>
+<span id="cb89-10"><a href="#cb89-10" aria-hidden="true" tabindex="-1"></a>df_compare <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
+<span id="cb89-11"><a href="#cb89-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">source =</span> <span class="st">"Original"</span>, <span class="at">value =</span> df<span class="sc">$</span>Sales),</span>
+<span id="cb89-12"><a href="#cb89-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">source =</span> <span class="st">"Simulated"</span>, <span class="at">value =</span> sim_sales))</span>
+<span id="cb89-13"><a href="#cb89-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-14"><a href="#cb89-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-15"><a href="#cb89-15" aria-hidden="true" tabindex="-1"></a>plt_sim <span class="ot">&lt;-</span> df_compare <span class="sc">%&gt;%</span> </span>
+<span id="cb89-16"><a href="#cb89-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(</span>
+<span id="cb89-17"><a href="#cb89-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">fill =</span> source)) <span class="sc">+</span></span>
+<span id="cb89-18"><a href="#cb89-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>, <span class="at">color =</span> <span class="st">"white"</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">position =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb89-19"><a href="#cb89-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>source, <span class="at">scales =</span> <span class="st">"free_y"</span>) <span class="sc">+</span></span>
+<span id="cb89-20"><a href="#cb89-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb89-21"><a href="#cb89-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Original vs Simulated Sales (Exponential Fit)"</span>,</span>
+<span id="cb89-22"><a href="#cb89-22" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">"Sales"</span>, <span class="at">y =</span> <span class="st">"Count"</span>)</span>
+<span id="cb89-23"><a href="#cb89-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-24"><a href="#cb89-24" aria-hidden="true" tabindex="-1"></a>plt_sim</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="DATA-605-Final---Fox_files/figure-html/forecast2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><em>Calculate the 5th and 95th percentiles using the cumulative distribution function (CDF) of the exponential distribution.</em></p>
+<p>5% of products have sales below 32.67 and 95% of products have sales below 1908.03 in the simulated model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="co"># expontial function rate from above: sales_lambda &lt;- sales_fit_exp$estimate["rate"]</span></span>
+<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb90-3"><a href="#cb90-3" aria-hidden="true" tabindex="-1"></a><span class="co"># quantile function</span></span>
+<span id="cb90-4"><a href="#cb90-4" aria-hidden="true" tabindex="-1"></a>sales_q5 <span class="ot">&lt;-</span> <span class="fu">qexp</span>(<span class="fl">0.05</span>, <span class="at">rate =</span> sales_lambda)</span>
+<span id="cb90-5"><a href="#cb90-5" aria-hidden="true" tabindex="-1"></a>sales_q95 <span class="ot">&lt;-</span> <span class="fu">qexp</span>(<span class="fl">0.95</span>, <span class="at">rate =</span> sales_lambda)</span>
+<span id="cb90-6"><a href="#cb90-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb90-7"><a href="#cb90-7" aria-hidden="true" tabindex="-1"></a>sales_q5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 32.66953</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a>sales_q95</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1908.03</code></pre>
+</div>
+</div>
+<p><em>Compute a 95% confidence interval for the original data assuming normality and compare it with the empirical percentiles.</em></p>
+<p>The confidence interval under the normality assumption includes negative sales numbers which is not possible; this is because this data is not normally distributed but right-skewed.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a>sales_mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(df<span class="sc">$</span>Sales)</span>
+<span id="cb94-2"><a href="#cb94-2" aria-hidden="true" tabindex="-1"></a>sales_sd <span class="ot">&lt;-</span> <span class="fu">sd</span>(df<span class="sc">$</span>Sales)</span>
+<span id="cb94-3"><a href="#cb94-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb94-4"><a href="#cb94-4" aria-hidden="true" tabindex="-1"></a>sales_ci_normal <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">lower =</span> sales_mean <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> sales_sd,</span>
+<span id="cb94-5"><a href="#cb94-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">upper =</span> sales_mean <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> sales_sd)</span>
+<span id="cb94-6"><a href="#cb94-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb94-7"><a href="#cb94-7" aria-hidden="true" tabindex="-1"></a>sales_ci_empirical <span class="ot">&lt;-</span> <span class="fu">quantile</span>(df<span class="sc">$</span>Sales, </span>
+<span id="cb94-8"><a href="#cb94-8" aria-hidden="true" tabindex="-1"></a>                               <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span>
+<span id="cb94-9"><a href="#cb94-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb94-10"><a href="#cb94-10" aria-hidden="true" tabindex="-1"></a>sales_ci_compare <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb94-11"><a href="#cb94-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">Method =</span> <span class="fu">c</span>(<span class="st">"Normal CI"</span>, <span class="st">"Empirical Percentiles"</span>),</span>
+<span id="cb94-12"><a href="#cb94-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">Lower =</span> <span class="fu">c</span>(<span class="fu">round</span>(sales_ci_normal[<span class="dv">1</span>], <span class="dv">2</span>), <span class="fu">round</span>(sales_ci_empirical[<span class="dv">1</span>], <span class="dv">2</span>)),</span>
+<span id="cb94-13"><a href="#cb94-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">Upper =</span> <span class="fu">c</span>(<span class="fu">round</span>(sales_ci_normal[<span class="dv">2</span>], <span class="dv">2</span>), <span class="fu">round</span>(sales_ci_empirical[<span class="dv">2</span>], <span class="dv">2</span>))</span>
+<span id="cb94-14"><a href="#cb94-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb94-15"><a href="#cb94-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb94-16"><a href="#cb94-16" aria-hidden="true" tabindex="-1"></a>sales_ci_compare</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 3
+  Method                Lower Upper
+  &lt;chr&gt;                 &lt;dbl&gt; &lt;dbl&gt;
+1 Normal CI             -272. 1545.
+2 Empirical Percentiles  105. 1502.</code></pre>
+</div>
+</div>
+</section>
+<section id="discussion-1" class="level4">
+<h4 class="anchored" data-anchor-id="discussion-1">2. Discussion:</h4>
+<p><em>Discuss how well the exponential distribution models the data and what this implies for forecasting future sales or pricing. Consider whether a different distribution might be more appropriate.</em></p>
+<p>The exponential distribution captures the right skew in the plot below but it has a longer tail. Actual max sales is 2447.49 while this simulation seems to go further out. Also, there seems to be more low-sales in the simulation: on the plot below, the bar near zero is proportionately greater. I think the model will overestimate sales at the extremes and I would try a gamma or log-normal distribution to avoid this issue while capturing the skew.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a>plt_sim</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="DATA-605-Final---Fox_files/figure-html/forecast5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="regression-modeling-for-inventory-optimization-10-points" class="level3">
+<h3 class="anchored" data-anchor-id="regression-modeling-for-inventory-optimization-10-points">4: Regression Modeling for Inventory Optimization (10 Points)</h3>
+<section id="multiple-regression-model" class="level4">
+<h4 class="anchored" data-anchor-id="multiple-regression-model">1. Multiple Regression Model:</h4>
+<p><em>Build a multiple regression model to predict Inventory_Levels based on Sales, Lead_Time_Days, and Price.</em> <em>Provide a full summary of your model, including coefficients, R-squared value, and residual analysis.</em></p>
+<p><strong>Coefficients</strong> Inventory = -0.007809 * Sales + 7.316793 * Lead Time - 1.087778 * Price + 464.792662</p>
+<p>None of the coefficients is statistically significant, and the overall model is not statistically significant (p-value 0.4902).</p>
+<p><strong>R-squared</strong> R-squared is 0.01223. The model explains only 1.2% of changes in Inventory Levels.</p>
+<p><strong>Residuals</strong></p>
+<p>Overall the data appears to meet the assumptions of no multicollinearity (see earlier analysis) as well as linearity, homoscedasticity, and normality of residuals.</p>
+<ol type="1">
+<li><p>Residuals vs Fitted: There is no fan shape or curve so the data appears to meet the assumptions of homoscedasticity and linearity. There does appear to be a lot of variation.</p></li>
+<li><p>Histogram of Residuals: Appears nearly normally distributed so the data meets the assumption of normality.</p></li>
+<li><p>Q-Q: Follows the line generally with deviation at both ends, suggests some mild skew/outliers.</p></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="co"># model</span></span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a>mod_inv <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
+<span id="cb97-3"><a href="#cb97-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(Inventory_Levels <span class="sc">~</span> Sales <span class="sc">+</span> Lead_Time_Days <span class="sc">+</span> Price, .)</span>
+<span id="cb97-4"><a href="#cb97-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-5"><a href="#cb97-5" aria-hidden="true" tabindex="-1"></a><span class="co"># summary</span></span>
+<span id="cb97-6"><a href="#cb97-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod_inv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Inventory_Levels ~ Sales + Lead_Time_Days + Price, 
+    data = .)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-395.54 -118.07   -7.68  111.81  372.56 
+
+Coefficients:
+                 Estimate Std. Error t value         Pr(&gt;|t|)    
+(Intercept)    464.792662  61.321852   7.580 0.00000000000135 ***
+Sales           -0.007809   0.023955  -0.326            0.745    
+Lead_Time_Days   7.316793   5.293049   1.382            0.168    
+Price           -1.087778   2.305846  -0.472            0.638    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 155.3 on 196 degrees of freedom
+Multiple R-squared:  0.01223,   Adjusted R-squared:  -0.002887 
+F-statistic: 0.8091 on 3 and 196 DF,  p-value: 0.4902</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="co"># df with actuals, fitted, and residuals</span></span>
+<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a>df_inv_model <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
+<span id="cb99-3"><a href="#cb99-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(Inventory_Levels) <span class="sc">%&gt;%</span> </span>
+<span id="cb99-4"><a href="#cb99-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb99-5"><a href="#cb99-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">.fitted =</span> <span class="fu">fitted</span>(mod_inv),</span>
+<span id="cb99-6"><a href="#cb99-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">.resid =</span> <span class="fu">resid</span>(mod_inv),</span>
+<span id="cb99-7"><a href="#cb99-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">.std_resid =</span> <span class="fu">rstandard</span>(mod_inv)</span>
+<span id="cb99-8"><a href="#cb99-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb99-9"><a href="#cb99-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb99-10"><a href="#cb99-10" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(df_inv_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 200
+Columns: 4
+$ Inventory_Levels &lt;dbl&gt; 367.4421, 426.6512, 407.6394, 392.3912, 448.3120, 547…
+$ .fitted          &lt;dbl&gt; 489.3130, 476.6767, 457.4460, 446.8733, 520.3259, 500…
+$ .resid           &lt;dbl&gt; -121.870856, -50.025552, -49.806610, -54.482154, -72.…
+$ .std_resid       &lt;dbl&gt; -0.78922979, -0.32542964, -0.32447302, -0.36110725, -…</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Residuals vs Fitted</span></span>
+<span id="cb101-2"><a href="#cb101-2" aria-hidden="true" tabindex="-1"></a>plot_resid <span class="ot">&lt;-</span> df_inv_model <span class="sc">%&gt;%</span> </span>
+<span id="cb101-3"><a href="#cb101-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> .fitted, <span class="at">y =</span> .resid)) <span class="sc">+</span></span>
+<span id="cb101-4"><a href="#cb101-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">color =</span> <span class="st">"gray40"</span>) <span class="sc">+</span></span>
+<span id="cb101-5"><a href="#cb101-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"darkred"</span>) <span class="sc">+</span></span>
+<span id="cb101-6"><a href="#cb101-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb101-7"><a href="#cb101-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Residuals vs Fitted"</span>,</span>
+<span id="cb101-8"><a href="#cb101-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Fitted Values"</span>,</span>
+<span id="cb101-9"><a href="#cb101-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Residuals"</span></span>
+<span id="cb101-10"><a href="#cb101-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb101-11"><a href="#cb101-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb101-12"><a href="#cb101-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-13"><a href="#cb101-13" aria-hidden="true" tabindex="-1"></a>plot_resid</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="DATA-605-Final---Fox_files/figure-html/regress1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Histogram of Residuals</span></span>
+<span id="cb102-2"><a href="#cb102-2" aria-hidden="true" tabindex="-1"></a>plot_resid_hist <span class="ot">&lt;-</span> df_inv_model <span class="sc">%&gt;%</span> </span>
+<span id="cb102-3"><a href="#cb102-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> .resid)) <span class="sc">+</span></span>
+<span id="cb102-4"><a href="#cb102-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">15</span>, <span class="at">fill =</span> <span class="st">"darkblue"</span>, <span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
+<span id="cb102-5"><a href="#cb102-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Histogram of Residuals"</span>, <span class="at">x =</span> <span class="st">"Residuals"</span>) <span class="sc">+</span></span>
+<span id="cb102-6"><a href="#cb102-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb102-7"><a href="#cb102-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb102-8"><a href="#cb102-8" aria-hidden="true" tabindex="-1"></a>plot_resid_hist</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="DATA-605-Final---Fox_files/figure-html/regress1-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Q-Q</span></span>
+<span id="cb103-2"><a href="#cb103-2" aria-hidden="true" tabindex="-1"></a>plot_qq <span class="ot">&lt;-</span> df_inv_model <span class="sc">%&gt;%</span> </span>
+<span id="cb103-3"><a href="#cb103-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">sample =</span> .resid)) <span class="sc">+</span></span>
+<span id="cb103-4"><a href="#cb103-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_qq</span>() <span class="sc">+</span></span>
+<span id="cb103-5"><a href="#cb103-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_qq_line</span>(<span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb103-6"><a href="#cb103-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Q-Q Plot of Residuals"</span>) <span class="sc">+</span></span>
+<span id="cb103-7"><a href="#cb103-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb103-8"><a href="#cb103-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb103-9"><a href="#cb103-9" aria-hidden="true" tabindex="-1"></a>plot_qq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="DATA-605-Final---Fox_files/figure-html/regress1-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="optimization" class="level4">
+<h4 class="anchored" data-anchor-id="optimization">Optimization:</h4>
+<p><em>Use your model to optimize inventory levels for a peak sales season, balancing minimizing stockouts with minimizing overstock</em></p>
+<p>Since the model explains very little and is not statistically significant, it should not be used to optimize inventory levels.</p>
+<p>If we were to use it, it is a linear model so calculus is not helpful: the gradient is constant (equal to the coefficients) and the model has no curvature or interior max/min to find.</p>
+<p>To optimize a linear model, we would need defined constraints including a definition of terms like peak sales (dataset does not contain a time dimension to find a peak sales season).</p>
+<p><strong>Model</strong> Inventory = -0.007809 * Sales + 7.316793 * Lead Time - 1.087778 * Price + 464.792662</p>
+</section>
 </section>
 </section>
 
